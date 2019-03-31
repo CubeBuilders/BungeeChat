@@ -1,0 +1,163 @@
+package hk.siggi.bungeecord.bungeechat.commands.server;
+
+import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.PlayerSession;
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.plugin.Command;
+
+public class CommandCTReward extends Command {
+
+	public final BungeeChat plugin;
+
+	public CommandCTReward(BungeeChat plugin) {
+		super("ctreward", null);
+		this.plugin = plugin;
+	}
+
+	@Override
+	public void execute(CommandSender sender, String[] args) {
+		if (!(sender instanceof ProxiedPlayer)) {
+			return;
+		}
+		
+		ProxiedPlayer player = (ProxiedPlayer) sender;
+		
+		PlayerSession session = plugin.getSession(player);
+		long currentSessionLength = (System.currentTimeMillis() - session.loginTime);
+		long timeInLast2Weeks = session.timeInLast2Weeks + currentSessionLength;
+		double hoursInLast2Weeks = ((double) timeInLast2Weeks) / 3600000L;
+		
+		TextComponent msg = new TextComponent("");
+		player.sendMessage(msg);
+		
+		TextComponent ctRewards = new TextComponent("CubeTokens for being on CubeBuilders & inviting friends:");
+		ctRewards.setColor(ChatColor.YELLOW);
+		msg.addExtra(ctRewards);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		TextComponent infoText = new TextComponent("A base amount calculated based on the # of players online:");
+		infoText.setColor(ChatColor.GOLD);
+		msg.addExtra(infoText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		TextComponent baseCTText = new TextComponent("Base CT: ");
+		TextComponent formulaText = new TextComponent("(# of players online) * 5/20");
+		baseCTText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.AQUA);
+		msg.addExtra(baseCTText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		baseCTText = new TextComponent("Base CT: ");
+		formulaText = new TextComponent(plugin.getProxy().getOnlineCount() + " * 5/20");
+		baseCTText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.AQUA);
+		msg.addExtra(baseCTText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		baseCTText = new TextComponent("Base CT: ");
+		formulaText = new TextComponent(doubleToString(plugin.baseCT()));
+		baseCTText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.YELLOW);
+		msg.addExtra(baseCTText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		infoText = new TextComponent("A multiplier calculated based on the number of hours you were online in the last two weeks:");
+		infoText.setColor(ChatColor.GOLD);
+		msg.addExtra(infoText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		TextComponent multiplierText = new TextComponent("Multiplier: ");
+		formulaText = new TextComponent("min(2.5, 1 + (hours / 8))");
+		multiplierText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.AQUA);
+		msg.addExtra(multiplierText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		multiplierText = new TextComponent("Multiplier: ");
+		formulaText = new TextComponent("min(2.5, 1 + (" + doubleToString(hoursInLast2Weeks) + " / 8))");
+		multiplierText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.AQUA);
+		msg.addExtra(multiplierText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		multiplierText = new TextComponent("Multiplier: ");
+		formulaText = new TextComponent("min(2.5, " + doubleToString(1 + (hoursInLast2Weeks / 8)) + ")");
+		multiplierText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.AQUA);
+		msg.addExtra(multiplierText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		multiplierText = new TextComponent("Multiplier: ");
+		formulaText = new TextComponent(doubleToString(Math.min(2.5, (1 + (hoursInLast2Weeks / 8)))));
+		multiplierText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.YELLOW);
+		msg.addExtra(multiplierText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		infoText = new TextComponent("Finally, multiply the base by the CT, and this is what you get every 15 minutes.");
+		infoText.setColor(ChatColor.GOLD);
+		msg.addExtra(infoText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		TextComponent finalText = new TextComponent("Final Amount: ");
+		formulaText = new TextComponent("round(Base CT * Multiplier)");
+		finalText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.AQUA);
+		msg.addExtra(finalText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		finalText = new TextComponent("Final Amount: ");
+		formulaText = new TextComponent("round(" + doubleToString(plugin.baseCT()) + " * " + doubleToString(Math.min(2.5, (1 + (hoursInLast2Weeks / 8)))) + ")");
+		finalText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.AQUA);
+		msg.addExtra(finalText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		double finalAmount = plugin.baseCT() * Math.min(2.5, (1 + (hoursInLast2Weeks / 8)));
+		int finalInt = (int) Math.round(finalAmount);
+		if (finalInt < 1) finalInt = 1;
+		
+		msg = new TextComponent("");
+		finalText = new TextComponent("Final Amount: ");
+		formulaText = new TextComponent(Integer.toString(finalInt));
+		finalText.setColor(ChatColor.GOLD);
+		formulaText.setColor(ChatColor.YELLOW);
+		msg.addExtra(finalText);
+		msg.addExtra(formulaText);
+		player.sendMessage(msg);
+		
+		msg = new TextComponent("");
+		infoText = new TextComponent("So spend more time on CubeBuilders and invite more friends, you'll get more CubeTokens as a reward!");
+		infoText.setColor(ChatColor.GOLD);
+		msg.addExtra(infoText);
+		player.sendMessage(msg);
+	}
+	
+	public String doubleToString(double number) {
+		return Double.toString(Math.round(number * 1000.0) / 1000.0);
+	}
+}

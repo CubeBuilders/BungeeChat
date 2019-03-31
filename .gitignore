@@ -1,0 +1,22 @@
+*.jar
+dist
+build
+lib
+
+# macOS filesystem litter
+.DS_Store
+.Spotlight-V100
+.Trashes
+._*
+.AppleDouble
+.LSOverride
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Windows filesystem litter
+Thumbs.db
+ehthumbs.db
+Desktop.ini
