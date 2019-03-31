@@ -529,6 +529,9 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerCommand(this, new CommandCapsFilter(this));
 
 		pm.registerCommand(this, new CommandTestFeature(this));
+		
+		AprilFools2019 aprilFools = new AprilFools2019(this);
+		pm.registerListener(this, aprilFools);
 
 		RelogHandler rh = new RelogHandler(this);
 		getProxy().setReconnectHandler(rh);
