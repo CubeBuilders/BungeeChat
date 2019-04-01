@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -33,7 +34,8 @@ public class AprilFools2019 implements Listener {
 			}
 			saidAprilFools.add(uuid);
 			plugin.getScheduler().schedule(plugin, () -> {
-				plugin.unify(plugin.processChat(null, "&dAPRIL FOOLS! HAHA Betcha you freaked out for a second thinking you were really perm banned!"));
+				ProxiedPlayer p = plugin.getProxiedPlayer(uuid);
+				p.sendMessage(plugin.unify(plugin.processChat(null, "&dAPRIL FOOLS! HAHA Betcha you freaked out for a second thinking you were really perm banned!")));
 			}, 5000, TimeUnit.MILLISECONDS);
 			return;
 		}
