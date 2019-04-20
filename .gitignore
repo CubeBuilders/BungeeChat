@@ -2,6 +2,7 @@
 dist
 build
 lib
+nbproject/private
 
 # macOS filesystem litter
 .DS_Store
