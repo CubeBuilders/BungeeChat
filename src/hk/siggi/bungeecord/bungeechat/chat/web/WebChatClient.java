@@ -5,6 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import io.siggi.http.HTTPWebSocket;
 import io.siggi.http.HTTPWebSocketListener;
 import io.siggi.http.HTTPWebSocketMessage;
@@ -99,11 +101,11 @@ public class WebChatClient implements HTTPWebSocketListener {
 					}
 					break;
 				default:
-					sendMessage(bc.unify(bc.processChat(null, "&6Unknown command")));
+					sendMessage(unify(processChat(null, "&6Unknown command")));
 					break;
 			}
 		} else {
-			sendMessage(bc.unify(bc.processChat(null, line)));
+			sendMessage(unify(processChat(null, line)));
 		}
 	}
 

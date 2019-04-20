@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.chat.handler;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
 import hk.siggi.bungeecord.bungeechat.chat.ChatController;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class PrivateChatHandler implements ChatHandler {
 	@Override
 	public List<BaseComponent> getDisplay() {
 		List<BaseComponent> result = new ArrayList<>();
-		result.addAll(BungeeChat.getInstance().processChat(null, "&ePM To "));
+		result.addAll(processChat(null, "&ePM To "));
 		result.addAll(usernameComponent);
 		return result;
 	}

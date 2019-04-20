@@ -1,6 +1,8 @@
 package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -21,12 +23,12 @@ public class CommandBanName extends Command implements TabExecutor {
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		if (!sender.hasPermission("hk.siggi.bungeechat.ban")) {
-			sender.sendMessage(plugin.unify(plugin.processChat(null, "&4You don't have permission.")));
+			sender.sendMessage(unify(processChat(null, "&4You don't have permission.")));
 			return;
 		}
 		if (args.length == 0) {
-			sender.sendMessage(plugin.unify(plugin.processChat(null, "&6Usage: &b/banname [username]")));
-			sender.sendMessage(plugin.unify(plugin.processChat(null, "&6This command bans usernames, not accounts. The account owner can change their name to get out of this ban. This can be used to ban inappropriate usernames from joining.")));
+			sender.sendMessage(unify(processChat(null, "&6Usage: &b/banname [username]")));
+			sender.sendMessage(unify(processChat(null, "&6This command bans usernames, not accounts. The account owner can change their name to get out of this ban. This can be used to ban inappropriate usernames from joining.")));
 			return;
 		}
 		UUID issuer = BungeeChat.console;
@@ -38,14 +40,14 @@ public class CommandBanName extends Command implements TabExecutor {
 		}
 		UUID targetUUID = plugin.getPlayerNameHandler().getPlayerByName(args[0]);
 		if (plugin.isNameBanned(args[0])) {
-			sender.sendMessage(plugin.unify(plugin.processChat(null, "&b" + args[0] + "&6 is already banned.")));
+			sender.sendMessage(unify(processChat(null, "&b" + args[0] + "&6 is already banned.")));
 			return;
 		}
 		String targetName;
 		if (targetUUID == null) {
 			boolean bypass = false;
 			if (args.length < 2 || !args[1].equalsIgnoreCase("force")) {
-				sender.sendMessage(plugin.unify(plugin.processChat(null, "&6Unknown name: &b" + args[0] + "&6. Type &b/banname " + args[0] + " force&6 to force ban.")));
+				sender.sendMessage(unify(processChat(null, "&6Unknown name: &b" + args[0] + "&6. Type &b/banname " + args[0] + " force&6 to force ban.")));
 				return;
 			}
 			targetName = args[0];
@@ -56,7 +58,7 @@ public class CommandBanName extends Command implements TabExecutor {
 			} else
 			targetName = plugin.getPlayerNameHandler().getNameByPlayer(targetUUID);
 		}
-		sender.sendMessage(plugin.unify(plugin.processChat(null, "&6Banning username &b" + args[0] + "&6. (If they're currently online, you can either /kick, or issue a regular /ban) (if this is a nickname ban, you have to remove their nick as well manually)")));
+		sender.sendMessage(unify(processChat(null, "&6Banning username &b" + args[0] + "&6. (If they're currently online, you can either /kick, or issue a regular /ban) (if this is a nickname ban, you have to remove their nick as well manually)")));
 		plugin.banName(targetName, issuer, issuerName);
 	}
 

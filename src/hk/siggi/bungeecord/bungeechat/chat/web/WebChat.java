@@ -1,6 +1,8 @@
 package hk.siggi.bungeecord.bungeechat.chat.web;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import io.siggi.http.HTTPWebSocket;
 import io.siggi.http.HTTPWebSocketMessage;
@@ -87,7 +89,7 @@ public class WebChat {
 		String username = plugin.getPlayerNameHandler().getNameByPlayer(uuid);
 		WebChatClient client = new WebChatClient(this, uuid, socket);
 		client.start();
-		client.sendMessage(plugin.unify(plugin.processChat(null, "Hi&6 there, " + username + "! <https://cubebuilders.net/>")));
+		client.sendMessage(unify(processChat(null, "Hi&6 there, " + username + "! <https://cubebuilders.net/>")));
 	}
 
 	public void send(UUID uuid, BaseComponent component) {

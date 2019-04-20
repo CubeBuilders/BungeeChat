@@ -2,6 +2,8 @@ package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import com.google.gson.Gson;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.chat.string.ChatString;
 import hk.siggi.bungeecord.bungeechat.chat.string.patcher.ChatPatcher;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
@@ -35,7 +37,7 @@ public class CommandTestFeature extends Command {
 		ProxiedPlayer pl = (ProxiedPlayer) cs;
 		File testenvcheck = new File(plugin.getDataFolder(), "testenv");
 		if (!testenvcheck.exists()) {
-			pl.sendMessage(plugin.unify(plugin.processChat(null, "&6This command is not available on the production environment.")));
+			pl.sendMessage(unify(processChat(null, "&6This command is not available on the production environment.")));
 			return;
 		}
 		try {

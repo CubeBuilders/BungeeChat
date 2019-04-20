@@ -1,6 +1,6 @@
 package hk.siggi.bungeecord.bungeechat.chat.handler;
 
-import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
 import hk.siggi.bungeecord.bungeechat.chat.ChatController;
 import java.util.List;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -19,6 +19,6 @@ public class PublicChatHandler implements ChatHandler {
 	
 	@Override
 	public List<BaseComponent> getDisplay() {
-		return BungeeChat.getInstance().processChat(null, "&ePublic");
+		return processChat(null, "&ePublic");
 	}
 }

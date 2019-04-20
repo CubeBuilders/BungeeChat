@@ -1,6 +1,8 @@
 package hk.siggi.bungeecord.bungeechat.chat;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.chat.string.ChatCharacter;
@@ -269,7 +271,7 @@ public final class ChatController implements Listener {
 			maximumChats = 4;
 		}
 		if (session.getChatCount(maxAge) >= maximumChats) {
-			player.sendMessage(bungeechat.unify(bungeechat.processChat(null, "&cOh my gawd, you need to like take a chill pill! Slow down! :o")));
+			player.sendMessage(unify(processChat(null, "&cOh my gawd, you need to like take a chill pill! Slow down! :o")));
 			return true;
 		}
 		return false;

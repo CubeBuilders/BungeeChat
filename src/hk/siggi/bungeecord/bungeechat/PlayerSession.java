@@ -2,6 +2,8 @@ package hk.siggi.bungeecord.bungeechat;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.chat.handler.PublicChatHandler;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandImpersonate;
@@ -423,7 +425,7 @@ public class PlayerSession {
 			ChatHandler handler = getChatHandler();
 			if (!(handler instanceof PublicChatHandler)) {
 				List<BaseComponent> display = handler.getDisplay();
-				TextComponent c = new TextComponent(BungeeChat.getInstance().unify(display).toLegacyText());
+				TextComponent c = new TextComponent(unify(display).toLegacyText());
 				addComponent.accept(c);
 			}
 			if (getPlayerInfo().isVanished()) {
@@ -534,12 +536,12 @@ public class PlayerSession {
 			}
 			BungeeChat bc = BungeeChat.getInstance();
 			List<BaseComponent> msg1 = new ArrayList<>();
-			msg1.addAll(bc.processChat(null, "&9Your default chat is now "));
+			msg1.addAll(processChat(null, "&9Your default chat is now "));
 			msg1.addAll(chatHandler.getDisplay());
-			msg1.addAll(bc.processChat(null, "&9."));
-			p.sendMessage(bc.unify(msg1));
+			msg1.addAll(processChat(null, "&9."));
+			p.sendMessage(unify(msg1));
 			if (!(chatHandler instanceof PublicChatHandler)) {
-				p.sendMessage(bc.unify(bc.processChat(null, "&9To return to Public chat, type &6/pub&9.")));
+				p.sendMessage(unify(processChat(null, "&9To return to Public chat, type &6/pub&9.")));
 			}
 		}
 	}

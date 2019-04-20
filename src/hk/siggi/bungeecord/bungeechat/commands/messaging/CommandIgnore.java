@@ -1,6 +1,8 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.NicknameCache;
 import hk.siggi.bungeecord.bungeechat.PlayerNameHandler;
 import hk.siggi.bungeecord.bungeechat.UUIDCache;
@@ -36,7 +38,7 @@ public class CommandIgnore extends Command implements TabExecutor {
 			if (!playerInfo.getIgnores().isEmpty()) {
 				playerInfo.clearIgnores();
 			}
-			pl.sendMessage(plugin.unify(plugin.processChat(null, "&4As a staff member, you are not allowed to ignore players.")));
+			pl.sendMessage(unify(processChat(null, "&4As a staff member, you are not allowed to ignore players.")));
 			return;
 		}
 		switch (command) {
@@ -44,15 +46,15 @@ public class CommandIgnore extends Command implements TabExecutor {
 				if (strings.length >= 2) {
 					UUID target = playerNameHandler.getPlayerByName(strings[1]);
 					if (target == null) {
-						pl.sendMessage(plugin.unify(plugin.processChat(null, "&6Unknown user " + strings[1])));
+						pl.sendMessage(unify(processChat(null, "&6Unknown user " + strings[1])));
 					} else {
 						String name = playerNameHandler.getNameByPlayer(target);
 						playerInfo.addIgnore(target);
-						pl.sendMessage(plugin.unify(plugin.processChat(null, "&6Added &b" + name + " &6to your ignore list.")));
+						pl.sendMessage(unify(processChat(null, "&6Added &b" + name + " &6to your ignore list.")));
 					}
 				} else {
-					pl.sendMessage(plugin.unify(plugin.processChat(null, "&6Usage:")));
-					pl.sendMessage(plugin.unify(plugin.processChat(null, "&b /ignorelist add [playername] &6- Add a player to your ignore list.")));
+					pl.sendMessage(unify(processChat(null, "&6Usage:")));
+					pl.sendMessage(unify(processChat(null, "&b /ignorelist add [playername] &6- Add a player to your ignore list.")));
 				}
 			}
 			break;
@@ -60,21 +62,21 @@ public class CommandIgnore extends Command implements TabExecutor {
 				if (strings.length >= 2) {
 					UUID target = playerNameHandler.getPlayerByName(strings[1]);
 					if (target == null) {
-						pl.sendMessage(plugin.unify(plugin.processChat(null, "&6Unknown user " + strings[1])));
+						pl.sendMessage(unify(processChat(null, "&6Unknown user " + strings[1])));
 					} else {
 						String name = playerNameHandler.getNameByPlayer(target);
 						playerInfo.removeIgnore(target);
-						pl.sendMessage(plugin.unify(plugin.processChat(null, "&6Removed &b" + name + " &6from your ignore list.")));
+						pl.sendMessage(unify(processChat(null, "&6Removed &b" + name + " &6from your ignore list.")));
 					}
 				} else {
-					pl.sendMessage(plugin.unify(plugin.processChat(null, "&6Usage:")));
-					pl.sendMessage(plugin.unify(plugin.processChat(null, "&b /ignorelist remove [playername] &6- Remove a player from your ignore list.")));
+					pl.sendMessage(unify(processChat(null, "&6Usage:")));
+					pl.sendMessage(unify(processChat(null, "&b /ignorelist remove [playername] &6- Remove a player from your ignore list.")));
 				}
 			}
 			break;
 			case "removeall": {
 				playerInfo.clearIgnores();
-				pl.sendMessage(plugin.unify(plugin.processChat(null, "&6Your ignore list has been cleared.")));
+				pl.sendMessage(unify(processChat(null, "&6Your ignore list has been cleared.")));
 			}
 			break;
 			case "list": {
@@ -82,11 +84,11 @@ public class CommandIgnore extends Command implements TabExecutor {
 			}
 			break;
 			default: {
-				pl.sendMessage(plugin.unify(plugin.processChat(null, "&6Usage:")));
-				pl.sendMessage(plugin.unify(plugin.processChat(null, "&b /ignorelist add [playername] &6- Add a player to your ignore list.")));
-				pl.sendMessage(plugin.unify(plugin.processChat(null, "&b /ignorelist remove [playername] &6- Remove a player from your ignore list.")));
-				pl.sendMessage(plugin.unify(plugin.processChat(null, "&b /ignorelist removeall &6- Empty your ignore list.")));
-				pl.sendMessage(plugin.unify(plugin.processChat(null, "&b /ignorelist list &6- See who is on your ignore list.")));
+				pl.sendMessage(unify(processChat(null, "&6Usage:")));
+				pl.sendMessage(unify(processChat(null, "&b /ignorelist add [playername] &6- Add a player to your ignore list.")));
+				pl.sendMessage(unify(processChat(null, "&b /ignorelist remove [playername] &6- Remove a player from your ignore list.")));
+				pl.sendMessage(unify(processChat(null, "&b /ignorelist removeall &6- Empty your ignore list.")));
+				pl.sendMessage(unify(processChat(null, "&b /ignorelist list &6- See who is on your ignore list.")));
 			}
 			break;
 		}

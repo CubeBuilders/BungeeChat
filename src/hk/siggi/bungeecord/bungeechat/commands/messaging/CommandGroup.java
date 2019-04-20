@@ -1,6 +1,8 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.NicknameCache;
 import hk.siggi.bungeecord.bungeechat.PlayerNameHandler;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
@@ -45,12 +47,12 @@ public class CommandGroup extends Command implements TabExecutor {
 			PlayerSession session = plugin.getSession(player);
 			if (session.groupTabBypass) {
 				session.groupTabBypass = false;
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&6Tab Bypass is now disabled!")));
+				player.sendMessage(unify(processChat(null, "&6Tab Bypass is now disabled!")));
 			} else if (player.hasPermission("hk.siggi.bungeechat.groupchatbypass")) {
 				session.groupTabBypass = true;
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&6Tab Bypass is now enabled!")));
+				player.sendMessage(unify(processChat(null, "&6Tab Bypass is now enabled!")));
 			} else {
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&4Tab bypass is not available for you.")));
+				player.sendMessage(unify(processChat(null, "&4Tab bypass is not available for you.")));
 			}
 			return;
 		}
@@ -71,33 +73,33 @@ public class CommandGroup extends Command implements TabExecutor {
 				} catch (Exception e) {
 				}
 			}
-			player.sendMessage(plugin.unify(plugin.processChat(null, "&6Group Chat commands &e/group help " + page + " &6out of 3 pages.")));
+			player.sendMessage(unify(processChat(null, "&6Group Chat commands &e/group help " + page + " &6out of 3 pages.")));
 			if (page == 1) {
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group create [groupname] &f- Create a group")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group delete [groupname] &f- Delete a group")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group mute [groupname] &f- Mute a group chat")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group unmute [groupname] &f- Unmute a group chat")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group leave [groupname] &f- Leave a group")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/g [groupname] &f- Start chatting in a group")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/g [groupname] [message] &f- Send a single message to a group")));
+				player.sendMessage(unify(processChat(null, "&e/group create [groupname] &f- Create a group")));
+				player.sendMessage(unify(processChat(null, "&e/group delete [groupname] &f- Delete a group")));
+				player.sendMessage(unify(processChat(null, "&e/group mute [groupname] &f- Mute a group chat")));
+				player.sendMessage(unify(processChat(null, "&e/group unmute [groupname] &f- Unmute a group chat")));
+				player.sendMessage(unify(processChat(null, "&e/group leave [groupname] &f- Leave a group")));
+				player.sendMessage(unify(processChat(null, "&e/g [groupname] &f- Start chatting in a group")));
+				player.sendMessage(unify(processChat(null, "&e/g [groupname] [message] &f- Send a single message to a group")));
 			} else if (page == 2) {
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group add [groupname] [username] &f- Add a user to a group")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group mod [groupname] [username] &f- Make a user a moderator of a group")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group unmod [groupname] [username] &f- Remove a user's moderator privileges")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group kick [groupname] [username] &f- Kick a user from a group")));
+				player.sendMessage(unify(processChat(null, "&e/group add [groupname] [username] &f- Add a user to a group")));
+				player.sendMessage(unify(processChat(null, "&e/group mod [groupname] [username] &f- Make a user a moderator of a group")));
+				player.sendMessage(unify(processChat(null, "&e/group unmod [groupname] [username] &f- Remove a user's moderator privileges")));
+				player.sendMessage(unify(processChat(null, "&e/group kick [groupname] [username] &f- Kick a user from a group")));
 			} else if (page == 3) {
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group ban [groupname] [username] &f- Ban a user from a group")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group unban [groupname] [username] &f- Unban a user from a group")));
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&e/group whitelist [groupname] [on/off] &f- Set whitelisting for a group")));
+				player.sendMessage(unify(processChat(null, "&e/group ban [groupname] [username] &f- Ban a user from a group")));
+				player.sendMessage(unify(processChat(null, "&e/group unban [groupname] [username] &f- Unban a user from a group")));
+				player.sendMessage(unify(processChat(null, "&e/group whitelist [groupname] [on/off] &f- Set whitelisting for a group")));
 			}
 			return;
 		}
 		boolean bypass = player.hasPermission("hk.siggi.bungeechat.groupchatbypass");
 		if (args.length < (allowSingleArg ? 1 : 2)) {
-			player.sendMessage(plugin.unify(plugin.processChat(null, "&6Group Chat (by Siggi)")));
-			player.sendMessage(plugin.unify(plugin.processChat(null, "&6For help, type &e/group help")));
+			player.sendMessage(unify(processChat(null, "&6Group Chat (by Siggi)")));
+			player.sendMessage(unify(processChat(null, "&6For help, type &e/group help")));
 			if (bypass) {
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&6You are able to bypass group chat restrictions.")));
+				player.sendMessage(unify(processChat(null, "&6You are able to bypass group chat restrictions.")));
 			}
 			return;
 		}
@@ -115,7 +117,7 @@ public class CommandGroup extends Command implements TabExecutor {
 			}
 		}
 		if (!allowSingleArg && !args[0].equals("create") && gc == null) {
-			player.sendMessage(plugin.unify(plugin.processChat(null, "&cThat chat does not exist.")));
+			player.sendMessage(unify(processChat(null, "&cThat chat does not exist.")));
 			return;
 		}
 		UUID playerUUID = player.getUniqueId();
@@ -132,7 +134,7 @@ public class CommandGroup extends Command implements TabExecutor {
 				targetPlayerName = args[2];
 				targetPlayer = playerNameHandler.getPlayerByName(targetPlayerName);
 				if (targetPlayer == null) {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cCould not find that player.")));
+					player.sendMessage(unify(processChat(null, "&cCould not find that player.")));
 					return;
 				} else {
 					targetPlayerName = playerNameHandler.getNameByPlayer(targetPlayer);
@@ -144,7 +146,7 @@ public class CommandGroup extends Command implements TabExecutor {
 		switch (args[0]) {
 			case "create": {
 				if (gc != null) {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cA chat with that name already exists.")));
+					player.sendMessage(unify(processChat(null, "&cA chat with that name already exists.")));
 					return;
 				}
 				int numberOfChatsIOwn = 0;
@@ -155,19 +157,19 @@ public class CommandGroup extends Command implements TabExecutor {
 				}
 				int maxChats = 3;
 				if (!bypass && numberOfChatsIOwn >= maxChats) {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou already own " + numberOfChatsIOwn + " chats. (Maximum of " + maxChats + ")")));
+					player.sendMessage(unify(processChat(null, "&cYou already own " + numberOfChatsIOwn + " chats. (Maximum of " + maxChats + ")")));
 				} else {
 					if (ChatController.isGroupNameAllowed(group)) {
 						if (group.length() > 16) {
-							player.sendMessage(plugin.unify(plugin.processChat(null, "&cThat group chat name is too long.")));
+							player.sendMessage(unify(processChat(null, "&cThat group chat name is too long.")));
 						} else if (ChatController.canonicalName(group).length() < 3) {
-							player.sendMessage(plugin.unify(plugin.processChat(null, "&cThat group chat name is too short.")));
+							player.sendMessage(unify(processChat(null, "&cThat group chat name is too short.")));
 						} else {
 							GroupChat createChat = controller.createChat(args[1], player);
-							player.sendMessage(plugin.unify(plugin.processChat(null, "&6You've created a new chat &b" + createChat.getName() + "&6. To send messages to it, &b/g " + createChat.getName() + " [msg]&6. To add friends, &b/group add " + createChat.getName() + " [friendname]&6.")));
+							player.sendMessage(unify(processChat(null, "&6You've created a new chat &b" + createChat.getName() + "&6. To send messages to it, &b/g " + createChat.getName() + " [msg]&6. To add friends, &b/group add " + createChat.getName() + " [friendname]&6.")));
 						}
 					} else {
-						player.sendMessage(plugin.unify(plugin.processChat(null, "&cThat group chat name contains invalid characters.")));
+						player.sendMessage(unify(processChat(null, "&cThat group chat name contains invalid characters.")));
 					}
 				}
 			}
@@ -175,9 +177,9 @@ public class CommandGroup extends Command implements TabExecutor {
 			case "delete": {
 				if (bypass || gc.getOwner().equals(player.getUniqueId())) {
 					controller.deleteChat(gc);
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6You have deleted the chat &b" + gc.getName() + "&6.")));
+					player.sendMessage(unify(processChat(null, "&6You have deleted the chat &b" + gc.getName() + "&6.")));
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+					player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 				}
 			}
 			break;
@@ -185,7 +187,7 @@ public class CommandGroup extends Command implements TabExecutor {
 				boolean needCommaMember = false;
 				boolean needCommaListening = false;
 				TextComponent member = new TextComponent("");
-				plugin.addAll(member, plugin.processChat(null, "&6Chats you are in: "));
+				plugin.addAll(member, processChat(null, "&6Chats you are in: "));
 				TextComponent comma = new TextComponent(", ");
 				for (GroupChat c : controller.getChats()) {
 					boolean ismember = c.isMember(player);
@@ -196,13 +198,13 @@ public class CommandGroup extends Command implements TabExecutor {
 						} else {
 							needCommaMember = true;
 						}
-						ArrayList<BaseComponent> chatComponent = plugin.processChat(null, (c.isOwner(player) ? "&e" : "") + c.getName());
+						ArrayList<BaseComponent> chatComponent = processChat(null, (c.isOwner(player) ? "&e" : "") + c.getName());
 						ClickEvent click = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/group info " + c.getCanonicalName());
 						HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click for info")});
 						plugin.addEventsToAll(chatComponent, click, hover);
 						plugin.addAll(member, chatComponent);
 						if (!isjoined) {
-							chatComponent = plugin.processChat(null, " &4(muted)");
+							chatComponent = processChat(null, " &4(muted)");
 							click = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/group unmute " + c.getCanonicalName());
 							hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to unmute")});
 							plugin.addEventsToAll(chatComponent, click, hover);
@@ -225,11 +227,11 @@ public class CommandGroup extends Command implements TabExecutor {
 				}
 				int startAt = perPage * (curPage - 1);
 				int endAt = Math.min(startAt + perPage, chats.size());
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&6All Group Chats (" + curPage + "/" + maxPage + ")")));
+				player.sendMessage(unify(processChat(null, "&6All Group Chats (" + curPage + "/" + maxPage + ")")));
 				for (int i = startAt; i < endAt; i++) {
 					GroupChat c = chats.get(i);
 					TextComponent chatInfo = new TextComponent("");
-					ArrayList<BaseComponent> chatName = plugin.processChat(null, "&a" + c.getName());
+					ArrayList<BaseComponent> chatName = processChat(null, "&a" + c.getName());
 					ClickEvent click = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/group info " + c.getCanonicalName());
 					HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click for more info")});
 					plugin.addEventsToAll(chatName, click, hover);
@@ -293,12 +295,12 @@ public class CommandGroup extends Command implements TabExecutor {
 			}
 			break;
 			case "info": {
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&6Group " + gc.getName())));
+				player.sendMessage(unify(processChat(null, "&6Group " + gc.getName())));
 				UUID ownerUUID = gc.getOwner();
 				if (ownerUUID != null) {
 					String ownerName = plugin.getPlayerNameHandler().getNameByPlayer(ownerUUID);
 					if (ownerName != null) {
-						player.sendMessage(plugin.unify(plugin.processChat(null, "&6Owner: &b" + ownerName)));
+						player.sendMessage(unify(processChat(null, "&6Owner: &b" + ownerName)));
 					}
 				}
 				StringBuilder moderators = new StringBuilder("&6Moderators: &f");
@@ -317,7 +319,7 @@ public class CommandGroup extends Command implements TabExecutor {
 						moderators.append(moderatorName);
 					}
 				}
-				player.sendMessage(plugin.unify(plugin.processChat(null, moderators.toString())));
+				player.sendMessage(unify(processChat(null, moderators.toString())));
 				StringBuilder members = new StringBuilder("&6Members: &f");
 				needComma = false;
 				for (UUID uuid : gc.getMembers()) {
@@ -334,7 +336,7 @@ public class CommandGroup extends Command implements TabExecutor {
 						members.append(userName);
 					}
 				}
-				player.sendMessage(plugin.unify(plugin.processChat(null, members.toString())));
+				player.sendMessage(unify(processChat(null, members.toString())));
 				StringBuilder listeners = new StringBuilder("&6Listening: &f");
 				needComma = false;
 				for (UUID uuid : gc.getUsers()) {
@@ -348,7 +350,7 @@ public class CommandGroup extends Command implements TabExecutor {
 						listeners.append(userName);
 					}
 				}
-				player.sendMessage(plugin.unify(plugin.processChat(null, listeners.toString())));
+				player.sendMessage(unify(processChat(null, listeners.toString())));
 				StringBuilder banned = new StringBuilder("&6Banned: &f");
 				needComma = false;
 				for (UUID uuid : gc.getBanned()) {
@@ -362,39 +364,39 @@ public class CommandGroup extends Command implements TabExecutor {
 						banned.append(userName);
 					}
 				}
-				player.sendMessage(plugin.unify(plugin.processChat(null, banned.toString())));
+				player.sendMessage(unify(processChat(null, banned.toString())));
 				if (gc.getPermissionNode() == null) {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Whitelist: &f" + gc.isWhitelisted())));
+					player.sendMessage(unify(processChat(null, "&6Whitelist: &f" + gc.isWhitelisted())));
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Whitelist: &fPermission based")));
+					player.sendMessage(unify(processChat(null, "&6Whitelist: &fPermission based")));
 				}
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&6Messages sent in this group: &f" + gc.getMessageCount())));
+				player.sendMessage(unify(processChat(null, "&6Messages sent in this group: &f" + gc.getMessageCount())));
 				if (gc.hasAntiBypass()) {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Note: Anti Bypass enabled for this chat.")));
+					player.sendMessage(unify(processChat(null, "&6Note: Anti Bypass enabled for this chat.")));
 				}
 				if (gc.isNotLogged()) {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Note: This chat is off the record.")));
+					player.sendMessage(unify(processChat(null, "&6Note: This chat is off the record.")));
 				}
 				if (gc.isCensorDisabled()) {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Note: The censor is disabled for this chat.")));
+					player.sendMessage(unify(processChat(null, "&6Note: The censor is disabled for this chat.")));
 				}
 				TextComponent actions = new TextComponent("Actions:");
 				if (gc.canJoin(player) && !gc.isJoined(player)) {
-					ArrayList<BaseComponent> button = plugin.processChat(null, "&b [Unmute]");
+					ArrayList<BaseComponent> button = processChat(null, "&b [Unmute]");
 					ClickEvent click = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/group unmute " + gc.getCanonicalName());
 					HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Unmute This Group")});
 					plugin.addEventsToAll(button, click, hover);
 					plugin.addAll(actions, button);
 				}
 				if (gc.isJoined(player)) {
-					ArrayList<BaseComponent> button = plugin.processChat(null, "&b [Mute]");
+					ArrayList<BaseComponent> button = processChat(null, "&b [Mute]");
 					ClickEvent click = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/group mute " + gc.getCanonicalName());
 					HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Mute This Group")});
 					plugin.addEventsToAll(button, click, hover);
 					plugin.addAll(actions, button);
 				}
 				if (gc.isMember(player)) {
-					ArrayList<BaseComponent> button = plugin.processChat(null, "&b [Leave]");
+					ArrayList<BaseComponent> button = processChat(null, "&b [Leave]");
 					ClickEvent click = new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/group leave " + gc.getCanonicalName());
 					HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Leave This Group")});
 					plugin.addEventsToAll(button, click, hover);
@@ -402,14 +404,14 @@ public class CommandGroup extends Command implements TabExecutor {
 				}
 				if (gc.isModerator(player)) {
 					{
-						ArrayList<BaseComponent> button = plugin.processChat(null, "&b [Add]");
+						ArrayList<BaseComponent> button = processChat(null, "&b [Add]");
 						ClickEvent click = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/group add " + gc.getCanonicalName() + " ");
 						HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Add a user to this group")});
 						plugin.addEventsToAll(button, click, hover);
 						plugin.addAll(actions, button);
 					}
 					{
-						ArrayList<BaseComponent> button = plugin.processChat(null, "&b [Kick]");
+						ArrayList<BaseComponent> button = processChat(null, "&b [Kick]");
 						ClickEvent click = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/group kick " + gc.getCanonicalName() + " ");
 						HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Kick a user from this group")});
 						plugin.addEventsToAll(button, click, hover);
@@ -417,14 +419,14 @@ public class CommandGroup extends Command implements TabExecutor {
 					}
 					if (gc.isOwner(player)) {
 						{
-							ArrayList<BaseComponent> button = plugin.processChat(null, "&b [Mod]");
+							ArrayList<BaseComponent> button = processChat(null, "&b [Mod]");
 							ClickEvent click = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/group mod " + gc.getCanonicalName() + " ");
 							HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Add a moderator to this group")});
 							plugin.addEventsToAll(button, click, hover);
 							plugin.addAll(actions, button);
 						}
 						{
-							ArrayList<BaseComponent> button = plugin.processChat(null, "&b [Unmod]");
+							ArrayList<BaseComponent> button = processChat(null, "&b [Unmod]");
 							ClickEvent click = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/group unmod " + gc.getCanonicalName() + " ");
 							HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Remove a moderator from this group")});
 							plugin.addEventsToAll(button, click, hover);
@@ -432,14 +434,14 @@ public class CommandGroup extends Command implements TabExecutor {
 						}
 					}
 					{
-						ArrayList<BaseComponent> button = plugin.processChat(null, "&b [Ban]");
+						ArrayList<BaseComponent> button = processChat(null, "&b [Ban]");
 						ClickEvent click = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/group ban " + gc.getCanonicalName() + " ");
 						HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Ban a user from this group")});
 						plugin.addEventsToAll(button, click, hover);
 						plugin.addAll(actions, button);
 					}
 					{
-						ArrayList<BaseComponent> button = plugin.processChat(null, "&b [Unban]");
+						ArrayList<BaseComponent> button = processChat(null, "&b [Unban]");
 						ClickEvent click = new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/group unban " + gc.getCanonicalName() + " ");
 						HoverEvent hover = new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Unban a user from this group")});
 						plugin.addEventsToAll(button, click, hover);
@@ -452,26 +454,26 @@ public class CommandGroup extends Command implements TabExecutor {
 			case "unmute": {
 				if (bypass || gc.allowJoining(player)) {
 					gc.addUser(playerUUID);
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Unmuted the chat &6" + gc.getName() + "&r.")));
+					player.sendMessage(unify(processChat(null, "&6Unmuted the chat &6" + gc.getName() + "&r.")));
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have access to this chat.")));
+					player.sendMessage(unify(processChat(null, "&cYou don't have access to this chat.")));
 				}
 			}
 			break;
 			case "mute": {
 				gc.removeUser(playerUUID);
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&6Muted the chat &b" + gc.getName() + "&6.")));
+				player.sendMessage(unify(processChat(null, "&6Muted the chat &b" + gc.getName() + "&6.")));
 			}
 			break;
 			case "leave": {
 				if (gc.getOwner().equals(playerUUID)) {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou can't leave your own chat. You can &b/group delete&c it instead.")));
+					player.sendMessage(unify(processChat(null, "&cYou can't leave your own chat. You can &b/group delete&c it instead.")));
 					return;
 				}
 				gc.removeModerator(playerUUID);
 				gc.removeUser(playerUUID);
 				gc.removeMember(playerUUID);
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&6You left the chat &b" + gc.getName() + "&6.")));
+				player.sendMessage(unify(processChat(null, "&6You left the chat &b" + gc.getName() + "&6.")));
 			}
 			break;
 			case "add": {
@@ -479,9 +481,9 @@ public class CommandGroup extends Command implements TabExecutor {
 					gc.removeBanned(targetPlayer);
 					gc.addMember(targetPlayer);
 					gc.addUser(targetPlayer);
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Added " + targetPlayerName + " to the chat &b" + gc.getName() + "&6.")));
+					player.sendMessage(unify(processChat(null, "&6Added " + targetPlayerName + " to the chat &b" + gc.getName() + "&6.")));
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+					player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 				}
 			}
 			break;
@@ -490,49 +492,49 @@ public class CommandGroup extends Command implements TabExecutor {
 					gc.removeBanned(targetPlayer);
 					gc.addMember(targetPlayer);
 					gc.addModerator(targetPlayer);
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Added " + targetPlayerName + " as a moderator in chat &b" + gc.getName() + "&6.")));
+					player.sendMessage(unify(processChat(null, "&6Added " + targetPlayerName + " as a moderator in chat &b" + gc.getName() + "&6.")));
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+					player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 				}
 			}
 			break;
 			case "unmod": {
 				if (bypass || gc.getOwner().equals(playerUUID)) {
 					gc.removeModerator(targetPlayer);
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Removed " + targetPlayerName + " as a moderator in chat &b" + gc.getName() + "&6.")));
+					player.sendMessage(unify(processChat(null, "&6Removed " + targetPlayerName + " as a moderator in chat &b" + gc.getName() + "&6.")));
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+					player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 				}
 			}
 			break;
 			case "kick": {
 				if (bypass || gc.isModerator(player)) {
 					if (gc.isModerator(targetPlayer) && !(bypass || gc.getOwner().equals(playerUUID))) {
-						player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+						player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 					} else {
-						player.sendMessage(plugin.unify(plugin.processChat(null, "&6Kicked " + targetPlayerName + " from the chat &b" + gc.getName() + "&6.")));
+						player.sendMessage(unify(processChat(null, "&6Kicked " + targetPlayerName + " from the chat &b" + gc.getName() + "&6.")));
 						gc.removeModerator(targetPlayer);
 						gc.removeMember(targetPlayer);
 						gc.removeUser(targetPlayer);
 					}
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+					player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 				}
 			}
 			break;
 			case "ban": {
 				if (bypass || gc.isModerator(player)) {
 					if (gc.isModerator(targetPlayer) && !(bypass || gc.getOwner().equals(playerUUID))) {
-						player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+						player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 					} else {
-						player.sendMessage(plugin.unify(plugin.processChat(null, "&6Banned " + targetPlayerName + " from the chat &b" + gc.getName() + "&6.")));
+						player.sendMessage(unify(processChat(null, "&6Banned " + targetPlayerName + " from the chat &b" + gc.getName() + "&6.")));
 						gc.removeModerator(targetPlayer);
 						gc.removeMember(targetPlayer);
 						gc.removeUser(targetPlayer);
 						gc.addBanned(targetPlayer);
 					}
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+					player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 				}
 			}
 			break;
@@ -540,7 +542,7 @@ public class CommandGroup extends Command implements TabExecutor {
 				if (bypass || gc.isModerator(player)) {
 					gc.removeBanned(targetPlayer);
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+					player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 				}
 			}
 			break;
@@ -548,14 +550,14 @@ public class CommandGroup extends Command implements TabExecutor {
 				if (bypass || gc.isModerator(player)) {
 					boolean whitelist = Util.parseBool(args[2]);
 					gc.setWhitelist(whitelist);
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&6Set whitelist for chat &b" + gc.getName() + "&6: " + whitelist)));
+					player.sendMessage(unify(processChat(null, "&6Set whitelist for chat &b" + gc.getName() + "&6: " + whitelist)));
 				} else {
-					player.sendMessage(plugin.unify(plugin.processChat(null, "&cYou don't have permission to do this.")));
+					player.sendMessage(unify(processChat(null, "&cYou don't have permission to do this.")));
 				}
 			}
 			break;
 			default: {
-				player.sendMessage(plugin.unify(plugin.processChat(null, "&cUnknown command " + args[0] + ".")));
+				player.sendMessage(unify(processChat(null, "&cUnknown command " + args[0] + ".")));
 			}
 			break;
 		}
