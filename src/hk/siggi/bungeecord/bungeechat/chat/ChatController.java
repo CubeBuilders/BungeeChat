@@ -1,14 +1,14 @@
 package hk.siggi.bungeecord.bungeechat.chat;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.chat.string.ChatCharacter;
 import hk.siggi.bungeecord.bungeechat.chat.string.ChatString;
 import hk.siggi.bungeecord.bungeechat.chat.string.patcher.ChatPatcher;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.io.File;
 import java.util.ArrayList;
@@ -114,7 +114,7 @@ public final class ChatController implements Listener {
 	}
 
 	PlayerSession getSession(ProxiedPlayer p) {
-		return bungeechat.getSession(p);
+		return BungeeChat.getSession(p);
 	}
 
 	@EventHandler
@@ -247,7 +247,7 @@ public final class ChatController implements Listener {
 			chatTextCensored = originalChatText;
 		}
 		if (chatTextCensored != originalChatText) {
-			bungeechat.getSession(from).showCensorMessage();
+			BungeeChat.getSession(from).showCensorMessage();
 		}
 		return new ProcessedChat(message, originalChatText, chatTextCensored, chatTextSemicensored);
 	}

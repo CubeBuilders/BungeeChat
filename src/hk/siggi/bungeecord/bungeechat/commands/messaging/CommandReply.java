@@ -72,7 +72,7 @@ public class CommandReply extends Command {
 		if (args.length < 1) {
 			// User didn't enter a message.
 			// Set their default chat to PM to this person.
-			PlayerSession session = bc.getSession(player);
+			PlayerSession session = BungeeChat.getSession(player);
 			session.setChatHandler(chatHandler, true);
 			return;
 		}

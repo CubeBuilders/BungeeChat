@@ -37,7 +37,7 @@ public final class CommandAutoCompleter implements Listener {
 			String cursorCheck = cursor.toLowerCase().substring(1);
 			loadCommands();
 			ProxiedPlayer pl = (ProxiedPlayer) sender;
-			PlayerSession session = plugin.getSession(pl);
+			PlayerSession session = BungeeChat.getSession(pl);
 			List<String> suggestions = event.getSuggestions();
 			Consumer<String> addCommand = (command) -> {
 				if (command.toLowerCase().startsWith(cursorCheck)) {

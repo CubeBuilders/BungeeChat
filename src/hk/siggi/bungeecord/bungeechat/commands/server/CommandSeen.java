@@ -63,7 +63,7 @@ public class CommandSeen extends Command implements TabExecutor {
 		boolean maskIPAndLocation = false;
 		ProxiedPlayer p = (ProxiedPlayer) sender;
 		PlayerAccount account = plugin.getPlayerInfo(p.getUniqueId());
-		PlayerSession session = plugin.getSession(p);
+		PlayerSession session = BungeeChat.getSession(p);
 		if (account.isStreamModeActive()) {
 			maskIPAndLocation = true;
 		}
@@ -323,7 +323,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					if (lastSeen > 0L) {
 						message = new TextComponent("");
 						BaseComponent lastSeenT = new TextComponent("Last Seen: ");
-						TimeZone tz = plugin.getSession(p).user.getUserData().getTimeZone();
+						TimeZone tz = BungeeChat.getSession(p).user.getUserData().getTimeZone();
 						BaseComponent lastSeenTimestamp = new TextComponent(plugin.formatDate(lastSeen, tz));
 						BaseComponent lastSeenTime = new TextComponent(" (" + TimeUtil.timeToString(lastSeen - System.currentTimeMillis()) + " ago)");
 						lastSeenT.setColor(ChatColor.GREEN);

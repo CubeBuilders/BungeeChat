@@ -1,9 +1,10 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.PlayerSession;
+import hk.siggi.bungeecord.bungeechat.util.APIUtil;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
-import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import net.cubebuilders.user.CBUser;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -24,7 +25,7 @@ public class CommandRegister extends Command {
 			return;
 		}
 		ProxiedPlayer p = (ProxiedPlayer) cs;
-		PlayerSession session = plugin.getSession(p);
+		PlayerSession session = BungeeChat.getSession(p);
 		CBUser user = session.user;
 		String em = strings.length > 0 ? strings[0] : null;
 		if (em != null && em.equalsIgnoreCase("resend")) {
@@ -36,10 +37,9 @@ public class CommandRegister extends Command {
 				p.sendMessage(unify(processChat(null, "&6The email was already resent!")));
 				return;
 			}
-			if (plugin.resendEmail(p.getUniqueId())) {
+			if (APIUtil.resendEmail(p.getUniqueId())) {
 				session.didResendEmail = true;
 				p.sendMessage(unify(processChat(null, "&6A new email has been sent to &b"+user.getEmail()+"&6!")));
-
 			} else {
 				p.sendMessage(unify(processChat(null, "&6Something went wrong! Please try again!")));
 			}
@@ -50,13 +50,13 @@ public class CommandRegister extends Command {
 				p.sendMessage(unify(processChat(null, "&6Your email address is already set to &b" + user.getEmail() + "&6! :)")));
 			} else if (session.emailNeedsConfirmation && em.equalsIgnoreCase(user.getEmail())) {
 				session.emailNeedsConfirmation = false;
-				if (plugin.setEmail(p.getUniqueId(), em)) {
+				if (APIUtil.setEmail(p.getUniqueId(), em)) {
 					p.sendMessage(unify(processChat(null, "&6Thanks for keeping your information up to date! <3")));
 				} else {
 					p.sendMessage(unify(processChat(null, "&6Something went wrong! Please try again!")));
 				}
 			} else if (session.changeEmailTo != null && session.changeEmailTo.equals(em)) {
-				if (plugin.setEmail(p.getUniqueId(), em)) {
+				if (APIUtil.setEmail(p.getUniqueId(), em)) {
 					if (user.getUserData().isMember) {
 						p.sendMessage(unify(processChat(null, "&6Email set! Please check your email for a link to confirm the change!")));
 					} else {

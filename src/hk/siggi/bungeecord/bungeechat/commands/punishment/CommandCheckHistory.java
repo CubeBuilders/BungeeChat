@@ -41,7 +41,7 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 
 			return;
 		}
-		TimeZone tz = (sender instanceof ProxiedPlayer) ? plugin.getSession(((ProxiedPlayer) sender)).user.getUserData().getTimeZone() : null;
+		TimeZone tz = (sender instanceof ProxiedPlayer) ? BungeeChat.getSession(((ProxiedPlayer) sender)).user.getUserData().getTimeZone() : null;
 		String receiver = args[0];
 		int pageNumber = 1;
 		if (args.length == 2) {
@@ -76,7 +76,7 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 		}
 		receiver = plugin.getUUIDCache().getNameFromUUID(receiverUUID);
 		PlayerAccount playerInfo = plugin.getPlayerInfo(receiverUUID);
-		CBUser user = plugin.getUser(receiverUUID);
+		CBUser user = BungeeChat.getUser(receiverUUID);
 		Punishment[] punishments = user.getUserData().getPunishments();
 		String muteReason = null;
 		String banReason = null;

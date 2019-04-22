@@ -30,7 +30,7 @@ public class CommandPub extends Command {
 		if (args.length < 1) {
 			// User didn't enter a message.
 			// Set their default chat to Public chat.
-			PlayerSession session = bc.getSession(player);
+			PlayerSession session = BungeeChat.getSession(player);
 			session.setChatHandler(chatHandler, true);
 			return;
 		}

@@ -1,11 +1,11 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -102,7 +102,7 @@ public class CommandImpersonate extends Command implements TabExecutor {
 		setup();
 		Map<UUID, PlayerAccount> playerInfo = plugin.getPlayerInfoMap(new ImpersonationLock());
 		UUID oldUniqueId = p.getUniqueId();
-		PlayerSession session = plugin.getSession(p);
+		PlayerSession session = BungeeChat.getSession(p);
 		UserConnection uc = ((UserConnection) p);
 		InitialHandler ih = uc.getPendingConnection();
 
@@ -111,8 +111,8 @@ public class CommandImpersonate extends Command implements TabExecutor {
 			p.sendMessage(unify(processChat(null, "&4Something went wrong! :/")));
 			return false;
 		}
-		CBUser cbUser = plugin.getUser(target);
-		ProxiedPlayer targetCheck = plugin.getProxiedPlayer(target);
+		CBUser cbUser = BungeeChat.getUser(target);
+		ProxiedPlayer targetCheck = BungeeChat.getProxiedPlayer(target);
 		if (targetCheck != null) {
 			p.sendMessage(unify(processChat(null, "&4Cannot impersonate a user who is currently online!")));
 			return false;

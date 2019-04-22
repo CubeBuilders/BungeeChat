@@ -4,8 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import gnu.trove.map.TMap;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.antiddos.NetworkController;
 import hk.siggi.bungeecord.bungeechat.chat.ChatController;
 import hk.siggi.bungeecord.bungeechat.chat.GroupChat;
@@ -91,6 +89,9 @@ import hk.siggi.bungeecord.bungeechat.permissionloader.PermissionLoader;
 import hk.siggi.bungeecord.bungeechat.player.MCBan;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.relog.RelogHandler;
+import hk.siggi.bungeecord.bungeechat.util.APIUtil;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.IteratorAbstract;
 import hk.siggi.bungeecord.bungeechat.util.Prowl;
 import hk.siggi.bungeecord.bungeechat.util.SimpleIterable;
@@ -105,7 +106,6 @@ import io.siggi.http.HTTPServer;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.CharArrayReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -116,7 +116,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
@@ -307,17 +306,18 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 	}
 
-	public PlayerSession getSession(ProxiedPlayer player) {
+	public static PlayerSession getSession(ProxiedPlayer player) {
 		if (player == null) {
 			return null;
 		}
+		BungeeChat bc = getInstance();
 		PlayerSession result;
-		sessionMapReadLock.lock();
+		bc.sessionMapReadLock.lock();
 		try {
 			UUID uuid = player.getUniqueId();
-			result = sessionMap.get(player.getAddress());
+			result = bc.sessionMap.get(player.getAddress());
 		} finally {
-			sessionMapReadLock.unlock();
+			bc.sessionMapReadLock.unlock();
 		}
 		return result;
 	}
@@ -401,8 +401,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		return uuidCache.getUUIDFromName(player);
 	}
 
-	public ProxiedPlayer getProxiedPlayer(UUID uuid) {
-		return getProxy().getPlayer(uuid);
+	public static ProxiedPlayer getProxiedPlayer(UUID uuid) {
+		return getInstance().getProxy().getPlayer(uuid);
 	}
 
 	private BungeeScheduler bungeeScheduler = null;
@@ -1002,7 +1002,11 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 						ProxiedPlayer player = (ProxiedPlayer) receiver;
 						Server server = (Server) sender;
 						event.setCancelled(true);
-						String secretCode = genSecretCode(player.getUniqueId());
+						String secretCode = APIUtil.genSecretCode(player.getUniqueId());
+
+						if (secretCode == null) {
+							secretCode = "";
+						}
 
 						ByteArrayOutputStream baos = new ByteArrayOutputStream();
 						DataOutputStream out = new DataOutputStream(baos);
@@ -1498,14 +1502,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		session.afkTime = 0;
 	}
 
-	public String genSecretCode(UUID uuid) {
-		try {
-			return new String(Util.getURL("http://127.0.0.1:2823/api/secretcode?uuid=" + Util.uuidToString(uuid)));
-		} catch (Exception e) {
-			return "";
-		}
-	}
-
 	private GroupInfo groupInfo = null;
 
 	public GroupInfo getGroupInfo() {
@@ -1607,34 +1603,13 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		return new String(originalChars);
 	}
 
-	public static String stripChatCodes(String text) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < text.length(); i++) {
-			if (text.charAt(i) == '&' && text.length() > i + 1 && isChatCode(text.charAt(i + 1))) {
-				i += 1;
-				continue;
-			}
-			sb.append(text.charAt(i));
-		}
-		return sb.toString();
-	}
-
-	public static boolean isChatCode(char character) {
-		return (character >= '0' && character <= '9')
-				|| (character >= 'A' && character <= 'F')
-				|| (character >= 'a' && character <= 'f')
-				|| (character >= 'K' && character <= 'O')
-				|| (character >= 'k' && character <= 'o')
-				|| (character == 'R' || character == 'r');
-	}
-
 	private final String[] emptyStringArray = new String[0];
 
-	public CBUser getUser(UUID uuid) {
+	public static CBUser getUser(UUID uuid) {
 		return getUser(uuid, false);
 	}
 
-	public CBUser getUser(UUID uuid, boolean forceUpdate) {
+	public static CBUser getUser(UUID uuid, boolean forceUpdate) {
 		if (!forceUpdate) {
 			ProxiedPlayer p = getProxiedPlayer(uuid);
 			if (p != null) {
@@ -1647,49 +1622,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				}
 			}
 		}
-		byte[] bytes = Util.getURL("http://127.0.0.1:2823/api/getuser?uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()));
-		if (bytes == null) {
-			return null;
-		}
-		try {
-			return CBUser.fromJson(new String(bytes, "UTF-8"));
-		} catch (Exception e) {
-		}
-		return null;
-	}
-
-	public boolean setEmail(UUID uuid, String email) {
-		byte[] bytes;
-		try {
-			bytes = Util.getURL("http://127.0.0.1:2823/api/setemail?uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()) + "&email=" + (URLEncoder.encode(email, "UTF-8").replace("%20", "+")));
-		} catch (UnsupportedEncodingException ex) {
-			throw new RuntimeException(ex);
-		}
-		if (bytes == null) {
-			return false;
-		}
-		try {
-			if (new String(bytes, "UTF-8").equals("OK")) {
-				return true;
-			}
-		} catch (Exception e) {
-		}
-		return false;
-	}
-
-	public boolean resendEmail(UUID uuid) {
-		byte[] bytes;
-		bytes = Util.getURL("http://127.0.0.1:2823/api/resendemail?uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()));
-		if (bytes == null) {
-			return false;
-		}
-		try {
-			if (new String(bytes, "UTF-8").equals("OK")) {
-				return true;
-			}
-		} catch (Exception e) {
-		}
-		return false;
+		return APIUtil.getUser(uuid);
 	}
 
 	public void triggerUpdate(UUID uuid, boolean ban, long notifyPunishment) {
@@ -1805,31 +1738,17 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 		getSession(p).updateBungeePermissionCache();
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					byte[] data = Util.getURL("http://127.0.0.1:2823/api/pullcommands?uuid=" + (p.getUniqueId().toString().replaceAll("-", "").toLowerCase()));
-					String commandsStr = new String(data, "UTF-8");
-					BufferedReader reader = new BufferedReader(new CharArrayReader(commandsStr.toCharArray()));
-					String line;
-					while ((line = reader.readLine()) != null) {
-						if (line.equals("")) {
-							continue;
-						}
-						if (line.startsWith("/")) {
-							line = line.substring(1);
-						}
-						line = line.replaceAll("%Name%", p.getName());
-						getProxy().getPluginManager().dispatchCommand(getProxy().getConsole(), line);
-					}
-					sendInfoUpdate(p, p.getServer());
-				} catch (Exception e) {
+		new Thread(() -> {
+			List<String> commands = APIUtil.pullCommands(p.getUniqueId());
+			if (commands != null) {
+				for (String command : commands) {
+					command = command.replaceAll("%Name%", p.getName());
+					getProxy().getPluginManager().dispatchCommand(getProxy().getConsole(), command);
 				}
 			}
+			sendInfoUpdate(p, p.getServer());
 		}).start();
 	}
-
 
 	@EventHandler
 	public void preLogin(PreLoginEvent event) {
@@ -2534,7 +2453,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		final boolean ipBanned;
 		final CBUser user;
 		{
-			boolean isIpBanned = false;
 			CBUser cb = null;
 			try {
 				byte[] bytes = null;
@@ -2566,6 +2484,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				return;
 			}
 			user = cb;
+			boolean isIpBanned = false;
 			try {
 				byte[] ipBytes = connection.getAddress().getAddress().getAddress();
 				IP ip = null;
@@ -2574,15 +2493,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				} else if (ipBytes.length == 16) {
 					ip = new IPv6(ipBytes);
 				}
-				byte[] bytes = Util.getURL("http://127.0.0.1:2823/api/isipbanned/" + (ip.toString().replace(":", "-")));
-				if (bytes == null) {
-					event.setCancelled(true);
-					TextComponent c = new TextComponent("The login server appears to be offline. Please try again later.");
-					connection.disconnect(c);
-					return;
-				}
-				String str = new String(bytes);
-				isIpBanned = str.equals("1");
+				isIpBanned = APIUtil.isIPBanned(ip.toString());
 			} catch (Exception e) {
 			}
 			ipBanned = isIpBanned;
@@ -3104,8 +3015,11 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			message.addExtra(extra);
 
 			if (!(player instanceof ProxiedPlayer)) {
-				extra = new TextComponent("\n\nCubeBuildersGirl's Secret Code: " + genSecretCode(user.getUUID()) + "\n\n" + (user.getUserId() > 0 ? "If you forgot your password on the website, you can use the secret code above to reset it." : "You need to register on the website before you can appeal. Use the secret code above on the register page.") + "\n\nA staff member will NEVER ask for this secret code!");
-				message.addExtra(extra);
+				String secretCode = APIUtil.genSecretCode(user.getUUID());
+				if (secretCode != null) {
+					extra = new TextComponent("\n\nCubeBuildersGirl's Secret Code: " + secretCode + "\n\n" + (user.getUserId() > 0 ? "If you forgot your password on the website, you can use the secret code above to reset it." : "You need to register on the website before you can appeal. Use the secret code above on the register page.") + "\n\nA staff member will NEVER ask for this secret code!");
+					message.addExtra(extra);
+				}
 			}
 
 			player.disconnect(message);
@@ -3138,8 +3052,11 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			message.addExtra(extra);
 
 			if (!(player instanceof ProxiedPlayer)) {
-				extra = new TextComponent("\n\nCubeBuildersGirl's Secret Code: " + genSecretCode(user.getUUID()) + "\n\n" + (user.getUserId() > 0 ? "If you forgot your password on the website, you can use the secret code above to reset it." : "You need to register on the website before you can appeal. Use the secret code above on the register page.") + "\n\nA staff member will NEVER ask for this secret code!");
-				message.addExtra(extra);
+				String secretCode = APIUtil.genSecretCode(user.getUUID());
+				if (secretCode != null) {
+					extra = new TextComponent("\n\nCubeBuildersGirl's Secret Code: " + secretCode + "\n\n" + (user.getUserId() > 0 ? "If you forgot your password on the website, you can use the secret code above to reset it." : "You need to register on the website before you can appeal. Use the secret code above on the register page.") + "\n\nA staff member will NEVER ask for this secret code!");
+					message.addExtra(extra);
+				}
 			}
 
 			player.disconnect(message);

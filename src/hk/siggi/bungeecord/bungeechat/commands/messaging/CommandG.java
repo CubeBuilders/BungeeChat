@@ -63,7 +63,7 @@ public class CommandG extends Command implements TabExecutor {
 			// User didn't enter a message, just a name.
 			// Set their default chat to PM to this person.
 			BungeeChat bc = BungeeChat.getInstance();
-			PlayerSession session = bc.getSession(player);
+			PlayerSession session = BungeeChat.getSession(player);
 			session.setChatHandler(destinationChat, true);
 			return;
 		}

@@ -1,11 +1,11 @@
 package hk.siggi.bungeecord.bungeechat.chat;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -33,7 +33,7 @@ public final class GroupChat implements ChatHandler {
 	@Override
 	public void sendChat(ProxiedPlayer sender, String message) {
 		BungeeChat plugin = controller.bungeechat;
-		PlayerSession session = plugin.getSession(sender);
+		PlayerSession session = BungeeChat.getSession(sender);
 		BungeeChat bungeechat = BungeeChat.getInstance();
 		boolean bypassIgnore = sender.hasPermission("hk.siggi.bungeechat.ignoreexempt");
 		if (controller.rateLimitChat(sender)) {
@@ -75,7 +75,7 @@ public final class GroupChat implements ChatHandler {
 		StringBuilder recipientSb = new StringBuilder();
 
 		for (UUID recipientUUID : joined) {
-			ProxiedPlayer recipient = plugin.getProxiedPlayer(recipientUUID);
+			ProxiedPlayer recipient = BungeeChat.getProxiedPlayer(recipientUUID);
 			if (recipient == null) {
 				continue;
 			}

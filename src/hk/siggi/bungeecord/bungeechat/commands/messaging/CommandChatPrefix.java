@@ -42,7 +42,7 @@ public class CommandChatPrefix extends Command implements TabExecutor {
 		TextComponent base = new TextComponent("");
 		TextComponent chatPrefixType = new TextComponent("Chat Prefix Type: ");
 		String theTypeStr = info.getChatPrefixType().name().toLowerCase();
-		if (theTypeStr.equals("auto")) theTypeStr += " (" + (plugin.getSession(p).getChatPrefixType(ChatPrefixType.AUTO).name().toLowerCase()) + ")";
+		if (theTypeStr.equals("auto")) theTypeStr += " (" + (BungeeChat.getSession(p).getChatPrefixType(ChatPrefixType.AUTO).name().toLowerCase()) + ")";
 		TextComponent theType = new TextComponent(theTypeStr);
 		chatPrefixType.setColor(ChatColor.GOLD);
 		theType.setColor(ChatColor.AQUA);

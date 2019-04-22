@@ -63,7 +63,7 @@ public class CommandMail extends Command implements TabExecutor {
 		}
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		PlayerAccount playerInfo = plugin.getPlayerInfo(player.getUniqueId());
-		PlayerSession session = plugin.getSession(player);
+		PlayerSession session = BungeeChat.getSession(player);
 		PlayerNameHandler playerNameHandler = plugin.getPlayerNameHandler();
 		if (args[0].equalsIgnoreCase("send")) {
 			if (args.length < 3) {

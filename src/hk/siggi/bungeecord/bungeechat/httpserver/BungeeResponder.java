@@ -21,6 +21,7 @@ import hk.siggi.bungeecord.bungeechat.ontime.OnTimeSessionRecord;
 import hk.siggi.bungeecord.bungeechat.player.MCBan;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.player.Punishment;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.stripChatCodes;
 import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import hk.siggi.iphelper.IP;
@@ -1550,7 +1551,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 				pw.println();
 				ChatCensor censor = BungeeChat.getInstance().getChatCensor().filterOnly(word);
 				for (ChatLogLine cll : Util.iterable(ChatLogLine.iterateAllChats())) {
-					String message = BungeeChat.stripChatCodes(cll.message);
+					String message = stripChatCodes(cll.message);
 					if (!message.toLowerCase().contains(lc)) {
 						String censoredMessage = censor.filter(message);
 						if (!message.equals(censoredMessage)) {
@@ -1672,7 +1673,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 				return;
 			}
 			String fromNameCorrected = Util.uuidToString(fromUUID);
-			CBUser user = plugin.getUser(fromUUID);
+			CBUser user = BungeeChat.getUser(fromUUID);
 			boolean isNameBanned = plugin.isNameBanned(username);
 			boolean isBanned = user.isBanned(); // TODO: Add a check!
 			String customBanMessage = user.getUserData().banMessageString;

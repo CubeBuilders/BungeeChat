@@ -178,7 +178,7 @@ class PermissionLoaderBridgeImpl implements PermissionLoaderBridge {
 
 					// set the groups again (BungeeCord will take care of permissions)
 					p.addGroups(groups);
-					plugin.getSession(p).updateBungeePermissionCache();
+					BungeeChat.getSession(p).updateBungeePermissionCache();
 				} catch (Exception e) {
 				}
 			}

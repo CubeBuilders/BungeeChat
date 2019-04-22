@@ -85,7 +85,7 @@ public final class GroupInfo {
 	public Collection<String> getGroups(ProxiedPlayer player) {
 			Collection<String> groups;
 			{
-				String[] groupsArray = plugin.getSession(player).getFakeGroups();
+				String[] groupsArray = BungeeChat.getSession(player).getFakeGroups();
 				if (groupsArray == null) {
 					groups = player.getGroups();
 				} else {

@@ -41,10 +41,10 @@ public class CommandDontKickMe extends Command {
 //				return;
 //			}
 //		}
-		PlayerSession session = plugin.getSession(player);
+		PlayerSession session = BungeeChat.getSession(player);
 		if (args.length >= 2) {
 			String targetPlayer = args[1];
-			session = plugin.getSession(plugin.getProxy().getPlayer(targetPlayer));
+			session = BungeeChat.getSession(plugin.getProxy().getPlayer(targetPlayer));
 		}
 		int newKickTimer = Integer.MAX_VALUE;
 		try {

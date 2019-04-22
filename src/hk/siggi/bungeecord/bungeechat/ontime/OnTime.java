@@ -58,7 +58,7 @@ public final class OnTime implements Listener {
 		String targetServer = event.getServer().getInfo().getName();
 		OnTimePlayer p;
 		UUID uuid = player.getUniqueId();
-		PlayerSession session = plugin.getSession(player);
+		PlayerSession session = BungeeChat.getSession(player);
 		if (session.invalidatedOnTime) {
 			return;
 		}
@@ -98,9 +98,9 @@ public final class OnTime implements Listener {
 				playerMap.remove(uuid);
 			}
 		}
-		ProxiedPlayer pp = plugin.getProxiedPlayer(uuid);
+		ProxiedPlayer pp = BungeeChat.getProxiedPlayer(uuid);
 		if (pp != null) {
-			plugin.getSession(pp).invalidatedOnTime = true;
+			BungeeChat.getSession(pp).invalidatedOnTime = true;
 		}
 	}
 

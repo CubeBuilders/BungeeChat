@@ -122,7 +122,7 @@ public class CommandPermanentBan extends Command implements TabExecutor {
 		long now = System.currentTimeMillis();
 		long timeSinceLastBan = -1L;
 		try {
-			PlayerSession session = plugin.getSession(plugin.getProxiedPlayer(receiverUUID));
+			PlayerSession session = BungeeChat.getSession(BungeeChat.getProxiedPlayer(receiverUUID));
 			if (session != null) {
 				if (session.recentBan > 0L) {
 					timeSinceLastBan = now - session.recentBan;
@@ -155,7 +155,7 @@ public class CommandPermanentBan extends Command implements TabExecutor {
 				message.addExtra(extra);
 				sender.sendMessage(message);
 			} else {
-				PlayerSession session = plugin.getSession(targetPlayer);
+				PlayerSession session = BungeeChat.getSession(targetPlayer);
 				session.user.getUserData().punishments.add(p);
 				plugin.youAreBanned(targetPlayer, session.user);
 				session.user.getUserData().punishments.remove(p);

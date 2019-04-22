@@ -87,7 +87,7 @@ public class CommandList extends Command {
 			PlayerSession mySession = null;
 			if (sender instanceof ProxiedPlayer) {
 				myPlayer = (ProxiedPlayer) sender;
-				mySession = plugin.getSession(myPlayer);
+				mySession = BungeeChat.getSession(myPlayer);
 			}
 			while ((line = reader.readLine()) != null) {
 				String primaryServer = null;
@@ -293,7 +293,7 @@ public class CommandList extends Command {
 						playersHere.addExtra(comma);
 					}
 					playerInfo.setColor(plugin.getGroupInfo().getColor(p));
-					PlayerSession session = plugin.getSession(p);
+					PlayerSession session = BungeeChat.getSession(p);
 					if (session != null) {
 						if (session.teamSpeakOnline) {
 							TextComponent teamSpeak = new TextComponent("[TS]");

@@ -51,7 +51,7 @@ public class CommandPunish extends Command implements TabExecutor {
 			sender.sendMessage("Player not found!");
 			return;
 		}
-		plugin.getSession((ProxiedPlayer) sender).openPunisher(targetUUID, allowTroll, allowMute, allowBan);
+		BungeeChat.getSession((ProxiedPlayer) sender).openPunisher(targetUUID, allowTroll, allowMute, allowBan);
 		return;
 	}
 

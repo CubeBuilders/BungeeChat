@@ -109,7 +109,7 @@ public class CommandMute extends Command implements TabExecutor {
 		long now = System.currentTimeMillis();
 		long timeSinceLastMute = -1L;
 		try {
-			PlayerSession session = plugin.getSession(plugin.getProxiedPlayer(receiverUUID));
+			PlayerSession session = BungeeChat.getSession(BungeeChat.getProxiedPlayer(receiverUUID));
 			if (session != null) {
 				if (session.recentMute > 0L) {
 					timeSinceLastMute = now - session.recentMute;

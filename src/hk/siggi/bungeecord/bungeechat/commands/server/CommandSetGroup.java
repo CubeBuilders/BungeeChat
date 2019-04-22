@@ -62,14 +62,14 @@ public class CommandSetGroup extends Command {
 		}
 		String[] groups = groupsStr.split(",");
 		if (fake) {
-			plugin.getSession(target).setFakeGroups(groups);
+			BungeeChat.getSession(target).setFakeGroups(groups);
 			TextComponent ok = new TextComponent("Set fake groups.");
 			ok.setColor(ChatColor.GOLD);
 			sender.sendMessage(ok);
 		} else {
 			target.removeGroups(currentGroups);
 			target.addGroups(groups);
-			plugin.getSession(target).updateBungeePermissionCache();
+			BungeeChat.getSession(target).updateBungeePermissionCache();
 			plugin.sendInfoUpdate(target, target.getServer());
 			TextComponent ok = new TextComponent("Groups updated.");
 			ok.setColor(ChatColor.GOLD);

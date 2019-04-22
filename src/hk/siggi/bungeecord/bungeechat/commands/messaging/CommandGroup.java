@@ -1,14 +1,14 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.NicknameCache;
 import hk.siggi.bungeecord.bungeechat.PlayerNameHandler;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.UUIDCache;
 import hk.siggi.bungeecord.bungeechat.chat.ChatController;
 import hk.siggi.bungeecord.bungeechat.chat.GroupChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ public class CommandGroup extends Command implements TabExecutor {
 		}
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		if (args[0].equals("tabbypass")) {
-			PlayerSession session = plugin.getSession(player);
+			PlayerSession session = BungeeChat.getSession(player);
 			if (session.groupTabBypass) {
 				session.groupTabBypass = false;
 				player.sendMessage(unify(processChat(null, "&6Tab Bypass is now disabled!")));
@@ -578,7 +578,7 @@ public class CommandGroup extends Command implements TabExecutor {
 	@Override
 	public Iterable<String> onTabComplete(CommandSender sender, String[] args) {
 		ProxiedPlayer p = (ProxiedPlayer) sender;
-		PlayerSession session = plugin.getSession(p);
+		PlayerSession session = BungeeChat.getSession(p);
 		List<String> actions = Arrays.asList(new String[]{
 			"create", "delete", "list", "listall", "info", "mute", "unmute", "leave", "whitelist", "add", "mod", "unmod", "kick", "ban", "unban"
 		});

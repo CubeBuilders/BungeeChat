@@ -2,8 +2,6 @@ package hk.siggi.bungeecord.bungeechat;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.chat.handler.PublicChatHandler;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandImpersonate;
@@ -11,6 +9,8 @@ import hk.siggi.bungeecord.bungeechat.geolocation.Geolocation;
 import hk.siggi.bungeecord.bungeechat.permissionloader.PermissionLoader;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount.ChatPrefixType;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import static hk.siggi.bungeecord.bungeechat.util.Util.same;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -356,7 +356,6 @@ public class PlayerSession {
 		}
 
 		BungeeChat bc = BungeeChat.getInstance();
-		PlayerSession session = bc.getSession(p);
 		PlayerAccount playerInfo = bc.getPlayerInfo(p.getUniqueId());
 
 		if (vanishCheck > 0) {

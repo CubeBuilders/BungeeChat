@@ -25,7 +25,7 @@ public class CommandCTReward extends Command {
 		
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		
-		PlayerSession session = plugin.getSession(player);
+		PlayerSession session = BungeeChat.getSession(player);
 		long currentSessionLength = (System.currentTimeMillis() - session.loginTime);
 		long timeInLast2Weeks = session.timeInLast2Weeks + currentSessionLength;
 		double hoursInLast2Weeks = ((double) timeInLast2Weeks) / 3600000L;

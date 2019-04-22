@@ -1,7 +1,5 @@
 package hk.siggi.bungeecord.bungeechat.util;
 
-import hk.siggi.bungeecord.bungeechat.BungeeChat;
-import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import net.md_5.bungee.api.ChatColor;
@@ -15,6 +13,28 @@ public class ChatUtil {
 
 	private ChatUtil() {
 		// not meant to be instantiated
+	}
+
+	public static String stripChatCodes(String text) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < text.length(); i++) {
+			if (text.charAt(i) == '&' && text.length() > i + 1 && isChatCode(text.charAt(i + 1))) {
+				i += 1;
+				continue;
+			}
+			sb.append(text.charAt(i));
+		}
+		return sb.toString();
+	}
+
+	public static boolean isChatCode(char character) {
+		return (character >= '0' && character <= '9')
+				|| (character >= 'A' && character <= 'F')
+				|| (character >= 'a' && character <= 'f')
+				|| (character >= 'K' && character <= 'O')
+				|| (character >= 'k' && character <= 'o')
+				|| (character == 'R')
+				|| (character == 'r');
 	}
 
 	public static ArrayList<BaseComponent> processChat(ProxiedPlayer sender, String text) {
@@ -47,7 +67,7 @@ public class ChatUtil {
 				builder.append(chars[i]);
 				continue;
 			}
-			if (chars[i] == '&' && chars.length > i + 1 && BungeeChat.isChatCode(chars[i + 1])) {
+			if (chars[i] == '&' && chars.length > i + 1 && isChatCode(chars[i + 1])) {
 				i += 1;
 				if (builder.length() != 0) {
 					String finalString = builder.toString();

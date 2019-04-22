@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.util.APIUtil;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import net.md_5.bungee.api.CommandSender;
@@ -22,9 +23,13 @@ public class CommandSecretCode extends Command {
 			return;
 		}
 		ProxiedPlayer p = (ProxiedPlayer) cs;
-		String genSecretCode = plugin.genSecretCode(p.getUniqueId());
-		p.sendMessage(unify(processChat(null, "&6Your Secret Code is: &b" + genSecretCode)));
-		p.sendMessage(unify(processChat(null, "&6Enter it ONLY on CubeBuilders.net or Siggi.io!")));
+		String secretCode = APIUtil.genSecretCode(p.getUniqueId());
+		if (secretCode == null) {
+			p.sendMessage(unify(processChat(null, "&6A secret code was not able to be generated at this time. Please try again later.")));
+		} else {
+			p.sendMessage(unify(processChat(null, "&6Your Secret Code is: &b" + secretCode)));
+			p.sendMessage(unify(processChat(null, "&6Enter it ONLY on CubeBuilders.net or Siggi.io!")));
+		}
 	}
 
 }
