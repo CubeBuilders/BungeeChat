@@ -174,11 +174,18 @@ public final class ChatController implements Listener {
 		});
 	}
 
+	private static final UUID christy = UUID.fromString("6E3CBBBA-E741-4A3B-8C96-BA82189ABD32");
+
 	public ProcessedChat process(ProxiedPlayer from, String message, boolean censor) {
 		message = message.replace("<3", "❤");
 		message = message.replace(":tableflip:", "(╯°□°）╯︵ ┻━┻");
 		message = message.replace(":yuno:", "ლ(ಠ益ಠლ)");
 		message = message.replace(":e_e:", "ಠ益ಠ");
+
+		if (from != null && from.getUniqueId().equals(christy)) {
+			message = message.replace("Siggi", "my handsome ex that I miss so much");
+			message = message.replace("siggi", "my handsome ex that I miss so much");
+		}
 
 		boolean allowColor = from == null ? true : from.hasPermission("hk.siggi.bungeechat.chat.color");
 		boolean allowFormat = from == null ? true : from.hasPermission("hk.siggi.bungeechat.chat.format");
