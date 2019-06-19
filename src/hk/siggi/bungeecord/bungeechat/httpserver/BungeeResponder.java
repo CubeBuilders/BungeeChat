@@ -1205,6 +1205,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 						//sb.append("<a href=\"").append(encryptRequest("request=/bc/chatlog&showchatlog=1&from=" + (from / 1000L) + "&to=" + (to / 1000L) + (playersString == null ? "" : ("&players=" + playersString)) + (vplayersString == null ? "" : ("&vplayers=" + vplayersString)))).append("\">Encrypt chatlog</a> - click this then copy/paste the address bar to share this chatlog.<br><br><br>");
 					}
 					sb.append("<br>");
+					sb.append("Note: All chat messages are shown as they were originally typed in by the player, before any caps filtering or censorship has been applied to it!<br><br>");
 					ChatLogLine[] lines = ChatLogLine.getChatLogs(from, to);
 					if (!requestIsEncrypted) {
 						sb.append("<a href=\"/bc/chatlog?from=").append((from / 1000L) - 120L).append("&to=").append(to / 1000L).append(playersString == null ? "" : ("&players=" + playersString)).append(vplayersString == null ? "" : ("&vplayers=" + vplayersString)).append("\"> + 2 minutes before</a>");
