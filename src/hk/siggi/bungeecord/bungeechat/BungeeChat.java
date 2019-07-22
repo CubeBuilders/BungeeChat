@@ -2470,7 +2470,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				}
 				if (bytes == null) {
 					event.setCancelled(true);
-					TextComponent c = new TextComponent("Could not load your profile data. Please try again in 1 minute. If this problem persists, contact Siggi on Discord IcelandicAsian#8888");
+					TextComponent c = new TextComponent("Could not load your profile data. Please try again in 1 minute. If this problem persists, contact Siggi on Discord Siggi#7788");
 					connection.disconnect(c);
 					return;
 				}
