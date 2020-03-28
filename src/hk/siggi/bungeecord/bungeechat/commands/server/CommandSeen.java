@@ -174,18 +174,20 @@ public class CommandSeen extends Command implements TabExecutor {
 					sender.sendMessage(message);
 				}
 
-				IPtoISP ipToIsp = plugin.getIpToIsp();
-				if (ipToIsp != null) {
-					String isp = ipToIsp.getISP(ip.toShortString());
-					if (isp != null) {
-						message = new TextComponent("");
-						BaseComponent ispIs = new TextComponent("ISP: ");
-						BaseComponent ispTxt = new TextComponent(isp);
-						ispIs.setColor(ChatColor.GREEN);
-						ispTxt.setColor(ChatColor.AQUA);
-						message.addExtra(ispIs);
-						message.addExtra(ispTxt);
-						sender.sendMessage(message);
+				if (!ip.toLongString().contains("/")) {
+					IPtoISP ipToIsp = plugin.getIpToIsp();
+					if (ipToIsp != null) {
+						String isp = ipToIsp.getISP(ip.toShortString());
+						if (isp != null) {
+							message = new TextComponent("");
+							BaseComponent ispIs = new TextComponent("ISP: ");
+							BaseComponent ispTxt = new TextComponent(isp);
+							ispIs.setColor(ChatColor.GREEN);
+							ispTxt.setColor(ChatColor.AQUA);
+							message.addExtra(ispIs);
+							message.addExtra(ispTxt);
+							sender.sendMessage(message);
+						}
 					}
 				}
 
