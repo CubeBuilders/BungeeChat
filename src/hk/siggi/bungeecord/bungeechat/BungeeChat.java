@@ -157,6 +157,7 @@ import net.cubebuilders.user.UserDonation;
 import net.md_5.bungee.BungeeServerInfo;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -172,6 +173,7 @@ import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.PreLoginEvent;
+import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
@@ -326,7 +328,11 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		try {
 			BungeeServerInfo info = (BungeeServerInfo) getProxy().getServerInfo(server);
 			if (addressField == null) {
-				addressField = BungeeServerInfo.class.getDeclaredField("address");
+				try {
+					addressField = BungeeServerInfo.class.getDeclaredField("socketAddress");
+				} catch (Exception e) {
+					addressField = BungeeServerInfo.class.getDeclaredField("address");
+				}
 				addressField.setAccessible(true);
 				Field modifiers = addressField.getClass().getDeclaredField("modifiers");
 				modifiers.setAccessible(true);
@@ -3879,5 +3885,20 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				}
 			}
 		}
+	}
+
+	@EventHandler
+	public void pingRequest(ProxyPingEvent event) {
+		String motd = randomMotd();
+		if (motd == null) {
+			return;
+		}
+		ServerPing response = event.getResponse();
+		response.setDescription(motd);
+		event.setResponse(response);
+	}
+
+	private String randomMotd() {
+		return null;
 	}
 }
