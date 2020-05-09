@@ -69,7 +69,7 @@ public class NicknameCache {
 	}
 
 	public boolean isNicknameUsed(String nickname) {
-		return uuidByNicknames.containsKey(nickname);
+		return uuidByNicknames.containsKey(nickname.toLowerCase());
 	}
 
 	public boolean nicknamesLoaded() {
