@@ -84,11 +84,14 @@ public class NicknameCache {
 		List<String> nicks = new LinkedList<>();
 		nickname = nickname.toLowerCase();
 		for (String nick : nicknamesByUUID.values()) {
-			if (nick.toLowerCase().startsWith(nickname)) {
-				nicks.add(nick);
-				if (limit > 0 && nicks.size() >= limit) {
-					break;
+			try {
+				if (nick.toLowerCase().startsWith(nickname)) {
+					nicks.add(nick);
+					if (limit > 0 && nicks.size() >= limit) {
+						break;
+					}
 				}
+			} catch (NullPointerException npe) {
 			}
 		}
 		return nicks;

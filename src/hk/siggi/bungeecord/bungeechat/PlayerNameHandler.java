@@ -1,7 +1,6 @@
 package hk.siggi.bungeecord.bungeechat;
 
 import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
-import hk.siggi.bungeecord.bungeechat.ontime.OnTimePlayer;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -133,7 +132,13 @@ public final class PlayerNameHandler {
 		if (allowedUsers == null) {
 			limit -= matchedNames.size();
 		} else {
-			matchedNames.removeIf((n) -> !allowedUsers.test(nc.getUserByNickname(n)));
+			matchedNames.removeIf((n) -> {
+				try {
+					return !allowedUsers.test(nc.getUserByNickname(n));
+				} catch (NullPointerException npe) {
+					return true;
+				}
+			});
 		}
 		if (!skipNonNicks && ((allowedUsers == null && limit > 0)
 				|| (allowedUsers != null && matchedNames.size() < limit))) {
@@ -188,36 +193,38 @@ public final class PlayerNameHandler {
 		return allNames;
 	}
 
+	private long getLastOnline(String username, long now) {
+		return getLastOnline(getPlayerByName(username), now);
+	}
+
+	private long getLastOnline(UUID uuid, long now) {
+		if (uuid == null) {
+			return -1L;
+		}
+		try {
+			if (plugin.getProxy().getPlayer(uuid) != null) {
+				return now;
+			}
+			return OnTime.getInstance().getPlayer(uuid).getLastOnline();
+		} catch (NullPointerException npe) {
+			return -1L;
+		}
+	}
+
 	private Comparator<String> sortByRecentlyOnline(String typedName) {
-		return (String o1, String o2) -> {if(typedName!=null){
-			if (o1.equalsIgnoreCase(o2)) {
-				return 0;
-			} else if (o1.equalsIgnoreCase(typedName)) {
-				return -1;
-			} else if (o2.equalsIgnoreCase(typedName)) {
-				return 1;
-			}}
-			UUID u1 = getPlayerByName(o1);
-			UUID u2 = getPlayerByName(o2);
-			ProxiedPlayer p1 = u1 == null ? null : plugin.getProxy().getPlayer(u1);
-			ProxiedPlayer p2 = u2 == null ? null : plugin.getProxy().getPlayer(u2);
-			if (p1 != null && p2 == null) {
-				return -1;
-			} else if (p1 == null && p2 != null) {
-				return 1;
+		return (String o1, String o2) -> {
+			if (typedName != null) {
+				if (o1.equalsIgnoreCase(o2)) {
+					return 0;
+				} else if (o1.equalsIgnoreCase(typedName)) {
+					return -1;
+				} else if (o2.equalsIgnoreCase(typedName)) {
+					return 1;
+				}
 			}
 			long now = System.currentTimeMillis();
-			OnTimePlayer otp1 = OnTime.getInstance().getPlayer(u1);
-			OnTimePlayer otp2 = OnTime.getInstance().getPlayer(u2);
-			long lastLogin1 = otp1.getLastOnline();
-			long lastLogin2 = otp2.getLastOnline();
-			if (lastLogin1 == -1L && lastLogin2 == -1) {
-				return o1.toLowerCase().compareTo(o2.toLowerCase());
-			} else if (lastLogin1 == -1L) {
-				lastLogin1 = now;
-			} else if (lastLogin2 == -1L) {
-				lastLogin2 = now;
-			}
+			long lastLogin1 = getLastOnline(o1, now);
+			long lastLogin2 = getLastOnline(o2, now);
 			if (lastLogin1 > lastLogin2) {
 				return -1;
 			} else if (lastLogin2 > lastLogin1) {

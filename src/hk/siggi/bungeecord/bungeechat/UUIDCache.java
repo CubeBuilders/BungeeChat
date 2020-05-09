@@ -156,13 +156,16 @@ public class UUIDCache {
 		startingWith = startingWith.toLowerCase();
 		LinkedList<UUID> uuids = new LinkedList<>();
 		for (Map.Entry entry : uuidToPlayer.entrySet()) {
-			UUID uuid = UUID.fromString((String) (entry.getKey()));
-			String n = (String) (entry.getValue());
-			if (n.toLowerCase().startsWith(startingWith)) {
-				uuids.add(uuid);
-				if (limit > 0 && uuids.size() >= limit) {
-					break;
+			try {
+				UUID uuid = UUID.fromString((String) (entry.getKey()));
+				String n = (String) (entry.getValue());
+				if (n.toLowerCase().startsWith(startingWith)) {
+					uuids.add(uuid);
+					if (limit > 0 && uuids.size() >= limit) {
+						break;
+					}
 				}
+			} catch (NullPointerException npe) {
 			}
 		}
 		return uuids;
