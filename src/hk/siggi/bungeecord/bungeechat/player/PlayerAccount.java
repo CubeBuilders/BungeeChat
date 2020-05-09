@@ -337,7 +337,7 @@ public final class PlayerAccount {
 					BungeeChat.getInstance().text(player, "You have new mail waiting for you on CubeBuilders! Login to CubeBuilders in-game and type /mail read to read! Upgrade to Plus to send & receive mail on your phone at https://cubebuilders.net/store (Msg & Data rates may apply)");
 				}
 			} else {
-				BungeeChat.getInstance().text(player, "Mail from " + senderName + ": " + message + " (reply: MAIL " + (senderName.startsWith("*") ? senderName.substring(1) : senderName) + " [message])");
+				BungeeChat.getInstance().text(player, "Mail from " + senderName + ": " + message + " (reply: MAIL " + (senderName.startsWith(BungeeChat.NICK_PREFIX) ? senderName.substring(BungeeChat.NICK_PREFIX.length()) : senderName) + " [message])");
 				if (getMail().length >= getMaxMail()) {
 					BungeeChat.getInstance().text(player, "Your Mail box is full! To continue receiving mail, please login to CubeBuilders and type /mail clear");
 				}

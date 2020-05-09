@@ -233,7 +233,7 @@ public final class GroupInfo {
 				hoverText = hoverText + (hoverText.equals("") ? "" : "\n") + "Real Name: " + realNameWithPencil;
 			}
 		}
-		String displayName = (nickname == null ? realNameWithPencil : ("*" + nickname));
+		String displayName = (nickname == null ? realNameWithPencil : (BungeeChat.NICK_PREFIX + nickname));
 		TextComponent nameComponent = new TextComponent(((miniPrefix && staffRank != null) ? staroutline : "") + displayName);
 		if (previousName != null) {
 			hoverText = hoverText + (hoverText.equals("") ? "" : "\n") + "Previous Name: " + previousName;

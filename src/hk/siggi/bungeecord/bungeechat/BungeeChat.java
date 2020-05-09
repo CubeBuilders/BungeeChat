@@ -198,6 +198,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 	private final Lock sessionMapReadLock = sessionMapLock.readLock();
 	private final Lock sessionMapWriteLock = sessionMapLock.writeLock();
 
+	public static final String NICK_PREFIX = "*";
+
 	public Map<UUID, PlayerAccount> getPlayerInfoMap(CommandImpersonate.ImpersonationLock lock) {
 		if (lock == null) {
 			throw new NullPointerException();

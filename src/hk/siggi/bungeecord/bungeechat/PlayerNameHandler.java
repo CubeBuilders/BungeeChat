@@ -38,7 +38,7 @@ public final class PlayerNameHandler {
 		PlayerAccount acc = plugin.getPlayerInfo(uuid);
 		String nickname = acc.getNickname();
 		if (nickname != null) {
-			return "*" + nickname;
+			return BungeeChat.NICK_PREFIX + nickname;
 		}
 		return plugin.getUUIDCache().getNameFromUUID(uuid);
 	}
@@ -55,7 +55,7 @@ public final class PlayerNameHandler {
 	 */
 	public UUID getPlayerByName(String name) {
 		UUID uuidFromName;
-		if (name.startsWith("*")) {
+		if (name.startsWith(BungeeChat.NICK_PREFIX)) {
 			name = name.substring(1);
 			uuidFromName = null;
 		} else {
@@ -121,7 +121,7 @@ public final class PlayerNameHandler {
 	 */
 	public List<String> autocompletePlayers(String name, Predicate<UUID> allowedUsers) {
 		boolean skipNonNicks = false;
-		if (name.startsWith("*")) {
+		if (name.startsWith(BungeeChat.NICK_PREFIX)) {
 			skipNonNicks = true;
 			name = name.substring(1);
 		}
