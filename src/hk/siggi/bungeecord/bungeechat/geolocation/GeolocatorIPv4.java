@@ -1,7 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.geolocation;
 
-import hk.siggi.bungeecord.bungeechat.util.RafStream;
 import hk.siggi.bungeecord.bungeechat.util.LineReader;
+import hk.siggi.bungeecord.bungeechat.util.RafStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -99,6 +99,9 @@ class GeolocatorIPv4 extends Geolocator {
 					} catch (NumberFormatException nfe) {
 						continue;
 					}
+					if (firstIP == -1L || lastIP == -1L) {
+						continue;
+					}
 					int firstBlock = (int) ((firstIP >> 16) & 0xffff);
 					int lastBlock = (int) ((lastIP >> 16) & 0xffff);
 					for (int i = firstBlock; i <= lastBlock; i++) {
@@ -121,10 +124,13 @@ class GeolocatorIPv4 extends Geolocator {
 	}
 
 	private long fix(long val) {
-		// did we read from an IPv6 database?
+		if (val > 0xFFFFFFFFL && (val & ~0xFFFFFFFFL) != 0xFFFF00000000L) {
+			// this is not in the IPv4 range
+			return -1;
+		}
 		if (val >= 0xFFFF00000000L && val <= 0xFFFFFFFFFFFFL) {
 			return val - 0xFFFF00000000L;
 		}
-		return val;
+		return val & 0xFFFFFFFFL;
 	}
 }
