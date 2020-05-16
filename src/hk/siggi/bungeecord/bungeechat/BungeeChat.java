@@ -3041,13 +3041,13 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			long timeLeft = expires - now;
 			String timeLeftString = TimeUtil.timeToString(timeLeft, 2);
 			if (timeLeftString.equals("0 seconds")) {
-				timeLeftString = "shortly.\n";
+				timeLeftString = "shortly.";
 			} else {
-				timeLeftString = "in " + timeLeftString + ".\n";
+				timeLeftString = "in " + timeLeftString + ".";
 			}
 
 			String dateStr = formatDate(expires, user.getUserData().getTimeZone());
-			BaseComponent message = new TextComponent(prefix + "You have been banned from CubeBuilders until " + dateStr + " (in " + timeLeftString + ").\n");
+			BaseComponent message = new TextComponent(prefix + "You have been banned from CubeBuilders until " + dateStr + " (" + timeLeftString + ").\n");
 			message.setColor(ChatColor.RED);
 
 			BaseComponent extra = new TextComponent("Reason: ");
