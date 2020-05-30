@@ -28,6 +28,7 @@ public class UserData {
 	public String timezone = null;
 	private transient TimeZone jTimeZone = null;
 	public long lastLogoutAll = 0L;
+	public String skinUrl = null;
 
 	public TimeZone getTimeZone() {
 		if (timezone == null) {
@@ -155,7 +156,7 @@ public class UserData {
 	// </editor-fold>
 
 	// <editor-fold defaultstate="collapsed" desc="Previous Names Fetcher">
-	void updatePreviousNames(final CBUser user, final UUID player, final String username) {
+	public void updatePreviousNames(final CBUser user, final UUID player, final String username) {
 	}
 	// </editor-fold>
 

@@ -29,8 +29,12 @@ public class CBUserGsonBuilder {
 				int userId = -1;
 				UUID uuid = null;
 				String password = null;
+				String passwordSalt = null;
+				String twoFactorSecret = null;
+				boolean twoFactorEnabled = false;
 				String email = null;
 				boolean emailVerified = false;
+				boolean emailDidBounce = false;
 				String emailVerificationCode = null;
 				boolean subscribedToMailingList = false;
 				boolean allowEmails = false;
@@ -60,10 +64,18 @@ public class CBUserGsonBuilder {
 						registerDate = reader.nextLong();
 					} else if (key.equalsIgnoreCase("password") && peek == JsonToken.STRING) {
 						password = reader.nextString();
+					} else if (key.equalsIgnoreCase("passwordSalt") && peek == JsonToken.STRING) {
+						passwordSalt = reader.nextString();
+					} else if (key.equalsIgnoreCase("twoFactorSecret") && peek == JsonToken.STRING) {
+						twoFactorSecret = reader.nextString();
+					} else if (key.equalsIgnoreCase("twoFactorEnabled") && peek == JsonToken.BOOLEAN) {
+						twoFactorEnabled = reader.nextBoolean();
 					} else if (key.equalsIgnoreCase("email") && peek == JsonToken.STRING) {
 						email = reader.nextString();
 					} else if (key.equalsIgnoreCase("emailVerified") && peek == JsonToken.BOOLEAN) {
 						emailVerified = reader.nextBoolean();
+					} else if (key.equalsIgnoreCase("emailDidBounce") && peek == JsonToken.BOOLEAN) {
+						emailDidBounce = reader.nextBoolean();
 					} else if (key.equalsIgnoreCase("emailVerificationCode") && peek == JsonToken.STRING) {
 						emailVerificationCode = reader.nextString();
 					} else if (key.equalsIgnoreCase("subscribedToMailingList") && peek == JsonToken.BOOLEAN) {
@@ -87,8 +99,12 @@ public class CBUserGsonBuilder {
 				reader.endObject();
 				CBUser cbUser = new CBUser(userId, uuid);
 				cbUser.password = password;
+				cbUser.passwordSalt = passwordSalt;
+				cbUser.twoFactorSecret = twoFactorSecret;
+				cbUser.twoFactorEnabled = twoFactorEnabled;
 				cbUser.email = email;
 				cbUser.emailVerified = emailVerified;
+				cbUser.emailDidBounce = emailDidBounce;
 				cbUser.emailVerificationCode = emailVerificationCode;
 				cbUser.subscribedToMailingList = subscribedToMailingList;
 				cbUser.allowEmails = allowEmails;
@@ -113,10 +129,18 @@ public class CBUserGsonBuilder {
 				if (cbUser.password != null) {
 					writer.name("password").value(cbUser.password);
 				}
+				if (cbUser.passwordSalt != null) {
+					writer.name("passwordSalt").value(cbUser.passwordSalt);
+				}
+				if (cbUser.twoFactorSecret != null) {
+					writer.name("twoFactorSecret").value(cbUser.twoFactorSecret);
+				}
+				writer.name("twoFactorEnabled").value(cbUser.twoFactorEnabled);
 				if (cbUser.email != null) {
 					writer.name("email").value(cbUser.email);
 				}
 				writer.name("emailVerified").value(cbUser.emailVerified);
+				writer.name("emailDidBounce").value(cbUser.emailDidBounce);
 				if (cbUser.emailVerificationCode != null) {
 					writer.name("emailVerificationCode").value(cbUser.emailVerificationCode);
 				}

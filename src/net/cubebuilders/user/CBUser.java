@@ -1,8 +1,7 @@
 package net.cubebuilders.user;
 
 import com.google.gson.Gson;
-import java.net.URL;
-import java.net.URLConnection;
+import com.google.gson.JsonObject;
 import java.util.UUID;
 import net.cubebuilders.user.Punishment.PunishmentAction;
 
@@ -90,10 +89,14 @@ public class CBUser {
 		if (user.password != null) {
 			password = user.password;
 		}
+		if (user.twoFactorSecret != null) {
+			twoFactorSecret = user.twoFactorSecret;
+		}
 		if (user.email != null) {
 			email = user.email;
 		}
 		emailVerified = user.emailVerified;
+		emailDidBounce = user.emailDidBounce;
 		emailVerificationCode = user.emailVerificationCode;
 		subscribedToMailingList = user.subscribedToMailingList;
 		subscribedToImportantEmails = user.subscribedToImportantEmails;
@@ -114,8 +117,12 @@ public class CBUser {
 	final UUID uuid;
 	long registerDate = -1L;
 	String password = null;
+	String passwordSalt = null;
+	String twoFactorSecret = null;
+	boolean twoFactorEnabled = false;
 	String email = null;
 	boolean emailVerified = false;
+	boolean emailDidBounce = false;
 	String emailVerificationCode = null;
 	boolean subscribedToMailingList = false;
 	boolean subscribedToImportantEmails = true;
@@ -126,7 +133,7 @@ public class CBUser {
 	boolean missYouGift = false;
 	UserData userData = null;
 
-	public void login(String username) {
+	public void login(String username, String ip) {
 		lastLogin = System.currentTimeMillis();
 		saveData();
 		if (missYouGift) {
@@ -183,6 +190,10 @@ public class CBUser {
 		return emailVerified;
 	}
 
+	public boolean didEmailBounce() {
+		return emailDidBounce;
+	}
+
 	public String getEmailVerificationCode() {
 		return emailVerificationCode;
 	}
@@ -227,6 +238,10 @@ public class CBUser {
 		this.emailVerified = emailVerified;
 	}
 
+	public void setEmailDidBounce(boolean emailDidBounce) {
+		this.emailDidBounce = emailDidBounce;
+	}
+
 	public void setEmailVerificationCode(String emailVerificationCode) {
 		this.emailVerificationCode = emailVerificationCode;
 	}
@@ -248,7 +263,23 @@ public class CBUser {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		throw new UnsupportedOperationException("Cannot set password from Bungee.");
+	}
+
+	public boolean verifyPassword(String password) {
+		throw new UnsupportedOperationException("Cannot verify password from Bungee.");
+	}
+
+	public boolean isTwoFactorEnabled() {
+		return twoFactorEnabled;
+	}
+
+	public void setTwoFactorSecret(String twoFactorSecret) {
+		throw new UnsupportedOperationException("Cannot set two factor secret from Bungee.");
+	}
+
+	public String getTwoFactorSecret() {
+		throw new UnsupportedOperationException("Cannot get two factor secret from Bungee.");
 	}
 
 	public long getRegisterDate() {
@@ -336,16 +367,28 @@ public class CBUser {
 		return copy;
 	}
 
+	private CBUser withoutSensitiveData() {
+		CBUser copy = copy();
+		copy.password = null;
+		copy.twoFactorSecret = null;
+		return copy;
+	}
+
+	public JsonObject toJsonObject() {
+		return toJsonObject(true);
+	}
+
+	public JsonObject toJsonObject(boolean withSensitiveData) {
+		CBUser toJson = withSensitiveData ? this : withoutSensitiveData();
+		return (JsonObject) gsonForNetwork.toJsonTree(toJson);
+	}
+
 	public String toJson(boolean prettyPrinting) {
 		return toJson(prettyPrinting, true);
 	}
 
-	public String toJson(boolean prettyPrinting, boolean withPassword) {
-		CBUser toJson = this;
-		if (!withPassword) {
-			toJson = copy();
-			toJson.password = null;
-		}
+	public String toJson(boolean prettyPrinting, boolean withSensitiveData) {
+		CBUser toJson = withSensitiveData ? this : withoutSensitiveData();
 		return (prettyPrinting ? gsonForFile : gsonForNetwork).toJson(toJson);
 	}
 
