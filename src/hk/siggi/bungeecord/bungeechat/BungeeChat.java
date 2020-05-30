@@ -1,5 +1,6 @@
 package hk.siggi.bungeecord.bungeechat;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -2471,7 +2472,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 						} catch (Exception e) {
 						}
 					}
-					bytes = Util.getURL("http://127.0.0.1:2823/api/userlogin?name=" + connection.getName() + "&uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()));
+					bytes = Util.getURL("http://127.0.0.1:2823/api/userlogin?name=" + connection.getName() + "&uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()) + "&ip=" + userIPAddress);
 					if (bytes != null) {
 						break;
 					}
@@ -2482,7 +2483,18 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 					connection.disconnect(c);
 					return;
 				}
-				cb = CBUser.fromJson(new String(bytes, "UTF-8"));
+				JsonObject result = new JsonParser().parse(new String(bytes, "UTF-8")).getAsJsonObject();
+				String status = result.get("status").getAsString();
+				if (status.equals("ok")) {
+					JsonElement userData = result.get("userdata");
+					cb = CBUser.fromJson(new Gson().toJson(userData));
+				} else {
+					String message = result.get("message").getAsString();
+					event.setCancelled(true);
+					TextComponent c = new TextComponent(message);
+					connection.disconnect(c);
+					return;
+				}
 			} catch (Exception e) {
 			}
 			if (cb == null) {
