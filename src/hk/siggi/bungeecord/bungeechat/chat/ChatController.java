@@ -440,12 +440,11 @@ public final class ChatController implements Listener {
 			bungeechat.addAll(baseTo, chat.uncensored);
 		}
 
-		sessionFrom.playSound("BLOCK_NOTE_BLOCK_PLING", 1.0f, 2.0f, 0);
+		sessionFrom.playSound("UI_BUTTON_CLICK", 1.0f, 2.0f, 0);
 		from.sendMessage(baseFrom);
 		if (!fromAccount.isSilentMuted() || toAccount.isSilentMuted() || to.hasPermission("hk.siggi.bungeechat.silentmute")) {
 			to.sendMessage(baseTo);
-			sessionTo.playSound("BLOCK_NOTE_BLOCK_PLING", 1.0f, 1.5f, 0);
-			sessionTo.playSound("BLOCK_NOTE_BLOCK_PLING", 1.0f, 2.0f, 2);
+			sessionTo.playSound("BLOCK_NOTE_BLOCK_BELL", 1.0f, 1.0f, 0);
 		}
 
 		if (sessionTo.user.isMuted()) {
