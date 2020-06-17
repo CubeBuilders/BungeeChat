@@ -110,7 +110,7 @@ public class CommandList extends Command {
 				if (sender instanceof ProxiedPlayer) {
 					myGeolocation = plugin.getGeolocation((ProxiedPlayer) sender);
 				}
-				Comparator<PlayerInfo> sorter = sortByDistance;
+				Comparator<PlayerInfo> sorter = sortAlphabetically;
 				if (args.length > 0) {
 					if (sender.hasPermission("hk.siggi.bungeechat.seenip")) {
 						try {
