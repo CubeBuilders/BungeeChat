@@ -112,11 +112,10 @@ public class CommandList extends Command {
 				}
 				Comparator<PlayerInfo> sorter = sortByDistance;
 				if (args.length > 0) {
-					if (args[0].equalsIgnoreCase("a")) {
-						sorter = sortAlphabetically;
-					} else if (sender.hasPermission("hk.siggi.bungeechat.seenip")) {
+					if (sender.hasPermission("hk.siggi.bungeechat.seenip")) {
 						try {
 							myGeolocation = plugin.getGeolocation(plugin.getProxy().getPlayer(args[0]));
+							sorter = sortByDistance;
 						} catch (Exception e) {
 						}
 					}
@@ -132,7 +131,7 @@ public class CommandList extends Command {
 					if (server.canAccess(sender)) {
 						for (ProxiedPlayer player : server.getPlayers()) {
 							double distance = Double.MAX_VALUE;
-							if (myGeolocation != null) {
+							if (sorter == sortByDistance && myGeolocation != null) {
 								Geolocation geolocation = plugin.getGeolocation(player);
 								if (geolocation != null) {
 									try {
@@ -274,16 +273,18 @@ public class CommandList extends Command {
 						retired.setColor(ChatColor.GRAY);
 						didHoverText = true;
 					}
-					Geolocation geolocation = plugin.getGeolocation(p);
-					String geolocationString = null;
-					if (geolocation != null) {
-						geolocationString = geolocation.regionName + ", " + geolocation.countryName;
-					}
-					if (geolocationString != null) {
-						TextComponent geolocationText = new TextComponent((didHoverText ? "\n" : "") + geolocationString);
-						hover.addExtra(geolocationText);
-						geolocationText.setColor(ChatColor.GRAY);
-						didHoverText = true;
+					if (sender.hasPermission("hk.siggi.bungeechat.seenip")) {
+						Geolocation geolocation = plugin.getGeolocation(p);
+						String geolocationString = null;
+						if (geolocation != null) {
+							geolocationString = geolocation.regionName + ", " + geolocation.countryName;
+						}
+						if (geolocationString != null) {
+							TextComponent geolocationText = new TextComponent((didHoverText ? "\n" : "") + geolocationString);
+							hover.addExtra(geolocationText);
+							geolocationText.setColor(ChatColor.GRAY);
+							didHoverText = true;
+						}
 					}
 					if (!didList) {
 						didList = true;
