@@ -3780,7 +3780,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				}
 				line = line.trim();
 				if (line.isEmpty()) {
-					return;
+					continue;
 				}
 				loaded.add(line.toLowerCase());
 			}
