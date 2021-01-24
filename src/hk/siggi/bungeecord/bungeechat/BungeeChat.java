@@ -2388,6 +2388,12 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		final PendingConnection connection = event.getConnection();
 		final UUID uuid = connection.getUniqueId();
 
+		if (uuid.toString().charAt(14) != '4') {
+			event.setCancelled(true);
+			event.setCancelReason(new TextComponent("CubeBuilders on Bedrock Edition is in private beta. To request to join, login to Java Edition and ask Siggi by using /mail send in-game and provide this ID: " + uuid.toString() + "."));
+			return;
+		}
+
 		final PlayerSession session = new PlayerSession(connection.getAddress(), uuid);
 		sessionMapWriteLock.lock();
 		try {
