@@ -1779,11 +1779,11 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		ProxiedPlayer player = event.getPlayer();
 		updateGroup(player);
 		UUID uuid = player.getUniqueId();
-		sessionMapWriteLock.lock();
+		sessionMapReadLock.lock();
 		try {
 			session = sessionMap.get(player.getAddress());
 		} finally {
-			sessionMapWriteLock.unlock();
+			sessionMapReadLock.unlock();
 		}
 		if (session == null) {
 			player.disconnect("An error has occurred.");
