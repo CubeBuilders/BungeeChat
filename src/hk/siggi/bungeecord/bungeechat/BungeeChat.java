@@ -3870,6 +3870,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 					oreColor = "&7";
 					break;
 				case "gold":
+				case "nethergold":
 					oreColor = "&6";
 					break;
 				case "coal":
