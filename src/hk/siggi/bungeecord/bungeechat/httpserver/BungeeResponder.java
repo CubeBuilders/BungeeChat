@@ -26,9 +26,6 @@ import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import hk.siggi.iphelper.IP;
 import hk.siggi.iphelper.IPv6;
-import hk.siggi.rsa.RSA;
-import hk.siggi.rsa.RSAFileManager;
-import hk.siggi.rsa.RSAKeyGenerator;
 import io.siggi.http.HTTPRequest;
 import io.siggi.http.HTTPResponder;
 import io.siggi.http.HTTPWebSocket;
@@ -54,7 +51,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.KeyPair;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,7 +114,6 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 	public BungeeResponder(BungeeChat plugin) {
 		this.plugin = plugin;
 		startLoadingRecentPunishments();
-		loadRSA();
 	}
 
 	private void startLoadingRecentPunishments() {
@@ -164,20 +159,6 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 				} catch (Exception e) {
 				}
 			}
-		}
-	}
-
-	private void loadRSA() {
-		try {
-			File rsaFolder = new File(BungeeChat.getInstance().getDataFolder(), "rsa");
-			if (!rsaFolder.exists()) {
-				rsaFolder.mkdirs();
-				keypair = RSAKeyGenerator.generate2K();
-				RSAFileManager.save(rsaFolder, keypair);
-			} else {
-				keypair = RSAFileManager.load(rsaFolder);
-			}
-		} catch (Exception e) {
 		}
 	}
 
@@ -368,44 +349,6 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 				writePage(request, "FAIL");
 			}
 			return;
-		}
-		if (request.url.startsWith("/bc/r/")) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("Huge ass encrypted URLs are no longer supported. Contact a staff member if you need access to a certain chatlog.");
-			writePage(request, generatePage("Chat log", sb.toString()));
-			return;
-			/*requestIsEncrypted = true;
-			 String encryptedRequestHex = request.url.substring(6);
-			 ByteArrayOutputStream out = new ByteArrayOutputStream();
-			 for (int i = 0; i < encryptedRequestHex.length(); i += 2) {
-			 out.write(Integer.parseInt(encryptedRequestHex.substring(i, i + 2), 16));
-			 }
-			 byte[] encryptedRequest = out.toByteArray();
-			 String decryptedRequest = new String(RSA.decrypt(encryptedRequest, keypair.getPrivate()));
-			 String requestPieces[] = decryptedRequest.split("&");
-			 for (String requestPiece : requestPieces) {
-			 if (requestPiece.contains("=")) {
-			 String key = requestPiece.substring(0, requestPiece.indexOf("="));
-			 String val = requestPiece.substring(requestPiece.indexOf("=") + 1);
-			 for (; key.contains("+"); key = key.substring(0, key.indexOf("+")) + "%20" + key.substring(key.indexOf("+") + 1));
-			 for (; val.contains("+"); val = val.substring(0, val.indexOf("+")) + "%20" + val.substring(val.indexOf("+") + 1));
-			 key = fixString(deURLEncode(key));
-			 val = fixString(deURLEncode(val));
-			 if (key.equalsIgnoreCase("request")) {
-			 requestedPage = val;
-			 } else if (key.equalsIgnoreCase("showprosecutor")) {
-			 if (val.equalsIgnoreCase("1")) {
-			 allowSeeingProsecutor = true;
-			 }
-			 } else if (key.equalsIgnoreCase("showchatlog")) {
-			 if (val.equalsIgnoreCase("1")) {
-			 allowChatlogs = true;
-			 }
-			 } else {
-			 request.get.setProperty(key, val);
-			 }
-			 }
-			 }*/
 		}
 		if (requestedPage.toLowerCase().startsWith("/bc/t/")) {
 			try {
@@ -1364,24 +1307,6 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 			writePage(request, generatePage("Chat log", sb.toString()).replaceAll("</head>", autofocus ? "<script>window.onload = function() {document.getElementById(\"playersfield\").focus();}</script></head>" : "</head>"));
 			return;
 		}
-		if (requestedPage.equalsIgnoreCase("/bc/enc") && allowSeeingProsecutor && allowChatlogs) {
-			StringBuilder sb = new StringBuilder();
-			String reqEncryption = request.post.get("enc");
-			String result = "";
-			if (reqEncryption != null) {
-				result = encryptRequest(reqEncryption);
-			}
-			sb.append("<h1>Encrypt Request</h1><br>");
-			sb.append("Result: ");
-			sb.append(result);
-			sb.append("<br>");
-			sb.append("<form action=\"/bc/enc\" method=\"POST\">");
-			sb.append("<input type=\"text\" name=\"enc\"><input type=\"submit\" value=\"OK\">");
-			sb.append("</form>");
-			sb.append("Params (URL Encoded): showchatlog, showprosecutor, request");
-			writePage(request, generatePage("Chat log", sb.toString()));
-			return;
-		}
 		if (requestedPage.equalsIgnoreCase("/bc/CB.svg")) {
 			request.response.setHeader("Content-Type", "image/svg+xml");
 			request.response.setHeader("Cache-Control", "max-age=3600");
@@ -2249,25 +2174,6 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 		request.response.write(b);
 	}
 
-	private String encryptRequest(String req) {
-		try {
-			byte[] encrypted = RSA.encrypt(req.getBytes(), keypair.getPublic());
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			out.write("/bc/r/".getBytes());
-			for (int i = 0; i < encrypted.length; i++) {
-				int j = ((int) encrypted[i]) & 0xff;
-				String s = Integer.toString(j, 16);
-				while (s.length() < 2) {
-					s = "0" + s;
-				}
-				out.write(s.getBytes());
-			}
-			return new String(out.toByteArray());
-		} catch (Exception e) {
-		}
-		return null;
-	}
-
 	private String read(String file) {
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -2368,8 +2274,6 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 		}
 		return s;
 	}
-
-	private KeyPair keypair = null;
 
 	private long nextLogID = -1;
 	private final Object nextLogLock = new Object();
