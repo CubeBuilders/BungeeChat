@@ -12,6 +12,7 @@
     <import file="nbproject/build-impl.xml"/>
     <target name="-pre-jar">
         <unzip src="lib/IPHelper.jar" dest="build/classes" />
+        <unzip src="lib/ReflectionBypass.jar" dest="build/classes" />
         <delete file="build/classes/META-INF/MANIFEST.MF" />
     </target>
 </project>

@@ -8,6 +8,8 @@ import com.google.gson.JsonParser;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import io.siggi.reflectionbypass.ReflectionBypass;
+
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -83,8 +85,6 @@ public class Serialization {
 				return fields;
 			}
 			fields = getFields0(cls);
-			Field modifiersField = Field.class.getDeclaredField("modifiers");
-			modifiersField.setAccessible(true);
 			for (Iterator<Field> it = fields.iterator(); it.hasNext();) {
 				Field field = it.next();
 				int modifiers = field.getModifiers();
@@ -92,14 +92,14 @@ public class Serialization {
 					it.remove();
 					continue;
 				}
-				field.setAccessible(true);
+				ReflectionBypass.setAccessible(field, true);
 				if ((field.getModifiers() & Modifier.FINAL) != 0) {
-					modifiersField.set(field, field.getModifiers() & ~Modifier.FINAL);
+					ReflectionBypass.setModifiers(field, field.getModifiers() & ~Modifier.FINAL);
 				}
 			}
 			fieldCache.put(cls, fields);
 			return fields;
-		} catch (NoSuchFieldException | IllegalAccessException ex) {
+		} catch (Exception ex) {
 			throw new RuntimeException("This shouldn't happen", ex);
 		} finally {
 			fieldCacheWriteLock.unlock();
