@@ -182,6 +182,7 @@ public final class ChatController implements Listener {
 		message = message.replace(":yuno:", "ლ(ಠ益ಠლ)");
 		message = message.replace(":e_e:", "ಠ益ಠ");
 		message = message.replace(":shrug:", "¯\\_(ツ)_/¯");
+		message = message.replace(":tm:", "™️");
 
 		if (from != null && from.getUniqueId().equals(christy)) {
 			message = message.replace("Siggi", "my handsome ex that I miss so much");
