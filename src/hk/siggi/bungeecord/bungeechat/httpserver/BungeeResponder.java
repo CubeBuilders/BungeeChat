@@ -31,6 +31,7 @@ import io.siggi.http.HTTPRequest;
 import io.siggi.http.HTTPResponder;
 import io.siggi.http.HTTPWebSocket;
 import io.siggi.http.HTTPWebSocketHandler;
+import static io.siggi.http.util.HTMLUtils.htmlentities;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -1197,7 +1198,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 							sb.append("<td>Public Chat (").append(chat.server).append(")</td>");
 							sb.append("<td></td>");
 							sb.append("<td>").append(chatSender).append("</td>");
-							sb.append("<td>").append(chat.message).append("</td>");
+							sb.append("<td>").append(htmlentities(chat.message)).append("</td>");
 							sb.append("</tr>");
 						} else if (line instanceof FactionChatLog) {
 							FactionChatLog chat = (FactionChatLog) line;
@@ -1228,7 +1229,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 							}
 							sb.append("</td>");
 							sb.append("<td>").append(chatSender).append("</td>");
-							sb.append("<td>").append(chat.message).append("</td>");
+							sb.append("<td>").append(htmlentities(chat.message)).append("</td>");
 							sb.append("</tr>");
 						} else if (line instanceof GroupChatLog) {
 							GroupChatLog chat = (GroupChatLog) line;
@@ -1259,7 +1260,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 							}
 							sb.append("</td>");
 							sb.append("<td>").append(chatSender).append("</td>");
-							sb.append("<td>").append(chat.message).append("</td>");
+							sb.append("<td>").append(htmlentities(chat.message)).append("</td>");
 							sb.append("</tr>");
 						} else if (line instanceof PrivateChatLog) {
 							PrivateChatLog chat = (PrivateChatLog) line;
@@ -1271,7 +1272,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 							sb.append("<td>Private Chat</td>");
 							sb.append("<td>").append(!visiblePlayers.isEmpty() && !visiblePlayers.contains(chat.recipient.username) ? "************" : chat.recipient.username).append("</td>");
 							sb.append("<td>").append(chatSender).append("</td>");
-							sb.append("<td>").append(chat.message).append("</td>");
+							sb.append("<td>").append(htmlentities(chat.message)).append("</td>");
 							sb.append("</tr>");
 						} else if (line instanceof MailChatLog) {
 							MailChatLog chat = (MailChatLog) line;
@@ -1283,7 +1284,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 							sb.append("<td>Mail</td>");
 							sb.append("<td>").append(!visiblePlayers.isEmpty() && !visiblePlayers.contains(chat.recipient.username) ? "************" : chat.recipient.username).append("</td>");
 							sb.append("<td>").append(chatSender).append("</td>");
-							sb.append("<td>").append(chat.message).append("</td>");
+							sb.append("<td>").append(htmlentities(chat.message)).append("</td>");
 							sb.append("</tr>");
 						} else if (line instanceof StaffChatLog) {
 							StaffChatLog chat = (StaffChatLog) line;
@@ -1295,7 +1296,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 							sb.append("<td>Staff Chat</td>");
 							sb.append("<td></td>");
 							sb.append("<td>").append(chatSender).append("</td>");
-							sb.append("<td>").append(chat.message).append("</td>");
+							sb.append("<td>").append(htmlentities(chat.message)).append("</td>");
 							sb.append("</tr>");
 						}
 					}
