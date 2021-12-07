@@ -12,6 +12,7 @@ import hk.siggi.bungeecord.bungeechat.chat.ServerPublicChatGroupController;
 import hk.siggi.bungeecord.bungeechat.chat.censor.ChatCensor;
 import hk.siggi.bungeecord.bungeechat.chat.web.WebChat;
 import hk.siggi.bungeecord.bungeechat.chatlog.ChatLogLine;
+import hk.siggi.bungeecord.bungeechat.chatlog.ChatLogReader;
 import hk.siggi.bungeecord.bungeechat.chatlog.ChatLogUser;
 import hk.siggi.bungeecord.bungeechat.chatlog.FactionChatLog;
 import hk.siggi.bungeecord.bungeechat.chatlog.GroupChatLog;
@@ -3272,7 +3273,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 	}
 
 	private boolean processChatLine(String line) {
-		ChatLogLine c = ChatLogLine.parseLine(System.currentTimeMillis() + ":" + line);
+		ChatLogLine c = ChatLogReader.parseLine(System.currentTimeMillis() + ":" + line);
 		if (c == null) {
 			return false;
 		}

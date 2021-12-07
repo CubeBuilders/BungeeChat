@@ -8,6 +8,7 @@ import hk.siggi.bungeecord.bungeechat.UUIDCache;
 import hk.siggi.bungeecord.bungeechat.UserActivityReport;
 import hk.siggi.bungeecord.bungeechat.chat.censor.ChatCensor;
 import hk.siggi.bungeecord.bungeechat.chatlog.ChatLogLine;
+import hk.siggi.bungeecord.bungeechat.chatlog.ChatLogReader;
 import hk.siggi.bungeecord.bungeechat.chatlog.ChatLogUser;
 import hk.siggi.bungeecord.bungeechat.chatlog.FactionChatLog;
 import hk.siggi.bungeecord.bungeechat.chatlog.GroupChatLog;
@@ -1149,7 +1150,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 					}
 					sb.append("<br>");
 					sb.append("Note: All chat messages are shown as they were originally typed in by the player, before any caps filtering or censorship has been applied to it!<br><br>");
-					ChatLogLine[] lines = ChatLogLine.getChatLogs(from, to);
+					ChatLogLine[] lines = ChatLogReader.getChatLogs(from, to);
 					if (!requestIsEncrypted) {
 						sb.append("<a href=\"/bc/chatlog?from=").append((from / 1000L) - 120L).append("&to=").append(to / 1000L).append(playersString == null ? "" : ("&players=" + playersString)).append(vplayersString == null ? "" : ("&vplayers=" + vplayersString)).append("\"> + 2 minutes before</a>");
 					}
@@ -1476,7 +1477,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 				pw.println("Word: " + lc);
 				pw.println();
 				ChatCensor censor = BungeeChat.getInstance().getChatCensor().filterOnly(word);
-				for (ChatLogLine cll : Util.iterable(ChatLogLine.iterateAllChats())) {
+				for (ChatLogLine cll : Util.iterable(ChatLogReader.iterateAllChats())) {
 					String message = stripChatCodes(cll.message);
 					if (!message.toLowerCase().contains(lc)) {
 						String censoredMessage = censor.filter(message);
