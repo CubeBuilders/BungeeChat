@@ -101,10 +101,10 @@ import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import static hk.siggi.bungeecord.bungeechat.util.Util.doubleToString;
 import hk.siggi.cubetokens.CT;
-import hk.siggi.iphelper.IP;
-import hk.siggi.iphelper.IPv4;
-import hk.siggi.iphelper.IPv6;
 import io.siggi.http.HTTPServer;
+import io.siggi.iphelper.IP;
+import io.siggi.iphelper.IPv4;
+import io.siggi.iphelper.IPv6;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -2114,7 +2114,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 					ipStr = ipStr.substring(0, ipStr.indexOf("/"));
 				}
 				String[] ipParts = ipStr.split("\\.");
-				if (ip.getBlockSize() == 32) { // exact IP
+				if (ip.getPrefixLength() == 32) { // exact IP
 					File f = new File(getDataFolder(), "ipLoginRecords"
 							+ File.separator + "IPv4"
 							+ File.separator + ipParts[0] + "." + ipParts[1]
@@ -2131,7 +2131,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				}
 				String[] ipParts = ipStr.split(":");
 				String ipFS = ipStr.replace(":", "-");
-				if (ip.getBlockSize() == 128) { // exact IP
+				if (ip.getPrefixLength() == 128) { // exact IP
 					File f = new File(getDataFolder(), "ipLoginRecords"
 							+ File.separator + "IPv6"
 							+ File.separator + ipParts[0]
@@ -2165,7 +2165,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		if (subnet instanceof IPv4) {
 			String[] parts = partToAppend.split("\\.");
 			byte[] b = subnet.getBytes();
-			int blockSize = subnet.getBlockSize();
+			int blockSize = subnet.getPrefixLength();
 			int plus = blockSize / 8;
 			for (int i = 0; i < parts.length; i++) {
 				b[i + plus] = (byte) Integer.parseInt(parts[i]);
@@ -2175,7 +2175,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		} else if (subnet instanceof IPv6) {
 			String[] parts = partToAppend.split(":");
 			byte[] b = subnet.getBytes();
-			int blockSize = subnet.getBlockSize();
+			int blockSize = subnet.getPrefixLength();
 			int plus = blockSize / 16;
 			for (int i = 0; i < parts.length; i++) {
 				int n = Integer.parseInt(parts[i], 16);

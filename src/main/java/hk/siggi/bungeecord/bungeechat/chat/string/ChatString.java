@@ -33,8 +33,8 @@ public class ChatString implements CharSequence {
 
 		char prevChar = '\0';
 
-		char colorCode = 'f';
-		char colorCodeOutsideLink = 'f';
+		ChatColor colorCode = ChatColor.WHITE;
+		ChatColor colorCodeOutsideLink = ChatColor.WHITE;
 		boolean bold = false;
 		boolean italic = false;
 		boolean underline = false;
@@ -66,7 +66,7 @@ public class ChatString implements CharSequence {
 					c = Character.toLowerCase(c);
 					if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) {
 						if (allowColor) {
-							colorCode = c;
+							colorCode = getChatColor(c);
 						} else {
 							deniedFormat = true;
 						}
@@ -99,7 +99,7 @@ public class ChatString implements CharSequence {
 					if (c == 'r') {
 						if (allowColor || allowFormat || allowMagic) {
 							bold = italic = underline = strike = magic = false;
-							colorCode = (link == null ? 'f' : 'b');
+							colorCode = (link == null ? ChatColor.WHITE : ChatColor.AQUA);
 						} else {
 							deniedFormat = true;
 						}
@@ -153,13 +153,13 @@ public class ChatString implements CharSequence {
 							magicOutsideLink = magic;
 							tooltipOutsideLink = tooltip;
 
-							colorCode = 'b';
+							colorCode = ChatColor.AQUA;
 							bold = italic = underline = strike = magic = false;
 							link = theLink;
 							tooltip = theLink;
 							i = firstCharAfterLink;
 						} else {
-							characters.add(new ChatCharacter('\0', 'b', false, false, false, false, false, theLink, theLink.startsWith("/") ? "Click to run this command!" : "Click to visit this page!"));
+							characters.add(new ChatCharacter('\0', ChatColor.AQUA, false, false, false, false, false, theLink, theLink.startsWith("/") ? "Click to run this command!" : "Click to visit this page!"));
 							i = endOfLink;
 						}
 						continue;
@@ -216,7 +216,7 @@ public class ChatString implements CharSequence {
 				copyFormat = characters.get(position - 1);
 			}
 		} else {
-			copyFormat = new ChatCharacter('\0', 'f', false, false, false, false, false, null, null);
+			copyFormat = new ChatCharacter('\0', ChatColor.WHITE, false, false, false, false, false, null, null);
 		}
 		List<ChatCharacter> newCharacters = new LinkedList<>();
 		char[] chars = text.toCharArray();
@@ -328,9 +328,8 @@ public class ChatString implements CharSequence {
 	}
 
 	public ChatString setColor(ChatColor color) {
-		char c = getColorCode(color);
 		for (int i = 0; i < characters.size(); i++) {
-			characters.set(i, characters.get(i).setColorCode(c));
+			characters.set(i, characters.get(i).setColorCode(color));
 		}
 		return this;
 	}
@@ -379,13 +378,13 @@ public class ChatString implements CharSequence {
 	 */
 	public String toFormattedString() {
 		char prefixChar = '&';
-		char colorCode = 'f';
+		ChatColor colorCode = ChatColor.WHITE;
 		boolean bold = false;
 		boolean italic = false;
 		boolean underline = false;
 		boolean strike = false;
 		boolean magic = false;
-		char colorCodeOutsideLink = 'f';
+		ChatColor colorCodeOutsideLink = ChatColor.WHITE;
 		boolean boldOutsideLink = false;
 		boolean italicOutsideLink = false;
 		boolean underlineOutsideLink = false;
@@ -429,7 +428,7 @@ public class ChatString implements CharSequence {
 						underlineOutsideLink = underline;
 						strikeOutsideLink = strike;
 						magicOutsideLink = magic;
-						colorCode = 'b';
+						colorCode = ChatColor.AQUA;
 						bold = italic = underline = strike = magic = false;
 					}
 				}
@@ -440,7 +439,7 @@ public class ChatString implements CharSequence {
 					|| (strike && !c.strike)
 					|| (magic && !c.magic)) {
 				bold = italic = underline = strike = magic = false;
-				colorCode = link == null ? 'b' : 'f';
+				colorCode = link == null ? ChatColor.AQUA : ChatColor.WHITE;
 			}
 			if (c.bold && !bold) {
 				sb.append(prefixChar).append('l');
@@ -462,7 +461,7 @@ public class ChatString implements CharSequence {
 				sb.append(prefixChar).append('k');
 				magic = true;
 			}
-			if (colorCode != c.colorCode) {
+			if (!colorCode.equals(c.colorCode)) {
 				sb.append(prefixChar).append(c.colorCode);
 				colorCode = c.colorCode;
 			}
@@ -510,7 +509,7 @@ public class ChatString implements CharSequence {
 			tc.setUnderlined(c.underline);
 			tc.setStrikethrough(c.strike);
 			tc.setObfuscated(c.magic);
-			tc.setColor(getChatColor(c.colorCode));
+			tc.setColor(c.colorCode);
 			if (c.link != null) {
 				String link = c.link;
 				if (link.startsWith("/")) {
@@ -615,44 +614,6 @@ public class ChatString implements CharSequence {
 			return link.substring(0, link.indexOf("/")).contains(".");
 		} else {
 			return link.contains(".");
-		}
-	}
-
-	private char getColorCode(ChatColor col) {
-		switch (col) {
-			case BLACK:
-				return '0';
-			case DARK_BLUE:
-				return '1';
-			case DARK_GREEN:
-				return '2';
-			case DARK_AQUA:
-				return '3';
-			case DARK_RED:
-				return '4';
-			case DARK_PURPLE:
-				return '5';
-			case GOLD:
-				return '6';
-			case GRAY:
-				return '7';
-			case DARK_GRAY:
-				return '8';
-			case BLUE:
-				return '9';
-			case GREEN:
-				return 'a';
-			case AQUA:
-				return 'b';
-			case RED:
-				return 'c';
-			case LIGHT_PURPLE:
-				return 'd';
-			case YELLOW:
-				return 'e';
-			case WHITE:
-			default:
-				return 'f';
 		}
 	}
 

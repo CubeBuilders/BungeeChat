@@ -11,9 +11,9 @@ import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
 import hk.siggi.bungeecord.bungeechat.util.Util;
-import hk.siggi.iphelper.IP;
-import hk.siggi.iphelper.IPv4;
-import hk.siggi.iphelper.IPv6;
+import io.siggi.iphelper.IP;
+import io.siggi.iphelper.IPv4;
+import io.siggi.iphelper.IPv6;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -90,7 +90,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				IP ip = IP.getIP(ipAsStr);
 				Iterable<UUID> playerList = plugin.getUUIDs(ip);
 				ipAsStr = ip.toShortString();
-				int blockSize = ip.getBlockSize();
+				int blockSize = ip.getPrefixLength();
 				boolean isSubnet = false;
 				if (ip instanceof IPv4) {
 					if (blockSize != 32) {
@@ -538,7 +538,7 @@ public class CommandSeen extends Command implements TabExecutor {
 		IP addrA = IP.getIP(ip);
 		String result = "<MaskedIP (" + (addrA instanceof IPv4 ? "IPv4" : (addrA instanceof IPv6 ? "IPv6" : "?")) + ")>";
 		if (addrA instanceof IPv4) {
-			if (addrA.getBlockSize() < 32) {
+			if (addrA.getPrefixLength() < 32) {
 				return "<HiddenSubnet (IPv4)>";
 			}
 			IPv4 addr = (IPv4) addrA;
@@ -555,7 +555,7 @@ public class CommandSeen extends Command implements TabExecutor {
 		} else if (addrA instanceof IPv6) {
 			IPv6 addr = (IPv6) addrA;
 			IPv6 subnet = addr;
-			if (addr.getBlockSize() < 128 && addr.getBlockSize() != 64) {
+			if (addr.getPrefixLength() < 128 && addr.getPrefixLength() != 64) {
 				return "<MaskedSubnet (IPv6)>";
 			}
 			subnet = new IPv6(addr.getBytes(), 64);
@@ -571,7 +571,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					reverseMaskedIPv6Subnets.put(maskedSubnet, subnetPart);
 				}
 			}
-			if (addr.getBlockSize() == 128) {
+			if (addr.getPrefixLength() == 128) {
 				String devicePart = fullAddr.substring(20);
 				String maskedDevice = maskedIPv6Devices.get(devicePart);
 				while (maskedDevice == null) {

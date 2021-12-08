@@ -2,9 +2,9 @@ package hk.siggi.bungeecord.bungeechat.geolocation;
 
 import hk.siggi.bungeecord.bungeechat.util.RafStream;
 import hk.siggi.bungeecord.bungeechat.util.LineReader;
-import hk.siggi.iphelper.IP;
-import hk.siggi.iphelper.IPv4;
-import hk.siggi.iphelper.IPv6;
+import io.siggi.iphelper.IP;
+import io.siggi.iphelper.IPv4;
+import io.siggi.iphelper.IPv6;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

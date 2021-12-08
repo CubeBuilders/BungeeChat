@@ -1,6 +1,6 @@
 package hk.siggi.bungeecord.bungeechat.iptoisp;
 
-import hk.siggi.iphelper.IP;
+import io.siggi.iphelper.IP;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;

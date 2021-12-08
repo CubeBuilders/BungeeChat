@@ -1,11 +1,13 @@
 package hk.siggi.bungeecord.bungeechat.chat.string;
 
+import net.md_5.bungee.api.ChatColor;
+
 import java.util.Objects;
 
 public final class ChatCharacter {
 
 	public final char character;
-	public final char colorCode;
+	public final ChatColor colorCode;
 	public final boolean bold;
 	public final boolean italic;
 	public final boolean underline;
@@ -14,7 +16,7 @@ public final class ChatCharacter {
 	public final String link;
 	public final String tooltip;
 
-	public ChatCharacter(char character, char colorCode, boolean bold, boolean italic, boolean underline, boolean strike, boolean magic, String link, String tooltip) {
+	public ChatCharacter(char character, ChatColor colorCode, boolean bold, boolean italic, boolean underline, boolean strike, boolean magic, String link, String tooltip) {
 		this.character = character;
 		this.colorCode = colorCode;
 		this.bold = bold;
@@ -47,7 +49,7 @@ public final class ChatCharacter {
 		return new ChatCharacter(c, colorCode, bold, italic, underline, strike, magic, link, tooltip);
 	}
 
-	public ChatCharacter setColorCode(char c) {
+	public ChatCharacter setColorCode(ChatColor c) {
 		if (colorCode == c) {
 			return this;
 		}
@@ -140,7 +142,7 @@ public final class ChatCharacter {
 		int booleanField = (this.bold ? 16 : 0) + (this.italic ? 8 : 0) + (this.underline ? 4 : 0)
 				+ (this.strike ? 2 : 0) + (this.magic ? 1 : 0);
 		hash = 29 * hash + this.character;
-		hash = 29 * hash + this.colorCode;
+		hash = 29 * hash + this.colorCode.hashCode();
 		hash = 29 * hash + booleanField;
 		hash = 29 * hash + Objects.hash(link);
 		hash = 29 * hash + Objects.hash(tooltip);

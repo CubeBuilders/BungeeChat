@@ -71,9 +71,8 @@ public final class VotifierModuleImpl implements VotifierModule, Listener {
 			String address = vote.getAddress();
 			String timeStamp = vote.getTimeStamp();
 			String serviceName = vote.getServiceName();
-			long localTimestamp = vote.getLocalTimestamp();
 			try (FileWriter writer = new FileWriter(new File(plugin.getDataFolder(), "votelog.txt"), true)) {
-				writer.write(localTimestamp + "," + timeStamp + "," + name + "," + uuid + "," + address + "," + serviceName+"\n");
+				writer.write(timeStamp + "," + name + "," + uuid + "," + address + "," + serviceName+"\n");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
