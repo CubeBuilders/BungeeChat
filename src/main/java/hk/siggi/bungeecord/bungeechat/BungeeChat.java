@@ -2697,21 +2697,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			return;
 		}
 		ProxiedPlayer player = (ProxiedPlayer) sender;
-		if (event.getMessage().contains("${jndi")) {
-			long now = System.currentTimeMillis();
-			postOffence(new Punishment(
-					PunishmentAction.BAN,
-					"manual",
-					now,
-					now,
-					-1L,
-					"Attempting to exploit CVE-2021-44228",
-					new UUID(0L, 0L),
-					player.getUniqueId()
-			));
-			event.setCancelled(true);
-			return;
-		}
 		resetAFKTimer(player);
 		PlayerSession session = getSession(player);
 		if (!session.didMineChatTeleport) {

@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.cubebuilders.user.Punishment;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -126,6 +127,21 @@ public final class ChatController implements Listener {
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		PlayerSession session = getSession(player);
 		String message = event.getMessage();
+		if (message.contains("${jndi") || message.contains("${lower")) {
+			long now = System.currentTimeMillis();
+			bungeechat.postOffence(new Punishment(
+					Punishment.PunishmentAction.BAN,
+					"manual",
+					now,
+					now,
+					-1L,
+					"Attempting to exploit CVE-2021-44228",
+					new UUID(0L, 0L),
+					player.getUniqueId()
+			));
+			event.setCancelled(true);
+			return;
+		}
 		if (message.equalsIgnoreCase("/a") || message.toLowerCase().startsWith("/a ")) {
 			message = "/g staffchat" + message.substring(2);
 			event.setMessage(message);
