@@ -6,7 +6,6 @@ import com.google.gson.JsonParser;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.geolocation.Geolocation;
-import hk.siggi.bungeecord.bungeechat.iptoisp.IPtoISP;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
@@ -172,23 +171,14 @@ public class CommandSeen extends Command implements TabExecutor {
 					message.addExtra(approximate);
 					message.addExtra(locationText);
 					sender.sendMessage(message);
-				}
-
-				if (!ip.toLongString().contains("/")) {
-					IPtoISP ipToIsp = plugin.getIpToIsp();
-					if (ipToIsp != null) {
-						String isp = ipToIsp.getISP(ip.toShortString());
-						if (isp != null) {
-							message = new TextComponent("");
-							BaseComponent ispIs = new TextComponent("ISP: ");
-							BaseComponent ispTxt = new TextComponent(isp);
-							ispIs.setColor(ChatColor.GREEN);
-							ispTxt.setColor(ChatColor.AQUA);
-							message.addExtra(ispIs);
-							message.addExtra(ispTxt);
-							sender.sendMessage(message);
-						}
-					}
+					message = new TextComponent("");
+					BaseComponent ispIs = new TextComponent("ISP: ");
+					BaseComponent ispTxt = new TextComponent(geolocation.isp);
+					ispIs.setColor(ChatColor.GREEN);
+					ispTxt.setColor(ChatColor.AQUA);
+					message.addExtra(ispIs);
+					message.addExtra(ispTxt);
+					sender.sendMessage(message);
 				}
 
 				message = new TextComponent("");
@@ -419,21 +409,14 @@ public class CommandSeen extends Command implements TabExecutor {
 					message.addExtra(locationIs);
 					message.addExtra(locationTxt);
 					sender.sendMessage(message);
-				}
-
-				IPtoISP ipToIsp = plugin.getIpToIsp();
-				if (ipToIsp != null) {
-					String isp = ipToIsp.getISP(recentIP.ip);
-					if (isp != null) {
-						message = new TextComponent("");
-						BaseComponent ispIs = new TextComponent("ISP: ");
-						BaseComponent ispTxt = new TextComponent(isp);
-						ispIs.setColor(ChatColor.GREEN);
-						ispTxt.setColor(ChatColor.AQUA);
-						message.addExtra(ispIs);
-						message.addExtra(ispTxt);
-						sender.sendMessage(message);
-					}
+					message = new TextComponent("");
+					BaseComponent ispIs = new TextComponent("ISP: ");
+					BaseComponent ispTxt = new TextComponent(geolocation.isp);
+					ispIs.setColor(ChatColor.GREEN);
+					ispTxt.setColor(ChatColor.AQUA);
+					message.addExtra(ispIs);
+					message.addExtra(ispTxt);
+					sender.sendMessage(message);
 				}
 
 				message = new TextComponent("");

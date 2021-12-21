@@ -23,6 +23,12 @@
         </dependency>
         <dependency>
             <groupId>io.siggi</groupId>
+            <artifactId>IPDB</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.siggi</groupId>
             <artifactId>ReflectionBypass</artifactId>
             <version>1.0</version>
             <scope>compile</scope>

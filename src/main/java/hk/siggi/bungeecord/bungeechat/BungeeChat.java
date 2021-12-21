@@ -81,7 +81,6 @@ import hk.siggi.bungeecord.bungeechat.event.PunishmentIssuedEvent;
 import hk.siggi.bungeecord.bungeechat.geolocation.Geolocation;
 import hk.siggi.bungeecord.bungeechat.geolocation.Geolocator;
 import hk.siggi.bungeecord.bungeechat.httpserver.BungeeResponder;
-import hk.siggi.bungeecord.bungeechat.iptoisp.IPtoISP;
 import hk.siggi.bungeecord.bungeechat.module.VotifierModule;
 import hk.siggi.bungeecord.bungeechat.notifications.Notifications;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
@@ -430,7 +429,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 					Thread.sleep(1000L);
 				} catch (Exception e) {
 				}
-				Geolocator geo = Geolocator.get(new File(dataFolder, "geolocation-ipv6.csv"));
+				Geolocator geo = Geolocator.get(new File(dataFolder, "ipdb.dat"));
 				if (geo != null) {
 					geolocation = geo;
 					updateGeolocationForOnlinePlayers();
@@ -442,11 +441,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			chatCensor = new ChatCensor(new File(dataFolder, "chatcensor"));
 		} else {
 			chatCensor.reloadWords();
-		}
-		if (ipToIsp == null) {
-			ipToIsp = new IPtoISP(new File(dataFolder, "iptoisp.txt"));
-		} else {
-			ipToIsp.readFromFile();
 		}
 	}
 
@@ -1545,7 +1539,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		return chatCensor;
 	}
 	private ChatCensor chatCensor = null;
-	private IPtoISP ipToIsp = null;
 
 	public ArrayList<BaseComponent> censor(ArrayList<BaseComponent> original, ChatCensor cc) {
 		ArrayList<BaseComponent> newComponents = new ArrayList<>();
@@ -1770,8 +1763,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			event.setCancelled(true);
 			event.setCancelReason(blockMessage);
 		}
-		InetSocketAddress address = connection.getAddress();
-		ipToIsp.getISP(address.getAddress().getHostAddress());
 	}
 
 	@EventHandler
@@ -3830,10 +3821,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		} catch (Exception e) {
 		}
 		return false;
-	}
-
-	public IPtoISP getIpToIsp() {
-		return ipToIsp;
 	}
 
 	private void sendSkin(UUID user, String value) {

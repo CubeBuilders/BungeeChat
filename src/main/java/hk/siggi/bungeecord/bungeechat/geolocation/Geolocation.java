@@ -10,8 +10,9 @@ public final class Geolocation {
 	public final String longitude;
 	public final String zipCode;
 	public final String timeZone;
+	public final String isp;
 
-	Geolocation(String countryCode, String countryName, String regionName, String cityName, String latitude, String longitude, String zipCode, String timeZone) {
+	Geolocation(String countryCode, String countryName, String regionName, String cityName, String latitude, String longitude, String zipCode, String timeZone, String isp) {
 		this.countryCode = countryCode;
 		this.countryName = countryName;
 		this.regionName = regionName;
@@ -20,6 +21,7 @@ public final class Geolocation {
 		this.longitude = longitude;
 		this.zipCode = zipCode;
 		this.timeZone = timeZone;
+		this.isp = isp;
 	}
 
 	@Override
