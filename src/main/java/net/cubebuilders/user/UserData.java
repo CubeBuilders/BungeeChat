@@ -1,6 +1,7 @@
 package net.cubebuilders.user;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 import net.cubebuilders.user.UserFriend.FriendStatus;
@@ -12,6 +13,7 @@ public class UserData {
 	private static final NameHistory[] zeroHistory = new NameHistory[0];
 	private static final UserFriend[] zeroFriends = new UserFriend[0];
 
+	public final List<String> ranks = new ArrayList<>();
 	public String staffRank = null;
 	public boolean hiddenStaff = false;
 	public ArrayList<Punishment> punishments = null;

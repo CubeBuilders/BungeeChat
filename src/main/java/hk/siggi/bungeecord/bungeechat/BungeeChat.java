@@ -66,6 +66,7 @@ import hk.siggi.bungeecord.bungeechat.commands.server.CommandHub;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandImpersonate;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandList;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandNotify;
+import hk.siggi.bungeecord.bungeechat.commands.server.CommandRank;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandRegister;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandReload;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandSecretCode;
@@ -520,6 +521,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerCommand(this, new CommandChatPrefix(this));
 		pm.registerCommand(this, new CommandReload(this));
 		pm.registerCommand(this, new CommandSetGroup(this));
+		pm.registerCommand(this, new CommandRank(this));
 		pm.registerCommand(this, new CommandDontKickMe(this));
 		pm.registerCommand(this, new CommandCTReward(this));
 		pm.registerCommand(this, new CommandNotify(this));
@@ -1730,6 +1732,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				newGroups.add(latestRank.rank);
 			}
 		}
+		newGroups.addAll(userData.ranks);
 		if (newGroups.isEmpty()) {
 			if (user.getUserData().isMember) {
 				newGroups.add("member");

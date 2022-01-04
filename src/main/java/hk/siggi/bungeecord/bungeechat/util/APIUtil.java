@@ -102,4 +102,12 @@ public class APIUtil {
 			return null;
 		}
 	}
+
+	public static void addRank(UUID uuid, String rank) {
+		Util.getURL("http://127.0.0.1:2823/api/addrank?uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()) + "&rank=" + rank);
+	}
+
+	public static void delRank(UUID uuid, String rank) {
+		Util.getURL("http://127.0.0.1:2823/api/delrank?uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()) + "&rank=" + rank);
+	}
 }
