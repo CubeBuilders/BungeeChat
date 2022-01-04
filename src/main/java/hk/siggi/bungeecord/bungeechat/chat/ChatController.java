@@ -269,7 +269,7 @@ public final class ChatController implements Listener {
 			chatTextSemicensored = originalChatText;
 			chatTextCensored = originalChatText;
 		}
-		if (chatTextCensored != originalChatText) {
+		if (from != null && chatTextCensored != originalChatText) {
 			BungeeChat.getSession(from).showCensorMessage();
 		}
 		return new ProcessedChat(message, originalChatText, chatTextCensored, chatTextSemicensored);

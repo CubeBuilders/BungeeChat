@@ -2,6 +2,8 @@ package hk.siggi.bungeecord.bungeechat.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.chat.ProcessedChat;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -38,7 +40,10 @@ public class ChatUtil {
 	}
 
 	public static ArrayList<BaseComponent> processChat(ProxiedPlayer sender, String text) {
+		if (false)
 		return processChat(sender, text, false);
+		ProcessedChat process = BungeeChat.getInstance().getChatController().process(sender, text, false);
+		return process.uncensored;
 	}
 
 	private static ArrayList<BaseComponent> processChat(ProxiedPlayer sender, String text, boolean isInsideLink) {
