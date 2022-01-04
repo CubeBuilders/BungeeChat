@@ -91,6 +91,10 @@ public final class ChatController implements Listener {
 			}
 			if (c == '&') {
 				i += 1; // skip over colour codes.
+				c = name.charAt(i);
+				if (c == '#' || c == 'x') {
+					i += 6;
+				}
 			}
 		}
 		return sb.toString();
