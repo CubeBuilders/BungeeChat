@@ -144,13 +144,15 @@ public class ChatString implements CharSequence {
 					String theLink = rawChat.substring(startOfLink, endOfLink);
 					boolean hasText = false;
 					if (chars.length > firstCharAfterLink) {
-						int startOfText = firstCharAfterLink + 1;
-						int endOfText = startOfText - 1;
-						do {
-							endOfText = rawChat.indexOf(">", endOfText + 1);
-						} while (endOfText != -1 && chars[endOfText - 1] == '\\');
-						if (endOfText != -1) {
-							hasText = true;
+						if (chars[firstCharAfterLink] == '<') {
+							int startOfText = firstCharAfterLink + 1;
+							int endOfText = startOfText - 1;
+							do {
+								endOfText = rawChat.indexOf(">", endOfText + 1);
+							} while (endOfText != -1 && chars[endOfText - 1] == '\\');
+							if (endOfText != -1) {
+								hasText = true;
+							}
 						}
 					}
 					if (validateLink(theLink) && (theLink.startsWith("/") ? allowCommandLinks : allowLinks)) {
