@@ -68,7 +68,7 @@ public final class GroupInfo {
 						if (pieces.length > 4) {
 							minicolor = pieces[4];
 						}
-						(pieces[0].equals("staff") ? staffRanks : memberRanks).add(new Rank(id, display, ChatColor.valueOf(color.toUpperCase()), ChatColor.valueOf(minicolor.toUpperCase())));
+						(pieces[0].equals("staff") ? staffRanks : memberRanks).add(new Rank(id, display, ChatColor.of(color.toUpperCase()), ChatColor.of(minicolor.toUpperCase())));
 					}
 				} catch (Exception e) {
 				}

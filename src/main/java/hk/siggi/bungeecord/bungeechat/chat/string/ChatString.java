@@ -23,10 +23,10 @@ public class ChatString implements CharSequence {
 	}
 
 	public ChatString(String rawChat, boolean processFormatting) {
-		this(rawChat, processFormatting, processFormatting, processFormatting, processFormatting, processFormatting);
+		this(rawChat, processFormatting, processFormatting, processFormatting, processFormatting, processFormatting, processFormatting);
 	}
 
-	public ChatString(String rawChat, boolean allowColor, boolean allowFormat, boolean allowMagic, boolean allowLinks, boolean allowCommandLinks) {
+	public ChatString(String rawChat, boolean allowColor, boolean allowHexColor, boolean allowFormat, boolean allowMagic, boolean allowLinks, boolean allowCommandLinks) {
 		boolean wasColorCode = false;
 
 		char codePrefix = '&';
@@ -69,6 +69,22 @@ public class ChatString implements CharSequence {
 							colorCode = getChatColor(c);
 						} else {
 							deniedFormat = true;
+						}
+					}
+					if (c == '#' || c == 'x') {
+						deniedFormat = true;
+						if (allowHexColor) {
+							int charsAfter = chars.length - i - 1;
+							if (charsAfter >= 6) {
+								String code = new String(chars, i + 1, 6);
+								try {
+									int rgb = Integer.parseInt(code, 16);
+									colorCode = ChatColor.of("#" + code);
+									deniedFormat = false;
+									i += 6;
+								} catch (Exception e) {
+								}
+							}
 						}
 					}
 					if (c == 'k') {
@@ -587,6 +603,9 @@ public class ChatString implements CharSequence {
 			case 'e':
 			case 'F':
 			case 'f':
+			case '#':
+			case 'X':
+			case 'x':
 			case 'R':
 			case 'r':
 			case 'K':

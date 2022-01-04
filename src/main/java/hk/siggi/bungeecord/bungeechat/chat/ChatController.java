@@ -198,12 +198,13 @@ public final class ChatController implements Listener {
 		message = message.replace(":shrug:", "¯\\_(ツ)_/¯");
 		message = message.replace(":tm:", "™");
 
-		boolean allowColor = from == null ? true : from.hasPermission("hk.siggi.bungeechat.chat.color");
-		boolean allowFormat = from == null ? true : from.hasPermission("hk.siggi.bungeechat.chat.format");
-		boolean allowMagic = from == null ? true : from.hasPermission("hk.siggi.bungeechat.chat.magic");
-		boolean allowLinks = from == null ? true : from.hasPermission("hk.siggi.bungeechat.chat.link");
-		boolean allowCommandLinks = from == null ? true : from.hasPermission("hk.siggi.bungeechat.chat.commandlink");
-		ChatString chatString = new ChatString(message, allowColor, allowFormat, allowMagic, allowLinks, allowCommandLinks);
+		boolean allowColor = from == null || from.hasPermission("hk.siggi.bungeechat.chat.color");
+		boolean allowHexColor = from == null || from.hasPermission("hk.siggi.bungeechat.chat.color.hex");
+		boolean allowFormat = from == null || from.hasPermission("hk.siggi.bungeechat.chat.format");
+		boolean allowMagic = from == null || from.hasPermission("hk.siggi.bungeechat.chat.magic");
+		boolean allowLinks = from == null || from.hasPermission("hk.siggi.bungeechat.chat.link");
+		boolean allowCommandLinks = from == null || from.hasPermission("hk.siggi.bungeechat.chat.commandlink");
+		ChatString chatString = new ChatString(message, allowColor, allowHexColor, allowFormat, allowMagic, allowLinks, allowCommandLinks);
 		if (censor) {
 			if (from != null) {
 				boolean filter = true;
