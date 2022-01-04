@@ -466,7 +466,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 			} else if (lastLogout == -1L) {
 				lastSeen = "Currently Online";
 			} else {
-				lastSeen = TimeUtil.timeToString(lastLogout - now);
+				lastSeen = TimeUtil.timeDifference(now, lastLogout);
 			}
 			sb.append("<h1>OnTime for ");
 			sb.append(playerName);
@@ -629,7 +629,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 			} else if (lastLogout == -1L) {
 				lastSeen = "Currently Online";
 			} else {
-				lastSeen = TimeUtil.timeToString(lastLogout - now);
+				lastSeen = TimeUtil.timeDifference(now, lastLogout);
 			}
 			sb.append("<h1>OnTime for ");
 			sb.append(playerName);
@@ -718,7 +718,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 			} else if (lastLogout == -1L) {
 				lastSeen = "Currently Online";
 			} else {
-				lastSeen = TimeUtil.timeToString(lastLogout - now);
+				lastSeen = TimeUtil.timeDifference(now, lastLogout);
 			}
 			HashMap<String, OnTimeInfo> onTimeInfoMap = new HashMap<String, OnTimeInfo>();
 			sb.append("<h1>OnTime for ");

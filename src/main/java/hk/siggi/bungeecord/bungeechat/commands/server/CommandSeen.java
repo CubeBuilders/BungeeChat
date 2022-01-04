@@ -317,7 +317,7 @@ public class CommandSeen extends Command implements TabExecutor {
 						BaseComponent lastSeenT = new TextComponent("Last Seen: ");
 						TimeZone tz = BungeeChat.getSession(p).user.getUserData().getTimeZone();
 						BaseComponent lastSeenTimestamp = new TextComponent(plugin.formatDate(lastSeen, tz));
-						BaseComponent lastSeenTime = new TextComponent(" (" + TimeUtil.timeToString(lastSeen - System.currentTimeMillis()) + " ago)");
+						BaseComponent lastSeenTime = new TextComponent(" (" + TimeUtil.timeDifference(lastSeen, System.currentTimeMillis()) + " ago)");
 						lastSeenT.setColor(ChatColor.GREEN);
 						lastSeenTime.setColor(ChatColor.AQUA);
 						message.addExtra(lastSeenT);

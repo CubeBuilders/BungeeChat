@@ -146,18 +146,30 @@ public class TimeUtil
 		Calendar now = new GregorianCalendar();
 		Calendar c = new GregorianCalendar();
 		c.setTimeInMillis(now.getTimeInMillis() + time);
-		return timeDifference(now, c, limit, shortForm);
+		return timeDifference(now, c, limit, shortForm, true);
 	}
 
-	public static String timeDifference(Calendar fromTime, Calendar toTime) {
+	public static String timeDifference(long fromTime, long toTime) {
 		return timeDifference(fromTime, toTime, 3);
 	}
 
-	public static String timeDifference(Calendar fromTime, Calendar toTime, int limit)
-	{
-		return timeDifference(fromTime, toTime, limit, false);
+	private static String timeDifference(Calendar fromTime, Calendar toTime) {
+		return timeDifference(fromTime, toTime, 3);
 	}
-	public static String timeDifference(Calendar fromTime, Calendar toTime, int limit, boolean shortForm) {
+
+	public static String timeDifference(long fromTime, long toTime, int limit) {
+		Calendar from = new GregorianCalendar();
+		from.setTimeInMillis(fromTime);
+		Calendar to = new GregorianCalendar();
+		to.setTimeInMillis(toTime);
+		return timeDifference(from, to, limit);
+	}
+
+	private static String timeDifference(Calendar fromTime, Calendar toTime, int limit)
+	{
+		return timeDifference(fromTime, toTime, limit, false, false);
+	}
+	private static String timeDifference(Calendar fromTime, Calendar toTime, int limit, boolean shortForm, boolean onlyUpToDays) {
 		boolean future = false;
 		if (toTime.equals(fromTime))
 		{
@@ -183,7 +195,7 @@ public class TimeUtil
 			"year", "years", "month", "months", "day", "days", "hour", "hours", "minute", "minutes", "second", "seconds"
 		};
 		int accuracy = 0;
-		for (int i = 0; i < types.length; i++)
+		for (int i = (onlyUpToDays ? 2 : 0); i < types.length; i++)
 		{
 			if (accuracy >= limit)
 			{

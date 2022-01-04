@@ -2985,7 +2985,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				now = startTime;
 			}
 			long timeLeft = expires - now;
-			String timeLeftString = TimeUtil.timeToString(timeLeft, 2);
+			String timeLeftString = TimeUtil.timeDifference(now, now + timeLeft, 2);
 			if (timeLeftString.equals("0 seconds")) {
 				timeLeftString = "Your mute will expire shortly.";
 			} else {
@@ -3057,7 +3057,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				now = startTime;
 			}
 			long timeLeft = expires - now;
-			String timeLeftString = TimeUtil.timeToString(timeLeft, 2);
+			String timeLeftString = TimeUtil.timeDifference(now, now + timeLeft, 2);
 			if (timeLeftString.equals("0 seconds")) {
 				timeLeftString = "shortly.";
 			} else {

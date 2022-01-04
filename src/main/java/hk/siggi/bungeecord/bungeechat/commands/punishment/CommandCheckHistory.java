@@ -99,7 +99,7 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 					message.setColor(ChatColor.AQUA);
 					sender.sendMessage(message);
 				} else {
-					BaseComponent message = new TextComponent(receiver + " is muted, expires on " + plugin.formatDate(muteExpires, tz) + " (in " + TimeUtil.timeToString(muteExpires - System.currentTimeMillis()) + ").");
+					BaseComponent message = new TextComponent(receiver + " is muted, expires on " + plugin.formatDate(muteExpires, tz) + " (in " + TimeUtil.timeDifference(System.currentTimeMillis(), muteExpires) + ").");
 					message.setColor(ChatColor.AQUA);
 					sender.sendMessage(message);
 				}
@@ -114,7 +114,7 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 					message.setColor(ChatColor.AQUA);
 					sender.sendMessage(message);
 				} else {
-					BaseComponent message = new TextComponent(receiver + " is banned, expires on " + plugin.formatDate(banExpires, tz) + " (in " + TimeUtil.timeToString(banExpires - System.currentTimeMillis()) + ").");
+					BaseComponent message = new TextComponent(receiver + " is banned, expires on " + plugin.formatDate(banExpires, tz) + " (in " + TimeUtil.timeDifference(System.currentTimeMillis(), banExpires) + ").");
 					message.setColor(ChatColor.AQUA);
 					sender.sendMessage(message);
 				}

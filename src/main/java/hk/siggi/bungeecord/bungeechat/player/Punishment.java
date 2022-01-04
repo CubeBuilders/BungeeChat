@@ -139,11 +139,7 @@ public class Punishment {
 		if (length == 0L) {
 			return cachedLength = "Permanent";
 		}
-		GregorianCalendar from = new GregorianCalendar();
-		GregorianCalendar to = new GregorianCalendar();
-		from.setTimeInMillis(time);
-		to.setTimeInMillis(time + length);
-		return cachedLength = TimeUtil.timeDifference(from, to);
+		return cachedLength = TimeUtil.timeDifference(time, time + length);
 	}
 
 	public String getIssuedBy() {
