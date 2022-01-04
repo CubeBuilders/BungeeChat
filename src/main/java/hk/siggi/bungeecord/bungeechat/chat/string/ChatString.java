@@ -61,18 +61,15 @@ public class ChatString implements CharSequence {
 				continue;
 			} else if (wasColorCode) {
 				wasColorCode = false;
+				boolean formatFailed = true;
 				if (isFormatCode(c)) {
-					boolean deniedFormat = false;
 					c = Character.toLowerCase(c);
 					if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')) {
 						if (allowColor) {
 							colorCode = getChatColor(c);
-						} else {
-							deniedFormat = true;
+							formatFailed = false;
 						}
-					}
-					if (c == '#' || c == 'x') {
-						deniedFormat = true;
+					} else if (c == '#' || c == 'x') {
 						if (allowHexColor) {
 							int charsAfter = chars.length - i - 1;
 							if (charsAfter >= 6) {
@@ -80,51 +77,48 @@ public class ChatString implements CharSequence {
 								try {
 									int rgb = Integer.parseInt(code, 16);
 									colorCode = ChatColor.of("#" + code);
-									deniedFormat = false;
+									formatFailed = false;
 									i += 6;
 								} catch (Exception e) {
 								}
 							}
 						}
-					}
-					if (c == 'k') {
+					} else if (c == 'k') {
 						if (allowMagic) {
 							magic = true;
-						} else {
-							deniedFormat = true;
+							formatFailed = false;
 						}
-					}
-					if (c >= 'l' && c <= 'o') {
+					} else if (c >= 'l' && c <= 'o') {
 						if (allowFormat) {
 							if (c == 'l') {
 								bold = true;
+								formatFailed = false;
 							}
 							if (c == 'm') {
 								strike = true;
+								formatFailed = false;
 							}
 							if (c == 'n') {
 								underline = true;
+								formatFailed = false;
 							}
 							if (c == 'o') {
 								italic = true;
+								formatFailed = false;
 							}
-						} else {
-							deniedFormat = true;
 						}
-					}
-					if (c == 'r') {
+					} else if (c == 'r') {
 						if (allowColor || allowFormat || allowMagic) {
 							bold = italic = underline = strike = magic = false;
 							colorCode = (link == null ? ChatColor.WHITE : ChatColor.AQUA);
-						} else {
-							deniedFormat = true;
+							formatFailed = false;
 						}
 					}
-					if (deniedFormat) {
-						characters.add(new ChatCharacter(codePrefix, colorCode, bold, italic, underline, strike, magic, link, tooltip));
-					} else {
-						continue;
-					}
+				}
+				if (formatFailed) {
+					characters.add(new ChatCharacter(codePrefix, colorCode, bold, italic, underline, strike, magic, link, tooltip));
+				} else {
+					continue;
 				}
 			}
 			if (c == '\\') {
