@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.cubetokens;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.util.Util;
 import hk.siggi.cubetokens.CT;
 import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
@@ -25,7 +26,11 @@ public class CommandGiveCubeTokens extends Command {
 			return;
 		}
 		UUID uuid;
-		uuid = plugin.getPlayerNameHandler().getPlayerByName(split[0]);
+		if (split[0].length() > 16) {
+			uuid = Util.uuidFromString(split[0]);
+		} else {
+			uuid = plugin.getPlayerNameHandler().getPlayerByName(split[0]);
+		}
 		if (uuid == null) {
 			BaseComponent noExist = new TextComponent("Player " + split[0] + " does not exist");
 			noExist.setColor(ChatColor.RED);
