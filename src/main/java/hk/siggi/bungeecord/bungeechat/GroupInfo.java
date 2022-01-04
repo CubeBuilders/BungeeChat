@@ -332,8 +332,8 @@ public final class GroupInfo {
 			int hash = 5;
 			hash = 67 * hash + id.hashCode();
 			hash = 67 * hash + display.hashCode();
-			hash = 67 * hash + color.ordinal();
-			hash = 67 * hash + miniColor.ordinal();
+			hash = 67 * hash + color.hashCode();
+			hash = 67 * hash + miniColor.hashCode();
 			return hash;
 		}
 	}
