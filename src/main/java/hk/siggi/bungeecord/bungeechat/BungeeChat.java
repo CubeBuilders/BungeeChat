@@ -2387,7 +2387,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 		if (uuid.toString().charAt(14) != '4') {
 			event.setCancelled(true);
-			event.setCancelReason(new TextComponent("CubeBuilders on Bedrock Edition is in private beta. To request to join, login to Java Edition and ask Siggi by using /mail send in-game and provide this ID: " + uuid.toString() + "."));
+			event.setCancelReason(new TextComponent("CubeBuilders requires a Minecraft: Java Edition account. If you have one, go to link.geysermc.org and link your accounts!"));
 			return;
 		}
 
