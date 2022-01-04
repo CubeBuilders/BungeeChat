@@ -54,7 +54,8 @@ public final class GroupInfo {
 			while ((line = reader.readLine()) != null) {
 				try {
 					int idx = line.indexOf("#");
-					if (idx >= 0) {
+					int tabIdx = line.indexOf("\t");
+					if (idx >= 0 && (tabIdx == -1 || tabIdx > idx)) {
 						line = line.substring(0, idx);
 					}
 					line = line.trim();
