@@ -1726,10 +1726,12 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				newGroups.add("hiddenstaff");
 			}
 		}
-		UserDonation latestRank = userData.getLatestRank();
-		if (latestRank != null) {
-			if (latestRank.isActive()) {
-				newGroups.add(latestRank.rank);
+		if (!userData.ranks.contains("platinum")) {
+			UserDonation latestRank = userData.getLatestRank();
+			if (latestRank != null) {
+				if (latestRank.isActive()) {
+					newGroups.add(latestRank.rank);
+				}
 			}
 		}
 		newGroups.addAll(userData.ranks);
