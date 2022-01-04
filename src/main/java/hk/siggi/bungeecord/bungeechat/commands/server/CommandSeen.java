@@ -7,6 +7,8 @@ import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.geolocation.Geolocation;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
+import hk.siggi.bungeecord.bungeechat.ontime.OnTimePlayer;
+import hk.siggi.bungeecord.bungeechat.ontime.OnTimeSessionRecord;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
 import hk.siggi.bungeecord.bungeechat.util.Util;
@@ -125,7 +127,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					location = (maskIPAndLocation ? "****" : geolocation.cityName) + ", " + geolocation.regionName + ", " + geolocation.countryName;
 				}
 				BaseComponent message = new TextComponent("");
-				BaseComponent seenIP = new TextComponent("Seen IP address check");
+				BaseComponent seenIP = new TextComponent("==== IP Address ====");
 				seenIP.setColor(ChatColor.BLUE);
 				message.addExtra(seenIP);
 				sender.sendMessage(message);
@@ -297,7 +299,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				values.addAll(ipMap.values());
 				Collections.sort(values);
 				BaseComponent message = new TextComponent("");
-				BaseComponent seenIP = new TextComponent("Seen Player check");
+				BaseComponent seenIP = new TextComponent("==== Player Activity ====");
 				seenIP.setColor(ChatColor.BLUE);
 				message.addExtra(seenIP);
 				sender.sendMessage(message);
@@ -309,13 +311,34 @@ public class CommandSeen extends Command implements TabExecutor {
 				message.addExtra(playerIs);
 				message.addExtra(playerTxt);
 				sender.sendMessage(message);
+				TimeZone tz = BungeeChat.getSession(p).user.getUserData().getTimeZone();
+				OnTimePlayer onTimePlayer = OnTime.getInstance().getPlayer(playerToCheck);
+				OnTimeSessionRecord[] sessionRecords = onTimePlayer.getSessionRecords();
+				long totalTimeLoggedIn = OnTime.getTotalTimeLoggedIn(sessionRecords);
+				{
+					long firstSeen = 0;
+					if (sessionRecords.length != 0) {
+						firstSeen = sessionRecords[0].login;
+					}
+					if (firstSeen > 0L) {
+						message = new TextComponent("");
+						BaseComponent firstSeenT = new TextComponent("First Seen: ");
+						BaseComponent firstSeenTimestamp = new TextComponent(plugin.formatDate(firstSeen, tz));
+						BaseComponent firstSeenTime = new TextComponent(" (" + TimeUtil.timeDifference(firstSeen, System.currentTimeMillis()) + " ago)");
+						firstSeenT.setColor(ChatColor.GREEN);
+						firstSeenTime.setColor(ChatColor.AQUA);
+						message.addExtra(firstSeenT);
+						message.addExtra(firstSeenTimestamp);
+						message.addExtra(firstSeenTime);
+						sender.sendMessage(message);
+					}
+				}
 				lastSeen:
 				if (onlinePlayer == null || fakeLastOnline > 0L) {
-					long lastSeen = fakeLastOnline > 0L ? fakeLastOnline : OnTime.getInstance().getPlayer(playerToCheck).getLastOnline();
+					long lastSeen = fakeLastOnline > 0L ? fakeLastOnline : onTimePlayer.getLastOnline();
 					if (lastSeen > 0L) {
 						message = new TextComponent("");
 						BaseComponent lastSeenT = new TextComponent("Last Seen: ");
-						TimeZone tz = BungeeChat.getSession(p).user.getUserData().getTimeZone();
 						BaseComponent lastSeenTimestamp = new TextComponent(plugin.formatDate(lastSeen, tz));
 						BaseComponent lastSeenTime = new TextComponent(" (" + TimeUtil.timeDifference(lastSeen, System.currentTimeMillis()) + " ago)");
 						lastSeenT.setColor(ChatColor.GREEN);
@@ -346,6 +369,16 @@ public class CommandSeen extends Command implements TabExecutor {
 					lastSeenNow.setColor(ChatColor.AQUA);
 					message.addExtra(lastSeen);
 					message.addExtra(lastSeenNow);
+					sender.sendMessage(message);
+				}
+				if (totalTimeLoggedIn > 0L) {
+					message = new TextComponent("");
+					BaseComponent totalTimeOn = new TextComponent("Total Time Online: ");
+					BaseComponent timeOn = new TextComponent(TimeUtil.timeToString(totalTimeLoggedIn, 4, true));
+					totalTimeOn.setColor(ChatColor.GREEN);
+					timeOn.setColor(ChatColor.AQUA);
+					message.addExtra(totalTimeOn);
+					message.addExtra(timeOn);
 					sender.sendMessage(message);
 				}
 
