@@ -2333,22 +2333,27 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 	public LoginResult.Property getSkinProperty(PendingConnection connection, boolean add) {
 		if (connection instanceof InitialHandler) {
-			InitialHandler ih = (InitialHandler) connection;
-			LoginResult result = ih.getLoginProfile();
-			LoginResult.Property[] properties = result.getProperties();
-			for (LoginResult.Property prop : properties) {
-				if (prop.getName().equals("textures")) {
-					return prop;
+			try {
+				InitialHandler ih = (InitialHandler) connection;
+				LoginResult result = ih.getLoginProfile();
+				LoginResult.Property[] properties = result.getProperties();
+				for (LoginResult.Property prop : properties) {
+					if (prop.getName().equals("textures")) {
+						return prop;
+					}
 				}
-			}
-			if (add) {
-				LoginResult.Property[] newProps = new LoginResult.Property[properties.length];
-				for (int i = 0; i < properties.length; i++) {
-					newProps[i] = properties[i];
+				if (add) {
+					LoginResult.Property[] newProps = new LoginResult.Property[properties.length];
+					for (int i = 0; i < properties.length; i++) {
+						newProps[i] = properties[i];
+					}
+					newProps[properties.length] = new LoginResult.Property("textures", "", null);
+					result.setProperties(newProps);
+					return newProps[properties.length];
 				}
-				newProps[properties.length] = new LoginResult.Property("textures", "", null);
-				result.setProperties(newProps);
-				return newProps[properties.length];
+			} catch (NullPointerException npe) {
+				// This can occur if the user has no skin or joined via Bedrock Edition
+				return null;
 			}
 		}
 		return null;
