@@ -205,7 +205,10 @@ public class TimeUtil
 			if (diff > 0)
 			{
 				accuracy++;
-				sb.append(" ").append(diff).append(" ").append(names[i * 2 + (diff > 1 ? 1 : 0)]);
+				sb.append(" ").append(diff);
+				if (!shortForm)
+					sb.append(" ");
+				sb.append(names[i * 2 + (diff > 1 ? 1 : 0)]);
 			}
 		}
 		if (sb.length() == 0)
