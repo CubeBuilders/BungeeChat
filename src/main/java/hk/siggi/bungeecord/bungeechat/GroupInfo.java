@@ -48,6 +48,8 @@ public final class GroupInfo {
 		try {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(fis = new FileInputStream(file)));
 			lastModified = file.lastModified();
+			memberRanks.clear();
+			staffRanks.clear();
 			String line;
 			while ((line = reader.readLine()) != null) {
 				try {
