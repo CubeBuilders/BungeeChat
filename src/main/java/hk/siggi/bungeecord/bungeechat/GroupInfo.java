@@ -13,8 +13,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import hk.siggi.bungeecord.bungeechat.util.ChatUtil;
+import hk.siggi.bungeecord.bungeechat.util.Color;
 import net.cubebuilders.user.NameHistory;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -71,7 +74,7 @@ public final class GroupInfo {
 						if (pieces.length > 4) {
 							minicolor = pieces[4];
 						}
-						(pieces[0].equals("staff") ? staffRanks : memberRanks).add(new Rank(id, display, ChatColor.of(color.toUpperCase()), ChatColor.of(minicolor.toUpperCase())));
+						(pieces[0].equals("staff") ? staffRanks : memberRanks).add(new Rank(id, display, Color.of(color.toUpperCase()), Color.of(minicolor.toUpperCase())));
 					}
 				} catch (Exception e) {
 				}
@@ -144,9 +147,9 @@ public final class GroupInfo {
 		Rank staffRank = (staffRankID >= 0 && staffRankID < staffRanks.size() ? staffRanks.get(staffRankID) : null);
 
 		if (staffRank != null) {
-			return staffRank.color;
+			return staffRank.color.chatColor;
 		} else if (memberRank != null) {
-			return memberRank.color;
+			return memberRank.color.chatColor;
 		} else {
 			return ChatColor.GRAY;
 		}
@@ -218,10 +221,10 @@ public final class GroupInfo {
 		String hoverText = "";
 		try {
 			if (memberRank != null) {
-				hoverText += memberRank.color + memberRank.display + " ";
+				hoverText += memberRank.color.code + memberRank.display + " ";
 			}
 			if (staffRank != null) {
-				hoverText += staffRank.color + staffRank.display + " ";
+				hoverText += staffRank.color.code + staffRank.display + " ";
 			}
 			hoverText += ChatColor.RESET;
 		} catch (Exception e) {
@@ -244,12 +247,13 @@ public final class GroupInfo {
 		String fingerprint = player.getUniqueId().toString().toUpperCase();
 		fingerprint = fingerprint.substring(0, 8);
 		hoverText = hoverText + (hoverText.equals("") ? "" : "\n") + "Player Fingerprint: " + fingerprint;
-		nameComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent(hoverText)}));
+		ArrayList<BaseComponent> hoverTextComponents = ChatUtil.processChat(null, hoverText);
+		nameComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverTextComponents.toArray(new BaseComponent[hoverTextComponents.size()])));
 		if (miniPrefix) {
 			if (staffRank != null) {
-				nameComponent.setColor(staffRank.miniColor);
+				nameComponent.setColor(staffRank.miniColor.chatColor);
 			} else if (memberRank != null) {
-				nameComponent.setColor(memberRank.miniColor);
+				nameComponent.setColor(memberRank.miniColor.chatColor);
 			}
 		}
 
@@ -271,11 +275,11 @@ public final class GroupInfo {
 			TextComponent spacer2 = new TextComponent(" ");
 			if (staffRank != null) {
 				staffRankComponent = new TextComponent(staffRank.display);
-				staffRankComponent.setColor(staffRank.color);
+				staffRankComponent.setColor(staffRank.color.chatColor);
 			}
 			if (memberRank != null) {
 				memberRankComponent = new TextComponent(memberRank.display);
-				memberRankComponent.setColor(memberRank.color);
+				memberRankComponent.setColor(memberRank.color.chatColor);
 			}
 			if (staffRankComponent != null) {
 				if (allowDoublePrefix && memberRank != null) {
@@ -297,14 +301,14 @@ public final class GroupInfo {
 
 		public final String id;
 		public final String display;
-		public final ChatColor color;
-		public final ChatColor miniColor;
+		public final Color color;
+		public final Color miniColor;
 
-		public Rank(String id, String display, ChatColor color) {
+		public Rank(String id, String display, Color color) {
 			this(id, display, color, color);
 		}
 
-		public Rank(String id, String display, ChatColor color, ChatColor miniColor) {
+		public Rank(String id, String display, Color color, Color miniColor) {
 			assertNotNull(id, "id");
 			assertNotNull(display, "display");
 			assertNotNull(color, "color");
