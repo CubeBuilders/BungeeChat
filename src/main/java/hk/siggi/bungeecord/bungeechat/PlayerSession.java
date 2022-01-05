@@ -18,6 +18,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -412,20 +413,24 @@ public class PlayerSession {
 
 		if (!showingAfkTimer && now - lastHotbar > 3500L) {
 			TextComponent a = new TextComponent("");
-			Consumer<TextComponent> addComponent = (component) -> {
+			Consumer<List<BaseComponent>> addComponents = (components) -> {
 				List<BaseComponent> ex = a.getExtra();
 				if (ex != null && !ex.isEmpty()) {
 					TextComponent aa = new TextComponent(ChatColor.YELLOW + " | ");
 					aa.setColor(ChatColor.YELLOW);
 					a.addExtra(aa);
 				}
-				a.addExtra(component);
+				for (BaseComponent component : components) {
+					a.addExtra(component);
+				}
+			};
+			Consumer<BaseComponent> addComponent = (component) -> {
+				addComponents.accept(Arrays.asList(new BaseComponent[]{component}));
 			};
 			ChatHandler handler = getChatHandler();
 			if (!(handler instanceof PublicChatHandler)) {
 				List<BaseComponent> display = handler.getDisplay();
-				TextComponent c = new TextComponent(unify(display).toLegacyText());
-				addComponent.accept(c);
+				addComponents.accept(display);
 			}
 			if (getPlayerInfo().isVanished()) {
 				TextComponent v = new TextComponent(ChatColor.GREEN + "Vanished");
