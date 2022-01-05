@@ -150,6 +150,10 @@ public final class ChatController implements Listener {
 			message = "/g staffchat" + message.substring(2);
 			event.setMessage(message);
 		}
+		if (message.equalsIgnoreCase("/mod") || message.toLowerCase().startsWith("/mod ")) {
+			message = "/g mods" + message.substring(4);
+			event.setMessage(message);
+		}
 		if (message.equalsIgnoreCase("/pt")) {
 			event.setCancelled(true);
 			player.sendMessage("Usage: /pt [passthrough]");
