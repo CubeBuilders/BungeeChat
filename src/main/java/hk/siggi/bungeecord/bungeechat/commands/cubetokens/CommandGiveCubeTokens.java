@@ -23,7 +23,9 @@ public class CommandGiveCubeTokens extends Command {
 	@Override
 	public void execute(CommandSender sender, String[] split) {
 		if (sender instanceof ProxiedPlayer) {
-			return;
+			if (!sender.hasPermission("cubetokens.give")) {
+				return;
+			}
 		}
 		UUID uuid;
 		if (split[0].length() > 16) {
