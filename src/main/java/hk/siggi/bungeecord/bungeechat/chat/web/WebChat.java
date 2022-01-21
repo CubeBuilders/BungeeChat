@@ -4,8 +4,6 @@ import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.Util;
-import io.siggi.http.HTTPWebSocket;
-import io.siggi.http.HTTPWebSocketMessage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,6 +17,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import io.siggi.simplewebsocket.SimpleWebsocket;
+import io.siggi.simplewebsocket.WebSocketMessage;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 public class WebChat {
@@ -63,31 +63,18 @@ public class WebChat {
 		this.plugin = plugin;
 	}
 
-	public void acceptWebSocket(HTTPWebSocket socket, String sessionId) throws IOException {
-		UUID uuid = null;
-		boolean accessFail = false;
-		try {
-			URL url = new URL("http://127.0.0.1:2823/api/sessioncookie?cookie=" + sessionId);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			String uuidStr = reader.readLine();
-			uuid = Util.uuidFromString(uuidStr);
-		} catch (Exception e) {
-			accessFail = true;
-		}
+	public void acceptWebSocket(SimpleWebsocket socket, UUID uuid, String username) throws IOException {
 		if (uuid == null) {
-			String result = "notloggedin";
-			if (accessFail) {
-				result = "servfail";
-			}
-			socket.accept();
-			HTTPWebSocketMessage msg = HTTPWebSocketMessage.create("{\"result\":\"" + result + "\"}");
+			WebSocketMessage msg = WebSocketMessage.create("{\"result\":\"notloggedin\"}");
 			socket.send(msg);
 			socket.close();
 			return;
 		}
-		String username = plugin.getPlayerNameHandler().getNameByPlayer(uuid);
-		WebChatClient client = new WebChatClient(this, uuid, socket);
+		String localName = plugin.getPlayerNameHandler().getNameByPlayer(uuid);
+		if (localName != null) {
+			username = localName;
+		}
+		WebChatClient client = new WebChatClient(this, uuid, username, socket);
 		client.start();
 		client.sendMessage(unify(processChat(null, "Hi&6 there, " + username + "! <https://cubebuilders.net/>")));
 	}

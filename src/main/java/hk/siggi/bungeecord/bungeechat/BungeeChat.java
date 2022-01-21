@@ -555,7 +555,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		try {
 			httpServer = new HTTPServer(20857);
 			httpServer.responderRegistry.register("/", bungeeResponder = new BungeeResponder(this), true, false);
-			httpServer.responderRegistry.registerWebSocketHandler("/", bungeeResponder, true, true);
 			httpServer.listen();
 		} catch (Exception e) {
 		}

@@ -54,7 +54,13 @@
         <dependency>
             <groupId>io.siggi</groupId>
             <artifactId>SiggiHTTP</artifactId>
-            <version>1.5</version>
+            <version>1.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.siggi</groupId>
+            <artifactId>SimpleWebsocket</artifactId>
+            <version>1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

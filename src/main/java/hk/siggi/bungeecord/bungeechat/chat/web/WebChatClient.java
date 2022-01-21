@@ -7,28 +7,30 @@ import com.google.gson.JsonParser;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
-import io.siggi.http.HTTPWebSocket;
-import io.siggi.http.HTTPWebSocketListener;
-import io.siggi.http.HTTPWebSocketMessage;
 import java.io.IOException;
 import java.util.UUID;
+import io.siggi.simplewebsocket.SimpleWebsocket;
+import io.siggi.simplewebsocket.WebSocketListener;
+import io.siggi.simplewebsocket.WebSocketMessage;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
 
-public class WebChatClient implements HTTPWebSocketListener {
+public class WebChatClient implements WebSocketListener {
 
 	private final WebChat webchat;
 	final UUID uuid;
-	final HTTPWebSocket socket;
+	final String username;
+	final SimpleWebsocket socket;
 	private boolean started = false;
 	private final Gson gson;
 	private final JsonParser jsonParser;
 	private boolean valid = false;
 	private String publicChatChannel = "hub";
 
-	WebChatClient(WebChat webchat, UUID uuid, HTTPWebSocket socket) {
+	WebChatClient(WebChat webchat, UUID uuid, String username, SimpleWebsocket socket) {
 		this.webchat = webchat;
 		this.uuid = uuid;
+		this.username = username;
 		this.socket = socket;
 		this.gson = new Gson();
 		this.jsonParser = new JsonParser();
@@ -43,21 +45,20 @@ public class WebChatClient implements HTTPWebSocketListener {
 			return;
 		}
 		started = true;
-		socket.accept();
 		socket.addListener(this);
-		socket.useNonBlockingMode();
+		socket.useNonBlockingMode(5000L);
 		valid = true;
 		JsonObject welcomeMsg = new JsonObject();
 		welcomeMsg.addProperty("result", "ok");
 		welcomeMsg.addProperty("uuid", uuid.toString());
 		welcomeMsg.addProperty("name", webchat.plugin.getPlayerNameHandler().getNameByPlayer(uuid));
-		HTTPWebSocketMessage welcome = HTTPWebSocketMessage.create(gson.toJson(welcomeMsg));
+		WebSocketMessage welcome = WebSocketMessage.create(gson.toJson(welcomeMsg));
 		socket.send(welcome);
 		webchat.addClient(this);
 	}
 
 	@Override
-	public void receivedMessage(HTTPWebSocket socket, HTTPWebSocketMessage message) {
+	public void receivedMessage(SimpleWebsocket socket, WebSocketMessage message) {
 		try {
 			String json = message.getText();
 			JsonElement parse = jsonParser.parse(json);
@@ -110,7 +111,7 @@ public class WebChatClient implements HTTPWebSocketListener {
 	}
 
 	@Override
-	public void socketClosed(HTTPWebSocket socket) {
+	public void socketClosed(SimpleWebsocket socket) {
 		valid = false;
 		webchat.removeClient(this);
 	}
@@ -120,7 +121,7 @@ public class WebChatClient implements HTTPWebSocketListener {
 			JsonObject lineObj = new JsonObject();
 			lineObj.addProperty("type", "line");
 			lineObj.addProperty("text", line);
-			socket.send(HTTPWebSocketMessage.create(gson.toJson(lineObj)));
+			socket.send(WebSocketMessage.create(gson.toJson(lineObj)));
 		} catch (Exception e) {
 		}
 	}
@@ -131,7 +132,7 @@ public class WebChatClient implements HTTPWebSocketListener {
 			JsonObject lineObj = new JsonObject();
 			lineObj.addProperty("type", "richline");
 			lineObj.add("base", jsonParser.parse(lineJson));
-			socket.send(HTTPWebSocketMessage.create(gson.toJson(lineObj)));
+			socket.send(WebSocketMessage.create(gson.toJson(lineObj)));
 		} catch (Exception e) {
 		}
 	}
@@ -141,7 +142,7 @@ public class WebChatClient implements HTTPWebSocketListener {
 			JsonObject lineObj = new JsonObject();
 			lineObj.addProperty("type", "kick");
 			lineObj.addProperty("message", kickMessage);
-			socket.send(HTTPWebSocketMessage.create(gson.toJson(lineObj)));
+			socket.send(WebSocketMessage.create(gson.toJson(lineObj)));
 		} catch (Exception e) {
 		}
 		try {

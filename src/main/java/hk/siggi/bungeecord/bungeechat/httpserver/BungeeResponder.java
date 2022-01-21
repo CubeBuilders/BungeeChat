@@ -27,8 +27,6 @@ import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import io.siggi.http.HTTPRequest;
 import io.siggi.http.HTTPResponder;
-import io.siggi.http.HTTPWebSocket;
-import io.siggi.http.HTTPWebSocketHandler;
 import static io.siggi.http.util.HTMLUtils.htmlentities;
 import io.siggi.iphelper.IP;
 import io.siggi.iphelper.IPv6;
@@ -66,9 +64,10 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.UUID;
 import javax.imageio.ImageIO;
+import io.siggi.simplewebsocket.SimpleWebsocket;
 import net.cubebuilders.user.CBUser;
 
-public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
+public class BungeeResponder implements HTTPResponder {
 
 	private final BungeeChat plugin;
 	private final ArrayList<Punishment> recentPunishments = new ArrayList<Punishment>();
@@ -166,21 +165,6 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 
 	private final ThreadLocal<SessionInfo> sessionInfo = new ThreadLocal<>();
 
-	@Override
-	public void handleWebSocket(HTTPWebSocket socket) throws IOException {
-		if (!socket.requestURI.equals("/bc/webchat")) {
-			return;
-		}
-		String sessionId = socket.cookies.get("SessID");
-		if (sessionId == null) {
-			sessionId = socket.get.get("session");
-			if (sessionId == null) {
-				return;
-			}
-		}
-		plugin.getWebChat().acceptWebSocket(socket, sessionId);
-	}
-
 	private class SessionInfo {
 
 		public final UUID uuid;
@@ -245,6 +229,12 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 //			}
 //		}
 		boolean requestIsEncrypted = false;
+		if (request.url.equals("/bc/webchat")) {
+			if (SimpleWebsocket.isWebsocketRequest(request) && userUUID != null && username != null) {
+				plugin.getWebChat().acceptWebSocket(SimpleWebsocket.accept(request), userUUID, username);
+			}
+			return;
+		}
 		if (request.url.equals("/trigger")) {
 			String uuidStr = request.get.get("uuid");
 			boolean ban = request.get.get("ban") != null;
