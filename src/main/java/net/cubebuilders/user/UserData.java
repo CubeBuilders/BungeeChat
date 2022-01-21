@@ -32,6 +32,10 @@ public class UserData {
 	public long lastLogoutAll = 0L;
 	public String skinUrl = null;
 
+	public String autoLoginToken = null;
+	public String autoLoginTokenTrustedIP = null;
+	public long autoLoginTokenExpires = 0L;
+
 	public TimeZone getTimeZone() {
 		if (timezone == null) {
 			jTimeZone = null;
