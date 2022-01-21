@@ -25,7 +25,7 @@ public class PeriodicAnnouncements {
 	}
 
 	void start() {
-		plugin.getScheduler().schedule(plugin, this::sendAMessage, 5L, TimeUnit.MINUTES);
+		plugin.getScheduler().schedule(plugin, this::sendAMessage, 5L, 5L, TimeUnit.MINUTES);
 	}
 
 	private void sendAMessage() {
