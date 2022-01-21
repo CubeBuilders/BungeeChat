@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.moderation;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import net.md_5.bungee.api.CommandSender;
@@ -23,20 +24,20 @@ public class CommandVanishOnLogin extends Command {
 			ProxiedPlayer player = ((ProxiedPlayer) sender);
 			name = player.getName();
 			if (!player.hasPermission("hk.siggi.bungeechat.vanish")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
-			sender.sendMessage("This command can only be used in-game.");
+			MessageSender.sendMessage(sender, "This command can only be used in-game.");
 			return;
 		}
 		PlayerAccount info = plugin.getPlayerInfo(((ProxiedPlayer) sender).getUniqueId());
 		if (info.getVanishOnLogin()) {
 			info.setVanishOnLogin(false);
-			sender.sendMessage("Vanish on Login disabled.");
+			MessageSender.sendMessage(sender, "Vanish on Login disabled.");
 		} else {
 			info.setVanishOnLogin(true);
-			sender.sendMessage("Vanish on Login enabled.");
+			MessageSender.sendMessage(sender, "Vanish on Login enabled.");
 		}
 	}
 }

@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
@@ -130,10 +131,10 @@ public class CommandServer extends Command implements TabExecutor {
 			TextComponent youAreHereServer = new TextComponent(currentServerHumanReadableName);
 			youAreHereServer.setColor(ChatColor.WHITE);
 			youAreHere.addExtra(youAreHereServer);
-			player.sendMessage(youAreHere);
+			MessageSender.sendMessage(player, youAreHere);
 			TextComponent serverList = new TextComponent("Click on a server to join it:");
 			serverList.setColor(ChatColor.GOLD);
-			player.sendMessage(serverList);
+			MessageSender.sendMessage(player, serverList);
 			for (int i = 0; i < serverListing.length; i++) {
 				ServerInfo server = (ServerInfo) servers.get(serverListing[i]);
 				if (server != null) {
@@ -147,7 +148,7 @@ public class CommandServer extends Command implements TabExecutor {
 						serverTextComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to join " + humanReadableName)}));
 						serverTextComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/server " + server.getName()));
 						serverPrefix.addExtra(serverTextComponent);
-						player.sendMessage(serverPrefix);
+						MessageSender.sendMessage(player, serverPrefix);
 					}
 				}
 			}
@@ -177,13 +178,13 @@ public class CommandServer extends Command implements TabExecutor {
 				}
 			}
 			if (server == null) {
-				player.sendMessage(ProxyServer.getInstance().getTranslation("no_server", new Object[0]));
+				MessageSender.sendMessage(player, ProxyServer.getInstance().getTranslation("no_server", new Object[0]));
 			} else if (!server.canAccess(player)) {
-				player.sendMessage(ProxyServer.getInstance().getTranslation("no_server_permission", new Object[0]));
+				MessageSender.sendMessage(player, ProxyServer.getInstance().getTranslation("no_server_permission", new Object[0]));
 			} else if (!player.hasPermission("hk.siggi.bungeecord.logintohub.directaccessany") && !contains(server.getName(), serverListing)) {
 				TextComponent serverList = new TextComponent("Direct access to this server denied.");
 				serverList.setColor(ChatColor.RED);
-				player.sendMessage(serverList);
+				MessageSender.sendMessage(player, serverList);
 			} else {
 				player.connect(server);
 			}

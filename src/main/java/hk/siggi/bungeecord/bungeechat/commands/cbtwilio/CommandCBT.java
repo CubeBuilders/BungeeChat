@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.cbtwilio;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -45,7 +46,7 @@ public class CommandCBT extends Command {
 			issuer = player.getUniqueId();
 			issuerName = player.getName();
 		} else {
-			sender.sendMessage("This command can only be used in-game.");
+			MessageSender.sendMessage(sender, "This command can only be used in-game.");
 			return;
 		}
 		PlayerAccount pi = plugin.getPlayerInfo(issuer);
@@ -66,20 +67,20 @@ public class CommandCBT extends Command {
 					BaseComponent extra = new TextComponent(number);
 					extra.setColor(ChatColor.WHITE);
 					message.addExtra(extra);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 					message = new TextComponent("To cancel service, text UNLINK to " + fixServiceNumber(serviceNumber) + " from your phone.  To change to a new number, you need to cancel service first and then start again with the new number.  If you no longer have access to this phone number, contact a staff member for assistance.");
 					message.setColor(ChatColor.AQUA);
 				} else if (result.equalsIgnoreCase("ServiceNotActive")) {
 					BaseComponent message = new TextComponent("CubeBuilders Texts: Not registered yet");
 					message.setColor(ChatColor.AQUA);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 					message = new TextComponent("To register, text START to +1-866-408-CUBE (2823). This service is available to users in United States and Canada only. Other countries are not supported.");
 					message.setColor(ChatColor.AQUA);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 				}
 				BaseComponent message = new TextComponent("Some features (such as mail via text, or raid detector alerts) require a paid membership with CubeBuilders. Additional message and data rates may apply depending your service plan with your cell phone carrier.");
 				message.setColor(ChatColor.AQUA);
-				player.sendMessage(message);
+				MessageSender.sendMessage(player, message);
 			} else if (args[0].equalsIgnoreCase("confirm")) {
 				if (args.length < 2) {
 					BaseComponent message = new TextComponent("Usage: ");
@@ -87,7 +88,7 @@ public class CommandCBT extends Command {
 					BaseComponent extra = new TextComponent("/cbt confirm <code>");
 					extra.setColor(ChatColor.WHITE);
 					message.addExtra(extra);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 					return;
 				}
 				String code = args[1];
@@ -105,10 +106,10 @@ public class CommandCBT extends Command {
 					message.addExtra(extra);
 					extra = new TextComponent(" to your account!");
 					message.addExtra(extra);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 					message = new TextComponent("Some features (such as mail via text, or raid detector alerts) require a paid membership with CubeBuilders. Additional message and data rates may apply depending on your service plan with your cell phone carrier.");
 					message.setColor(ChatColor.AQUA);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 				} else if (result.equalsIgnoreCase("ServiceAlreadyActive")) {
 					BaseComponent message = new TextComponent("You already have a phone number registered. For information, type: ");
 					message.setColor(ChatColor.RED);
@@ -117,18 +118,18 @@ public class CommandCBT extends Command {
 					extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click for information")}));
 					extra.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cbt"));
 					message.addExtra(extra);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 					message = new TextComponent("To link a new phone, unlink the old first by typing: ");
 					message.setColor(ChatColor.RED);
 					extra = new TextComponent("/cbt unlink");
 					extra.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cbt unlink"));
 					extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to unlink your phone from CubeBuilders")}));
 					message.addExtra(extra);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 				} else if (result.equalsIgnoreCase("InvalidCode")) {
 					BaseComponent message = new TextComponent("You entered an invalid confirmation code! Try again.");
 					message.setColor(ChatColor.RED);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 				}
 			} else if (args[0].equalsIgnoreCase("unlink")) {
 				BungeeChat.getInstance().text(issuer, "CubeBuilders: Texting service has been deactivated for " + player.getName() + " by in-game command. No more texts will be sent until you resubscribe by replying START. If you didn't do this, email Siggi at siggi@cubebuilders.net immediately, and change your Minecraft account password ASAP.");
@@ -142,11 +143,11 @@ public class CommandCBT extends Command {
 				if (result.equalsIgnoreCase("OK")) {
 					BaseComponent message = new TextComponent("Texting service has been deactivated.");
 					message.setColor(ChatColor.GOLD);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 				} else if (result.equalsIgnoreCase("ServiceNotActive")) {
 					BaseComponent message = new TextComponent("Texting service is not active for your account.");
 					message.setColor(ChatColor.RED);
-					player.sendMessage(message);
+					MessageSender.sendMessage(player, message);
 				}
 			}
 		} catch (Exception e) {

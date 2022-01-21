@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
@@ -39,26 +40,26 @@ public class CommandImpersonate extends Command implements TabExecutor {
 		}
 		ProxiedPlayer p = (ProxiedPlayer) sender;
 		if (!p.hasPermission("hk.siggi.bungeechat.impersonate")) {
-			p.sendMessage(Util.randomNotPermittedMessage());
+			MessageSender.sendMessage(p, Util.randomNotPermittedMessage());
 			return;
 		}
 		if (args.length == 0) {
-			p.sendMessage(unify(processChat(null, "&6Usage: &b/impersonate [playername]")));
+			MessageSender.sendMessage(p, "&6Usage: &b/impersonate [playername]");
 			return;
 		}
 		String name = args[0];
 		UUID uuid = plugin.getPlayerNameHandler().getPlayerByName(name);
 		if (uuid == null) {
-			p.sendMessage(unify(processChat(null, "&4Unknown username &b" + name)));
+			MessageSender.sendMessage(p, "&4Unknown username &b" + name);
 			return;
 		}
 		if (!plugin.getPlayerInfo(p.getUniqueId()).isVanished()) {
-			p.sendMessage(unify(processChat(null, "&4You have to be vanished to perform this action. Vanish, then impersonate, then change server, then unvanish.")));
+			MessageSender.sendMessage(p, "&4You have to be vanished to perform this action. Vanish, then impersonate, then change server, then unvanish.");
 			return;
 		}
 		if (doImpersonate(p, uuid)) {
 			plugin.getPlayerInfo(uuid).setVanished(true);
-			p.sendMessage(unify(processChat(null, "&6Switch servers before unvanishing, and so you don't give yourself away, make sure to &b/setgroup " + p.getName() + " fake [new groups]&6 before you unvanish!")));
+			MessageSender.sendMessage(p, "&6Switch servers before unvanishing, and so you don't give yourself away, make sure to &b/setgroup " + p.getName() + " fake [new groups]&6 before you unvanish!");
 		}
 	}
 
@@ -108,13 +109,13 @@ public class CommandImpersonate extends Command implements TabExecutor {
 
 		LoginResult newLoginResult = plugin.reconstructLoginResultFromCache(target);
 		if (newLoginResult == null) {
-			p.sendMessage(unify(processChat(null, "&4Something went wrong! :/")));
+			MessageSender.sendMessage(p, "&4Something went wrong! :/");
 			return false;
 		}
 		CBUser cbUser = BungeeChat.getUser(target);
 		ProxiedPlayer targetCheck = BungeeChat.getProxiedPlayer(target);
 		if (targetCheck != null) {
-			p.sendMessage(unify(processChat(null, "&4Cannot impersonate a user who is currently online!")));
+			MessageSender.sendMessage(p, "&4Cannot impersonate a user who is currently online!");
 			return false;
 		}
 
@@ -135,7 +136,7 @@ public class CommandImpersonate extends Command implements TabExecutor {
 
 			bungeeCord.addConnection(uc);
 
-			p.sendMessage(unify(processChat(null, "&6You are now &b" + uc.getName() + "&6 (UUID: &b" + uc.getUniqueId() + "&6)")));
+			MessageSender.sendMessage(p, "&6You are now &b" + uc.getName() + "&6 (UUID: &b" + uc.getUniqueId() + "&6)");
 
 			session.addBungeeHotbar("impersonate", "Impersonating " + uc.getName());
 

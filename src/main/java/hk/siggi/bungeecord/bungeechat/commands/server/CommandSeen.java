@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.geolocation.Geolocation;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
@@ -58,7 +59,7 @@ public class CommandSeen extends Command implements TabExecutor {
 			BaseComponent notAvailable = new TextComponent("This feature is not available to you.");
 			notAvailable.setColor(ChatColor.RED);
 			message.addExtra(notAvailable);
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 			return;
 		}
 		boolean maskIPAndLocation = false;
@@ -75,7 +76,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				BaseComponent notAvailable = new TextComponent("This feature is not available to you.");
 				notAvailable.setColor(ChatColor.RED);
 				message.addExtra(notAvailable);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 				return;
 			}
 			String ipAsStr = unmaskIP(entityToCheck);
@@ -84,7 +85,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				BaseComponent notAvailable = new TextComponent("IP address is invalid. If you're entering a masked IP address from a stream session, the mapping may have expired.");
 				notAvailable.setColor(ChatColor.RED);
 				message.addExtra(notAvailable);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 				return;
 			}
 			try {
@@ -102,7 +103,7 @@ public class CommandSeen extends Command implements TabExecutor {
 						BaseComponent msgA = new TextComponent("Minimum blocksize is /16 for searching IPv4 subnets.");
 						msgA.setColor(ChatColor.RED);
 						message.addExtra(msgA);
-						sender.sendMessage(msgA);
+						MessageSender.sendMessage(sender, msgA);
 						return;
 					}
 				} else if (ip instanceof IPv6) {
@@ -114,7 +115,7 @@ public class CommandSeen extends Command implements TabExecutor {
 						BaseComponent msgA = new TextComponent("Minimum blocksize is /32 for searching IPv6 subnets.");
 						msgA.setColor(ChatColor.RED);
 						message.addExtra(msgA);
-						sender.sendMessage(msgA);
+						MessageSender.sendMessage(sender, msgA);
 						return;
 					}
 				}
@@ -130,14 +131,14 @@ public class CommandSeen extends Command implements TabExecutor {
 				BaseComponent seenIP = new TextComponent("==== IP Address ====");
 				seenIP.setColor(ChatColor.BLUE);
 				message.addExtra(seenIP);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 
 				if (maskIPAndLocation) {
 					message = new TextComponent("");
 					BaseComponent note = new TextComponent("Exit Stream Mode to unmask IP addresses");
 					note.setColor(ChatColor.GOLD);
 					message.addExtra(note);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				}
 
 				message = new TextComponent("");
@@ -147,7 +148,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				ipAddress.setColor(ChatColor.AQUA);
 				message.addExtra(ipAddressIs);
 				message.addExtra(ipAddress);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 
 				if (ip instanceof IPv6 && blockSize > 64) {
 					IP subnet64 = new IPv6(ip.getBytes(), 64);
@@ -161,7 +162,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					subnet64TC.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/seen " + subnet64Str));
 					message.addExtra(subnet64Is);
 					message.addExtra(subnet64TC);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				}
 
 				if (location != null) {
@@ -172,7 +173,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					locationText.setColor(ChatColor.AQUA);
 					message.addExtra(approximate);
 					message.addExtra(locationText);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 					message = new TextComponent("");
 					BaseComponent ispIs = new TextComponent("ISP: ");
 					BaseComponent ispTxt = new TextComponent(geolocation.isp);
@@ -180,7 +181,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					ispTxt.setColor(ChatColor.AQUA);
 					message.addExtra(ispIs);
 					message.addExtra(ispTxt);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				}
 
 				message = new TextComponent("");
@@ -207,12 +208,12 @@ public class CommandSeen extends Command implements TabExecutor {
 					playerCount += 1;
 				}
 				((TextComponent) players).setText("Players (" + playerCount + "): ");
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 			} catch (Exception e) {
 				e.printStackTrace();
 				BaseComponent message = new TextComponent("An error has occurred! :/");
 				message.setColor(ChatColor.RED);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 			}
 		} else {
 			UUID playerToCheck;
@@ -254,7 +255,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				message.addExtra(couldNotFind);
 				message.addExtra(pName);
 				message.addExtra(checkAgain);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 				return;
 			}
 			String uuidStr = playerToCheck.toString().toLowerCase().replaceAll("-", "");
@@ -302,7 +303,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				BaseComponent seenIP = new TextComponent("==== Player Activity ====");
 				seenIP.setColor(ChatColor.BLUE);
 				message.addExtra(seenIP);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 				message = new TextComponent("");
 				BaseComponent playerIs = new TextComponent("Player: ");
 				BaseComponent playerTxt = new TextComponent(correctedName);
@@ -310,7 +311,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				playerTxt.setColor(ChatColor.AQUA);
 				message.addExtra(playerIs);
 				message.addExtra(playerTxt);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 				TimeZone tz = BungeeChat.getSession(p).user.getUserData().getTimeZone();
 				OnTimePlayer onTimePlayer = OnTime.getInstance().getPlayer(playerToCheck);
 				OnTimeSessionRecord[] sessionRecords = onTimePlayer.getSessionRecords();
@@ -330,7 +331,7 @@ public class CommandSeen extends Command implements TabExecutor {
 						message.addExtra(firstSeenT);
 						message.addExtra(firstSeenTimestamp);
 						message.addExtra(firstSeenTime);
-						sender.sendMessage(message);
+						MessageSender.sendMessage(sender, message);
 					}
 				}
 				lastSeen:
@@ -346,14 +347,14 @@ public class CommandSeen extends Command implements TabExecutor {
 						message.addExtra(lastSeenT);
 						message.addExtra(lastSeenTimestamp);
 						message.addExtra(lastSeenTime);
-						sender.sendMessage(message);
+						MessageSender.sendMessage(sender, message);
 						break lastSeen;
 					}
 					// Mon, 13 Oct 2014 23:13:34.863 GMT
 					// 14 October 2014
 					message = new TextComponent("This player's last login is before 14 October 2014.");
 					message.setColor(ChatColor.RED);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				} else {
 					message = new TextComponent("");
 					BaseComponent lastSeen = new TextComponent("Last Seen: ");
@@ -369,7 +370,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					lastSeenNow.setColor(ChatColor.AQUA);
 					message.addExtra(lastSeen);
 					message.addExtra(lastSeenNow);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				}
 				if (totalTimeLoggedIn > 0L) {
 					message = new TextComponent("");
@@ -379,7 +380,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					timeOn.setColor(ChatColor.AQUA);
 					message.addExtra(totalTimeOn);
 					message.addExtra(timeOn);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				}
 
 				if (targetUser.getPhoneNumber() != null && targetUser.isMailOn()) {
@@ -387,7 +388,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					BaseComponent phoneIsRegisteredMsg = new TextComponent("Phone Number Registered (receives /mail on their phone!)");
 					phoneIsRegisteredMsg.setColor(ChatColor.GOLD);
 					phoneIsRegistered.addExtra(phoneIsRegisteredMsg);
-					p.sendMessage(phoneIsRegistered);
+					MessageSender.sendMessage(p, phoneIsRegistered);
 				}
 
 				if (!sender.hasPermission("hk.siggi.bungeechat.seenip")) {
@@ -399,7 +400,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					// 20 March 2014
 					message = new TextComponent("IP address information is not available because this player's last login is before 20 March 2015.");
 					message.setColor(ChatColor.RED);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 					return;
 				}
 
@@ -408,7 +409,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					BaseComponent note = new TextComponent("Exit Stream Mode to unmask IP addresses");
 					note.setColor(ChatColor.GOLD);
 					message.addExtra(note);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				}
 
 				message = new TextComponent("");
@@ -430,7 +431,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					} catch (Exception e) {
 					}
 				}
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 
 				Geolocation geolocation = plugin.getGeolocation(recentIP.ip);
 				if (geolocation != null) {
@@ -441,7 +442,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					locationTxt.setColor(ChatColor.AQUA);
 					message.addExtra(locationIs);
 					message.addExtra(locationTxt);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 					message = new TextComponent("");
 					BaseComponent ispIs = new TextComponent("ISP: ");
 					BaseComponent ispTxt = new TextComponent(geolocation.isp);
@@ -449,7 +450,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					ispTxt.setColor(ChatColor.AQUA);
 					message.addExtra(ispIs);
 					message.addExtra(ispTxt);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				}
 
 				message = new TextComponent("");
@@ -489,12 +490,12 @@ public class CommandSeen extends Command implements TabExecutor {
 					BaseComponent ipAddressText = new TextComponent("... " + additional + " more");
 					message.addExtra(ipAddressText);
 				}
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 			} catch (Exception e) {
 				e.printStackTrace();
 				BaseComponent message = new TextComponent("An error has occurred! :/");
 				message.setColor(ChatColor.RED);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 			}
 		}
 	}

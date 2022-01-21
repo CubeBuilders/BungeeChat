@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -23,14 +24,14 @@ public class CommandReload extends Command {
 			if (!p.hasPermission("hk.siggi.bungeechat.reload")) {
 				TextComponent no = new TextComponent("You can't do that.");
 				no.setColor(ChatColor.RED);
-				sender.sendMessage(no);
+				MessageSender.sendMessage(sender, no);
 				return;
 			}
 		}
 		plugin.reloadConfig();
 		TextComponent ok = new TextComponent("Reloaded config.");
 		ok.setColor(ChatColor.GREEN);
-		sender.sendMessage(ok);
+		MessageSender.sendMessage(sender, ok);
 		return;
 	}
 }

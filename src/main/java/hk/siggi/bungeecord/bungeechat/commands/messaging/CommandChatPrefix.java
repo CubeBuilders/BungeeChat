@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount.ChatPrefixType;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class CommandChatPrefix extends Command implements TabExecutor {
 		theType.setColor(ChatColor.AQUA);
 		base.addExtra(chatPrefixType);
 		base.addExtra(theType);
-		cs.sendMessage(base);
+		MessageSender.sendMessage(cs, base);
 		if (showHelp) {
 			TextComponent base2 = new TextComponent("");
 			TextComponent usage = new TextComponent("Usage: ");
@@ -57,7 +58,7 @@ public class CommandChatPrefix extends Command implements TabExecutor {
 			command.setColor(ChatColor.AQUA);
 			base2.addExtra(usage);
 			base2.addExtra(command);
-			cs.sendMessage(base2);
+			MessageSender.sendMessage(cs, base2);
 		}
 	}
 

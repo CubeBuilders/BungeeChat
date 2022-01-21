@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -31,18 +32,18 @@ public class CommandCTReward extends Command {
 		double hoursInLast2Weeks = ((double) timeInLast2Weeks) / 3600000L;
 		
 		TextComponent msg = new TextComponent("");
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		TextComponent ctRewards = new TextComponent("CubeTokens for being on CubeBuilders & inviting friends:");
 		ctRewards.setColor(ChatColor.YELLOW);
 		msg.addExtra(ctRewards);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		TextComponent infoText = new TextComponent("A base amount calculated based on the # of players online:");
 		infoText.setColor(ChatColor.GOLD);
 		msg.addExtra(infoText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		TextComponent baseCTText = new TextComponent("Base CT: ");
@@ -51,7 +52,7 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.AQUA);
 		msg.addExtra(baseCTText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		baseCTText = new TextComponent("Base CT: ");
@@ -60,7 +61,7 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.AQUA);
 		msg.addExtra(baseCTText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		baseCTText = new TextComponent("Base CT: ");
@@ -69,13 +70,13 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.YELLOW);
 		msg.addExtra(baseCTText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		infoText = new TextComponent("A multiplier calculated based on the number of hours you were online in the last two weeks:");
 		infoText.setColor(ChatColor.GOLD);
 		msg.addExtra(infoText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		TextComponent multiplierText = new TextComponent("Multiplier: ");
@@ -84,7 +85,7 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.AQUA);
 		msg.addExtra(multiplierText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		multiplierText = new TextComponent("Multiplier: ");
@@ -93,7 +94,7 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.AQUA);
 		msg.addExtra(multiplierText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		multiplierText = new TextComponent("Multiplier: ");
@@ -102,7 +103,7 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.AQUA);
 		msg.addExtra(multiplierText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		multiplierText = new TextComponent("Multiplier: ");
@@ -111,13 +112,13 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.YELLOW);
 		msg.addExtra(multiplierText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		infoText = new TextComponent("Finally, multiply the base by the CT, and this is what you get every 15 minutes.");
 		infoText.setColor(ChatColor.GOLD);
 		msg.addExtra(infoText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		TextComponent finalText = new TextComponent("Final Amount: ");
@@ -126,7 +127,7 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.AQUA);
 		msg.addExtra(finalText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		finalText = new TextComponent("Final Amount: ");
@@ -135,7 +136,7 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.AQUA);
 		msg.addExtra(finalText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		double finalAmount = plugin.baseCT() * Math.min(2.5, (1 + (hoursInLast2Weeks / 8)));
 		int finalInt = (int) Math.round(finalAmount);
@@ -148,13 +149,13 @@ public class CommandCTReward extends Command {
 		formulaText.setColor(ChatColor.YELLOW);
 		msg.addExtra(finalText);
 		msg.addExtra(formulaText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 		
 		msg = new TextComponent("");
 		infoText = new TextComponent("So spend more time on CubeBuilders and invite more friends, you'll get more CubeTokens as a reward!");
 		infoText.setColor(ChatColor.GOLD);
 		msg.addExtra(infoText);
-		player.sendMessage(msg);
+		MessageSender.sendMessage(player, msg);
 	}
 	
 	public String doubleToString(double number) {

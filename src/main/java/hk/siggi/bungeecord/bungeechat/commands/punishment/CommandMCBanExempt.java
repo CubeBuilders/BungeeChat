@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class CommandMCBanExempt extends Command implements TabExecutor {
 			issuer = player.getUniqueId();
 			issuerName = player.getName();
 			if (!player.hasPermission("hk.siggi.bungeechat.mcbanexempt")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
@@ -44,7 +45,7 @@ public class CommandMCBanExempt extends Command implements TabExecutor {
 			BaseComponent extra = new TextComponent("/mcbanexempt <name> <yes/no>");
 			extra.setColor(ChatColor.WHITE);
 			usage.addExtra(extra);
-			sender.sendMessage(usage);
+			MessageSender.sendMessage(sender, usage);
 			return;
 		}
 		String receiver = args[0];
@@ -58,7 +59,7 @@ public class CommandMCBanExempt extends Command implements TabExecutor {
 			message.addExtra(extra);
 			extra = new TextComponent(". Did you enter the name correctly?");
 			message.addExtra(extra);
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 			return;
 		}
 		receiver = plugin.getUUIDCache().getNameFromUUID(receiverUUID);

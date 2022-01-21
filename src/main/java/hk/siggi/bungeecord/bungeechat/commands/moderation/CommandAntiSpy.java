@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.moderation;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import net.md_5.bungee.api.CommandSender;
@@ -29,29 +30,29 @@ public class CommandAntiSpy extends Command {
 			ProxiedPlayer player = ((ProxiedPlayer) sender);
 			name = player.getName();
 			if (!player.hasPermission("hk.siggi.bungeechat.antispy")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
-			sender.sendMessage("This command can only be used in-game.");
+			MessageSender.sendMessage(sender, "This command can only be used in-game.");
 			return;
 		}
 		PlayerAccount info = plugin.getPlayerInfo(((ProxiedPlayer) sender).getUniqueId());
 		if (nolog) {
 			if (info.isNoLog()) {
 				info.setNoLog(false);
-				sender.sendMessage("Your private messages are now logged again.");
+				MessageSender.sendMessage(sender, "Your private messages are now logged again.");
 			} else {
 				info.setNoLog(true);
-				sender.sendMessage("Your private messages are now not logged. It will be logged again by typing the command again, or after being offline for at least one hour.");
+				MessageSender.sendMessage(sender, "Your private messages are now not logged. It will be logged again by typing the command again, or after being offline for at least one hour.");
 			}
 		} else {
 			if (info.isAntiSpy()) {
 				info.setAntiSpy(false);
-				sender.sendMessage("Your private messages can now be spied on again.");
+				MessageSender.sendMessage(sender, "Your private messages can now be spied on again.");
 			} else {
 				info.setAntiSpy(true);
-				sender.sendMessage("Private messages now hidden on chatspy. It will be shown again when you type the command again, or after being offline for at least one hour.");
+				MessageSender.sendMessage(sender, "Private messages now hidden on chatspy. It will be shown again when you type the command again, or after being offline for at least one hour.");
 			}
 		}
 	}

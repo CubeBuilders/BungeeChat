@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
@@ -25,7 +26,7 @@ public class CommandOldTemporaryBan extends Command {
 			issuer = player.getUniqueId();
 			issuerName = player.getName();
 			if (!player.hasPermission("hk.siggi.bungeechat.ban")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
@@ -38,7 +39,7 @@ public class CommandOldTemporaryBan extends Command {
 			BaseComponent extra = new TextComponent("/ban <name> <duration> <reason>");
 			extra.setColor(ChatColor.WHITE);
 			usage.addExtra(extra);
-			sender.sendMessage(usage);
+			MessageSender.sendMessage(sender, usage);
 			return;
 		}
 	}

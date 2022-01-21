@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.moderation;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -21,7 +22,7 @@ public class CommandVanish extends Command {
 		if (player.hasPermission("hk.siggi.bungeechat.vanish")) {
 			plugin.vanish(player, args);
 		} else {
-			player.sendMessage(Util.randomNotPermittedMessage());
+			MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 		}
 	}
 }

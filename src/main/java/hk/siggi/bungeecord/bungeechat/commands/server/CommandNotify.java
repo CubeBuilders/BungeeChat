@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.notifications.LoginAlert;
 import hk.siggi.bungeecord.bungeechat.notifications.MineWatchAlert;
 import hk.siggi.bungeecord.bungeechat.notifications.NotificationTrigger;
@@ -44,7 +45,7 @@ public class CommandNotify extends Command implements TabExecutor {
 		ProxiedPlayer p = (ProxiedPlayer) sender;
 		Notifications notifications = plugin.getNotifications();
 		if (split.length == 0) {
-			p.sendMessage("?");
+			MessageSender.sendMessage(p, "?");
 		} else if (split[0].equalsIgnoreCase("add")) {
 			Class<? extends NotificationTrigger> clazz = getTrigger(split[1]);
 			if (clazz == LoginAlert.class) {
@@ -162,7 +163,7 @@ public class CommandNotify extends Command implements TabExecutor {
 				NotificationTrigger[] byNotifyee = notifications.getByNotifyee(p.getUniqueId());
 				for (int i = 0; i < byNotifyee.length; i++) {
 					NotificationTrigger trigger = byNotifyee[i];
-					p.sendMessage(Integer.toString(i + 1) + ": " + trigger.toString());
+					MessageSender.sendMessage(p, Integer.toString(i + 1) + ": " + trigger.toString());
 				}
 			} catch (Exception e) {
 			}

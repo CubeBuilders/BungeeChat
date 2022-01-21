@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class CommandCensor extends Command implements TabExecutor {
 		onOff.setColor(ChatColor.AQUA);
 		base.addExtra(chatCensor);
 		base.addExtra(onOff);
-		cs.sendMessage(base);
+		MessageSender.sendMessage(cs, base);
 
 		if (strings.length != 1) {
 			TextComponent base2 = new TextComponent("");
@@ -56,13 +57,13 @@ public class CommandCensor extends Command implements TabExecutor {
 			command.setColor(ChatColor.AQUA);
 			base2.addExtra(usage);
 			base2.addExtra(command);
-			cs.sendMessage(base2);
+			MessageSender.sendMessage(cs, base2);
 
 		TextComponent base3 = new TextComponent("");
 		TextComponent cbDisclaimer = new TextComponent("CubeBuilders / Siggi.io are not responsible for the content of other user's messages regardless of whether or not you use the chat censor.");
 		cbDisclaimer.setColor(ChatColor.GOLD);
 		base3.addExtra(cbDisclaimer);
-		cs.sendMessage(base3);
+		MessageSender.sendMessage(cs, base3);
 		}
 	}
 

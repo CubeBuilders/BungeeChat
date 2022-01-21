@@ -6,6 +6,7 @@ import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import net.cubebuilders.user.NameHistory;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.plugin.Command;
@@ -23,13 +24,13 @@ public class CommandRealName extends Command implements TabExecutor {
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		if (args.length == 0) {
-			sender.sendMessage(unify(processChat(null, "&6Usage: &b/realname [playername]")));
+			MessageSender.sendMessage(sender, "&6Usage: &b/realname [playername]");
 			return;
 		}
 		String n = args[0];
 		UUID u = plugin.getPlayerNameHandler().getPlayerByName(n);
 		String realName = plugin.getUUIDCache().getNameFromUUID(u);
-		sender.sendMessage(unify(processChat(null, "&6Real name: &b" + realName)));
+		MessageSender.sendMessage(sender, "&6Real name: &b" + realName);
 		List<String> prevNames = new LinkedList<>();
 		for (NameHistory history : plugin.getPlayerInfo(u).getNameHistory()) {
 			String nn = history.getName();
@@ -46,7 +47,7 @@ public class CommandRealName extends Command implements TabExecutor {
 			nameList.append(prevName);
 		}
 		String result = "&6Previous names: &b" + (nameList.toString()) + "&6.";
-		sender.sendMessage(unify(processChat(null, result)));
+		MessageSender.sendMessage(sender, result);
 		}
 	}
 

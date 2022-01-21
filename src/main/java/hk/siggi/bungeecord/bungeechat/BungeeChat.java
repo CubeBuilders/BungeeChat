@@ -867,8 +867,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			t2.addExtra(forBeingOnline);
 			t2.addExtra(qMark);
 
-			p.sendMessage(t);
-			p.sendMessage(t2);
+			MessageSender.sendMessage(p, t);
+			MessageSender.sendMessage(p, t2);
 		}
 	}
 	private String mcBansApiKey = null;
@@ -985,11 +985,11 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 								TextComponent blank = new TextComponent("");
 
-								p.sendMessage(blank);
-								p.sendMessage(blank);
-								p.sendMessage(msg);
-								p.sendMessage(blank);
-								p.sendMessage(blank);
+								MessageSender.sendMessage(p, blank);
+								MessageSender.sendMessage(p, blank);
+								MessageSender.sendMessage(p, msg);
+								MessageSender.sendMessage(p, blank);
+								MessageSender.sendMessage(p, blank);
 
 								CT.get().giveCubeTokens(p.getUniqueId(), 500, "MineChat Gift");
 							}
@@ -1706,8 +1706,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		ProxiedPlayer[] players = playerCollection.toArray(new ProxiedPlayer[playerCollection.size()]);
 		for (int i = 0; i < players.length; i++) {
 			if (players[i].hasPermission("hk.siggi.bungeechat.punishmentalert")) {
-				players[i].sendMessage(message);
-				players[i].sendMessage(messageReason);
+				MessageSender.sendMessage(players[i], message);
+				MessageSender.sendMessage(players[i], messageReason);
 			}
 		}
 		getProxy().getPluginManager().callEvent(new PunishmentIssuedEvent(punishment));
@@ -2260,14 +2260,14 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			getScheduler().schedule(this, new Runnable() {
 				@Override
 				public void run() {
-					player.sendMessage(blankLine);
-					player.sendMessage(blankLine);
-					player.sendMessage(youGotMail);
+					MessageSender.sendMessage(player, blankLine);
+					MessageSender.sendMessage(player, blankLine);
+					MessageSender.sendMessage(player, youGotMail);
 					if (warningFull != null) {
-						player.sendMessage(warningFull);
+						MessageSender.sendMessage(player, warningFull);
 					}
-					player.sendMessage(blankLine);
-					player.sendMessage(blankLine);
+					MessageSender.sendMessage(player, blankLine);
+					MessageSender.sendMessage(player, blankLine);
 				}
 			}, 2000, TimeUnit.MILLISECONDS);
 		}
@@ -2275,12 +2275,10 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 	private void youHaventVoted(final ProxiedPlayer player, PlayerAccount playerInfo) {
 		if (playerInfo.getLastVoted() < System.currentTimeMillis() - 86400000L) {
-			TextComponent blankLine = unify(processChat(null, ""));
-			TextComponent youHaventVoted = unify(processChat(null, "&6You haven't voted today! <https://cubebuilders.net/vote><Click here and vote now!>"));
 			getScheduler().schedule(this, () -> {
-				player.sendMessage(blankLine);
-				player.sendMessage(youHaventVoted);
-				player.sendMessage(blankLine);
+				MessageSender.sendMessage(player, "");
+				MessageSender.sendMessage(player, "&6You haven't voted today! <https://cubebuilders.net/vote><Click here and vote now!>");
+				MessageSender.sendMessage(player, "");
 			}, 2250, TimeUnit.MILLISECONDS);
 		}
 	}
@@ -2293,21 +2291,19 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			if (session.user.isEmailVerified()) {
 				if (now - emailConfirmedDate > 86400000L * 90L) {
 					session.emailNeedsConfirmation = true;
-					TextComponent blankLine = unify(processChat(null, ""));
-					player.sendMessage(blankLine);
-					player.sendMessage(unify(processChat(null, "&6Hey " + player.getName() + ", is your email still &b" + session.user.getEmail() + "&6?")));
-					player.sendMessage(unify(processChat(null, "&6If it is, </register " + session.user.getEmail() + "><click here to dismiss this message>!")));
-					player.sendMessage(unify(processChat(null, "&6If it is not, please enter your new email with </register ...></register [email]>")));
-					player.sendMessage(blankLine);
+					MessageSender.sendMessage(player, "");
+					MessageSender.sendMessage(player, "&6Hey " + player.getName() + ", is your email still &b" + session.user.getEmail() + "&6?");
+					MessageSender.sendMessage(player, "&6If it is, </register " + session.user.getEmail() + "><click here to dismiss this message>!");
+					MessageSender.sendMessage(player, "&6If it is not, please enter your new email with </register ...></register [email]>");
+					MessageSender.sendMessage(player, "");
 				}
 			} else if (session.user.getEmail() != null) {
-				TextComponent blankLine = unify(processChat(null, ""));
-				player.sendMessage(blankLine);
-				player.sendMessage(unify(processChat(null, "&6Hey " + player.getName() + ", you haven't confirmed your email yet!")));
-				player.sendMessage(unify(processChat(null, "&6The email we have on file is: &b" + session.user.getEmail() + ".")));
-				player.sendMessage(unify(processChat(null, "&6If the email is correct and you can't find the confirmation email, try checking your junk mail. If you still can't find the email, </register resend><click here to resend it>!")));
-				player.sendMessage(unify(processChat(null, "&6If that email is wrong, enter a new one with </register ...></register [email]>")));
-				player.sendMessage(blankLine);
+				MessageSender.sendMessage(player, "");
+				MessageSender.sendMessage(player, "&6Hey " + player.getName() + ", you haven't confirmed your email yet!");
+				MessageSender.sendMessage(player, "&6The email we have on file is: &b" + session.user.getEmail() + ".");
+				MessageSender.sendMessage(player, "&6If the email is correct and you can't find the confirmation email, try checking your junk mail. If you still can't find the email, </register resend><click here to resend it>!");
+				MessageSender.sendMessage(player, "&6If that email is wrong, enter a new one with </register ...></register [email]>");
+				MessageSender.sendMessage(player, "");
 			}
 		}, 2500, TimeUnit.MILLISECONDS);
 	}
@@ -2663,7 +2659,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				ProxiedPlayer[] players = playerCollection.toArray(new ProxiedPlayer[playerCollection.size()]);
 				for (ProxiedPlayer player : players) {
 					if (player.hasPermission("hk.siggi.bungeechat.punishmentalert")) {
-						player.sendMessage(mcBansAlert);
+						MessageSender.sendMessage(player, mcBansAlert);
 					}
 				}
 			}
@@ -2742,11 +2738,11 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 						TextComponent blank = new TextComponent("");
 
-						player.sendMessage(blank);
-						player.sendMessage(blank);
-						player.sendMessage(msg);
-						player.sendMessage(blank);
-						player.sendMessage(blank);
+						MessageSender.sendMessage(player, blank);
+						MessageSender.sendMessage(player, blank);
+						MessageSender.sendMessage(player, msg);
+						MessageSender.sendMessage(player, blank);
+						MessageSender.sendMessage(player, blank);
 					}
 				}
 				if (currentServerName.equals("hub")) {
@@ -2761,14 +2757,14 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		if (commandName.equalsIgnoreCase("/stop") || commandName.equalsIgnoreCase("/end")) {
 			BaseComponent message = new TextComponent("This command can only be used via the console.");
 			message.setColor(ChatColor.RED);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 			event.setCancelled(true);
 			return;
 		}
 		if ((event.getMessage().startsWith("/bukkit:") || (commandName.startsWith("/") && commandName.contains(":"))) && !player.hasPermission("hk.siggi.bungeechat.bypassbukkitblock")) {
 			BaseComponent message = new TextComponent("Stop it! No! You can't hack me! Scram before I tell Siggi!");
 			message.setColor(ChatColor.RED);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 			event.setCancelled(true);
 			return;
 		}
@@ -2907,7 +2903,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 		for (ProxiedPlayer p : getProxy().getPlayers()) {
 			if (p.hasPermission("hk.siggi.bungeechat.speedalert")) {
-				p.sendMessage(speedAlert);
+				MessageSender.sendMessage(p, speedAlert);
 			}
 		}
 	}
@@ -2954,14 +2950,14 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		if (expires == -1L) {
 			BaseComponent message = new TextComponent("You have been permanently muted for breaking the rules.");
 			message.setColor(ChatColor.RED);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 
 			message = new TextComponent("Reason: ");
 			message.setColor(ChatColor.RED);
 			BaseComponent extra = new TextComponent(muteReason);
 			extra.setColor(ChatColor.WHITE);
 			message.addExtra(extra);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 
 			/*message = new TextComponent("You can ");
 			 message.setColor(ChatColor.RED);
@@ -2970,18 +2966,18 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			 extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click here to appeal")}));
 			 extra.setColor(ChatColor.AQUA);
 			 message.addExtra(extra);
-			 player.sendMessage(message);*/
+			 MessageSender.sendMessage(player, message);*/
 		} else {
 			BaseComponent message = new TextComponent("You have been temporarily muted for breaking the rules.");
 			message.setColor(ChatColor.RED);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 
 			message = new TextComponent("Reason: ");
 			message.setColor(ChatColor.RED);
 			BaseComponent extra = new TextComponent(muteReason);
 			extra.setColor(ChatColor.WHITE);
 			message.addExtra(extra);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 
 			if (now - startTime < 500L) {
 				now = startTime;
@@ -2996,7 +2992,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 			message = new TextComponent(timeLeftString);
 			message.setColor(ChatColor.RED);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 
 			/*message = new TextComponent("You can ");
 			 message.setColor(ChatColor.RED);
@@ -3005,7 +3001,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			 extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click here to appeal")}));
 			 extra.setColor(ChatColor.AQUA);
 			 message.addExtra(extra);
-			 player.sendMessage(message);*/
+			 MessageSender.sendMessage(player, message);*/
 		}
 	}
 
@@ -3507,7 +3503,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				PlayerAccount pp = getPlayerInfo(p.getUniqueId());
 				iAmASpy = !pp.isNoSpy();
 				if (iAmASpy) {
-					p.sendMessage(message);
+					MessageSender.sendMessage(p, message);
 				}
 			}
 		}
@@ -3652,7 +3648,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 					extra = new TextComponent(" is currently offline. ");
 					message.addExtra(extra);
 				}
-				player.sendMessage(message);
+				MessageSender.sendMessage(player, message);
 				return;
 			}
 		}
@@ -3661,12 +3657,12 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			BaseComponent msg1 = new TextComponent("You are now visible!");
 			msg1.setColor(ChatColor.AQUA);
 			if (p != player) {
-				p.sendMessage(msg1);
+				MessageSender.sendMessage(p, msg1);
 				BaseComponent msg2 = new TextComponent("Making " + p.getName() + " visible!");
 				msg2.setColor(ChatColor.AQUA);
-				player.sendMessage(msg2);
+				MessageSender.sendMessage(player, msg2);
 			} else {
-				player.sendMessage(msg1);
+				MessageSender.sendMessage(player, msg1);
 			}
 		}
 		if (args[0].equalsIgnoreCase("h") || args[0].equalsIgnoreCase("hide")) {
@@ -3674,12 +3670,12 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			BaseComponent msg1 = new TextComponent("You are now hidden!");
 			msg1.setColor(ChatColor.AQUA);
 			if (p != player) {
-				p.sendMessage(msg1);
+				MessageSender.sendMessage(p, msg1);
 				BaseComponent msg2 = new TextComponent("Making " + p.getName() + " hidden!");
 				msg2.setColor(ChatColor.AQUA);
-				player.sendMessage(msg2);
+				MessageSender.sendMessage(player, msg2);
 			} else {
-				player.sendMessage(msg1);
+				MessageSender.sendMessage(player, msg1);
 			}
 		}
 		if (args[0].equalsIgnoreCase("j") || args[0].equalsIgnoreCase("join")) {
@@ -3897,10 +3893,10 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 					break;
 			}
 			String countStr = count >= 100000 ? "100000+" : (count + "x");
-			TextComponent component = unify(processChat(null, "&c[!] &e" + player.getName() + "&c found &e" + countStr + " " + oreColor + ore + "&c in light level &e" + lightLevel + "/15&c" + " (" + server.getName() + ")"));
+			String oreMessage = "&c[!] &e" + player.getName() + "&c found &e" + countStr + " " + oreColor + ore + "&c in light level &e" + lightLevel + "/15&c" + " (" + server.getName() + ")";
 			for (ProxiedPlayer p : getProxy().getPlayers()) {
 				if (p.hasPermission("hk.siggi.bungeechat.minewatch")) {
-					p.sendMessage(component);
+					MessageSender.sendMessage(p, oreMessage);
 				}
 			}
 		}

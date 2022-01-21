@@ -2,6 +2,7 @@ package hk.siggi.bungeecord.bungeechat.player;
 
 import com.google.gson.Gson;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import static hk.siggi.bungeecord.bungeechat.util.Util.copyCreationDate;
 import java.io.BufferedReader;
@@ -356,7 +357,7 @@ public final class PlayerAccount {
 				toRead.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Or click here to read!")}));
 				toRead.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mail read"));
 				youGotMail.addExtra(toRead);
-				recipient.sendMessage(youGotMail);
+				MessageSender.sendMessage(recipient, youGotMail);
 			}
 		}
 		if (alertSender) {
@@ -368,7 +369,7 @@ public final class PlayerAccount {
 					BaseComponent extra = new TextComponent(message);
 					extra.setColor(ChatColor.WHITE);
 					ms.addExtra(extra);
-					sender.sendMessage(ms);
+					MessageSender.sendMessage(sender, ms);
 				}
 			} catch (Exception e) {
 			}

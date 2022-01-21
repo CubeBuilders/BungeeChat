@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
@@ -34,10 +35,10 @@ public class CommandNick extends Command {
 		if (!plugin.getNicknameCache().nicknamesLoaded()) {
 			TextComponent base = new TextComponent("Nicknames are not available yet, the server only recently booted up.");
 			base.setColor(ChatColor.RED);
-			cs.sendMessage(base);
+			MessageSender.sendMessage(cs, base);
 			base = new TextComponent("Try again in one minute.");
 			base.setColor(ChatColor.RED);
-			cs.sendMessage(base);
+			MessageSender.sendMessage(cs, base);
 			return;
 		}
 		if (strings.length == 1) {
@@ -51,12 +52,12 @@ public class CommandNick extends Command {
 				if (newNickname == null) {
 					TextComponent base = new TextComponent("Your nickname has been removed.");
 					base.setColor(ChatColor.GOLD);
-					cs.sendMessage(base);
+					MessageSender.sendMessage(cs, base);
 				} else {
 					if (plugin.getUUIDCache().getUUIDFromName(newNickname) != null || plugin.getNicknameCache().isNicknameUsed(newNickname)) {
 						TextComponent base = new TextComponent("That name is already in use!");
 						base.setColor(ChatColor.RED);
-						cs.sendMessage(base);
+						MessageSender.sendMessage(cs, base);
 						return;
 					}
 					TextComponent base = new TextComponent("");
@@ -66,25 +67,25 @@ public class CommandNick extends Command {
 					usernameText.setColor(ChatColor.AQUA);
 					base.addExtra(yourNameWasSetTo);
 					base.addExtra(usernameText);
-					cs.sendMessage(base);
+					MessageSender.sendMessage(cs, base);
 				}
 				if (newNickname != null) {
 					if (!newNickname.matches("[A-Za-z0-9_]*")) {
 						TextComponent base = new TextComponent("A nickname can only contain letters, numbers, and underscore.");
 						base.setColor(ChatColor.RED);
-						cs.sendMessage(base);
+						MessageSender.sendMessage(cs, base);
 						return;
 					}
 					if (newNickname.length() > 16) {
 						TextComponent base = new TextComponent("A nickname can only be up to 16 characters.");
 						base.setColor(ChatColor.RED);
-						cs.sendMessage(base);
+						MessageSender.sendMessage(cs, base);
 						return;
 					}
 					if (plugin.isNameBanned(newNickname)) {
 						TextComponent base = new TextComponent("Your requested nickname is blacklisted and cannot be used.");
 						base.setColor(ChatColor.RED);
-						cs.sendMessage(base);
+						MessageSender.sendMessage(cs, base);
 						return;
 					}
 				}
@@ -94,7 +95,7 @@ public class CommandNick extends Command {
 			} else {
 				TextComponent text = new TextComponent("You cannot modify your nickname!");
 				text.setColor(ChatColor.RED);
-				cs.sendMessage(text);
+				MessageSender.sendMessage(cs, text);
 			}
 		} else if (strings.length == 2 && allowOtherNick) {
 			if (allowOtherNick) {
@@ -102,7 +103,7 @@ public class CommandNick extends Command {
 				if (playerUUID == null) {
 					TextComponent base = new TextComponent("User not found.");
 					base.setColor(ChatColor.RED);
-					cs.sendMessage(base);
+					MessageSender.sendMessage(cs, base);
 					return;
 				}
 				String username = plugin.getUUIDCache().getNameFromUUID(playerUUID);
@@ -116,22 +117,22 @@ public class CommandNick extends Command {
 					if (target != null) {
 						TextComponent base = new TextComponent("Your nickname has been removed.");
 						base.setColor(ChatColor.GOLD);
-						target.sendMessage(base);
+						MessageSender.sendMessage(target, base);
 					}
 					TextComponent base2 = new TextComponent("Nickname removed.");
 					base2.setColor(ChatColor.GOLD);
-					cs.sendMessage(base2);
+					MessageSender.sendMessage(cs, base2);
 				} else {
 					if (plugin.getUUIDCache().getUUIDFromName(newNickname) != null || plugin.getNicknameCache().isNicknameUsed(newNickname)) {
 						TextComponent base = new TextComponent("That name is already in use!");
 						base.setColor(ChatColor.RED);
-						cs.sendMessage(base);
+						MessageSender.sendMessage(cs, base);
 						return;
 					}
 					if (plugin.isNameBanned(newNickname)) {
 						TextComponent base = new TextComponent("Your requested nickname is blacklisted and cannot be used.");
 						base.setColor(ChatColor.RED);
-						cs.sendMessage(base);
+						MessageSender.sendMessage(cs, base);
 						return;
 					}
 					if (target != null) {
@@ -142,7 +143,7 @@ public class CommandNick extends Command {
 						usernameText.setColor(ChatColor.AQUA);
 						base.addExtra(yourNameWasSetTo);
 						base.addExtra(usernameText);
-						target.sendMessage(base);
+						MessageSender.sendMessage(target, base);
 					}
 					TextComponent base = new TextComponent("");
 					TextComponent targetText = new TextComponent(username);
@@ -154,7 +155,7 @@ public class CommandNick extends Command {
 					base.addExtra(targetText);
 					base.addExtra(yourNameWasSetTo);
 					base.addExtra(usernameText);
-					cs.sendMessage(base);
+					MessageSender.sendMessage(cs, base);
 				}
 				a.setNickname(newNickname);
 				if (target != null) {
@@ -164,7 +165,7 @@ public class CommandNick extends Command {
 			} else {
 				TextComponent text = new TextComponent("You cannot modify other's nicknames!");
 				text.setColor(ChatColor.RED);
-				cs.sendMessage(text);
+				MessageSender.sendMessage(cs, text);
 			}
 		} else {
 			if (p != null) {
@@ -178,16 +179,16 @@ public class CommandNick extends Command {
 					nick.setColor(ChatColor.AQUA);
 					base.addExtra(yourNameIs);
 					base.addExtra(nick);
-					cs.sendMessage(base);
+					MessageSender.sendMessage(cs, base);
 				}
 			}
 			TextComponent text = new TextComponent("Usage: /nick [newnickname] or /nick off");
 			text.setColor(ChatColor.GOLD);
-			cs.sendMessage(text);
+			MessageSender.sendMessage(cs, text);
 			if (allowOtherNick) {
 				TextComponent text2 = new TextComponent("Usage: /nick [player] [newnickname] or /nick [player] off");
 				text2.setColor(ChatColor.GOLD);
-				cs.sendMessage(text2);
+				MessageSender.sendMessage(cs, text2);
 			}
 		}
 	}

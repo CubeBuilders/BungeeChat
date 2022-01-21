@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.moderation;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import net.md_5.bungee.api.CommandSender;
@@ -23,11 +24,11 @@ public class CommandSpy extends Command {
 			ProxiedPlayer player = ((ProxiedPlayer) sender);
 			name = player.getName();
 			if (!player.hasPermission("hk.siggi.bungeechat.spy") && !player.hasPermission("hk.siggi.bungeechat.antispy")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
-			sender.sendMessage("This command can only be used in-game.");
+			MessageSender.sendMessage(sender, "This command can only be used in-game.");
 			return;
 		}
 		PlayerAccount info = plugin.getPlayerInfo(((ProxiedPlayer)sender).getUniqueId());
@@ -56,6 +57,6 @@ public class CommandSpy extends Command {
 		if (sneaky) {
 			spySettings += (spySettings.length() == 0 ? "" : ", ") + "Sneaky";
 		}
-		sender.sendMessage("Spy Settings: " + spySettings);
+		MessageSender.sendMessage(sender, "Spy Settings: " + spySettings);
 	}
 }

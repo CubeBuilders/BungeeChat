@@ -2,6 +2,7 @@ package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import java.util.Collection;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -24,31 +25,31 @@ public class CommandSetGroup extends Command {
 			if (!p.hasPermission("hk.siggi.bungeechat.setgroup")) {
 				TextComponent no = new TextComponent("You can't do that.");
 				no.setColor(ChatColor.RED);
-				sender.sendMessage(no);
+				MessageSender.sendMessage(sender, no);
 				return;
 			}
 		}
 		if (args.length == 0) {
 			TextComponent usage1 = new TextComponent("Usage: /setgroup [player] [group,group2,group3]");
 			usage1.setColor(ChatColor.GOLD);
-			sender.sendMessage(usage1);
+			MessageSender.sendMessage(sender, usage1);
 			TextComponent usage2 = new TextComponent("Usage: /setgroup [player] fake [group,group2,group3]");
 			usage2.setColor(ChatColor.GOLD);
-			sender.sendMessage(usage2);
+			MessageSender.sendMessage(sender, usage2);
 			return;
 		}
 		ProxiedPlayer target = plugin.getProxy().getPlayer(args[0]);
 		if (target == null) {
 			TextComponent no = new TextComponent("Player not found.");
 			no.setColor(ChatColor.RED);
-			sender.sendMessage(no);
+			MessageSender.sendMessage(sender, no);
 			return;
 		}
 		Collection<String> currentGroupsCollection = target.getGroups();
 		String[] currentGroups = currentGroupsCollection.toArray(new String[currentGroupsCollection.size()]);
 		if (args.length == 1) {
 			for (String group : currentGroups) {
-				sender.sendMessage(group);
+				MessageSender.sendMessage(sender, group);
 			}
 			return;
 		}
@@ -65,7 +66,7 @@ public class CommandSetGroup extends Command {
 			BungeeChat.getSession(target).setFakeGroups(groups);
 			TextComponent ok = new TextComponent("Set fake groups.");
 			ok.setColor(ChatColor.GOLD);
-			sender.sendMessage(ok);
+			MessageSender.sendMessage(sender, ok);
 		} else {
 			target.removeGroups(currentGroups);
 			target.addGroups(groups);
@@ -73,7 +74,7 @@ public class CommandSetGroup extends Command {
 			plugin.sendInfoUpdate(target, target.getServer());
 			TextComponent ok = new TextComponent("Groups updated.");
 			ok.setColor(ChatColor.GOLD);
-			sender.sendMessage(ok);
+			MessageSender.sendMessage(sender, ok);
 		}
 	}
 }

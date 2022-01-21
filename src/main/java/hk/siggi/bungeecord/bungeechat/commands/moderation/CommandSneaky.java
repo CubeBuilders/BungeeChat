@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.moderation;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import net.md_5.bungee.api.CommandSender;
@@ -23,20 +24,20 @@ public class CommandSneaky extends Command {
 			ProxiedPlayer player = ((ProxiedPlayer) sender);
 			name = player.getName();
 			if (!player.hasPermission("hk.siggi.bungeechat.vanish")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
-			sender.sendMessage("This command can only be used in-game.");
+			MessageSender.sendMessage(sender, "This command can only be used in-game.");
 			return;
 		}
 		PlayerAccount info = plugin.getPlayerInfo(((ProxiedPlayer) sender).getUniqueId());
 		if (info.isSneaky()) {
 			info.setSneaky(false);
-			sender.sendMessage("You are no longer sneaky.");
+			MessageSender.sendMessage(sender, "You are no longer sneaky.");
 		} else {
 			info.setSneaky(true);
-			sender.sendMessage("You are now sneaky.");
+			MessageSender.sendMessage(sender, "You are now sneaky.");
 		}
 	}
 }

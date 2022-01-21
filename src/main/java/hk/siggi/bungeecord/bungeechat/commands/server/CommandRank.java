@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.util.APIUtil;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import net.md_5.bungee.api.ChatColor;
@@ -26,12 +27,12 @@ public class CommandRank extends Command {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer player = (ProxiedPlayer) sender;
 			if (!player.hasPermission("hk.siggi.bungeecord.setrank")) {
-				sender.sendMessage(ChatColor.RED + "You don't have permission to do this!");
+				MessageSender.sendMessage(sender, ChatColor.RED + "You don't have permission to do this!");
 				return;
 			}
 		}
 		if (split.length < 3) {
-			sender.sendMessage(ChatColor.RED + "Usage: /rank [add|del] [name|uuid] [rank]");
+			MessageSender.sendMessage(sender, ChatColor.RED + "Usage: /rank [add|del] [name|uuid] [rank]");
 			return;
 		}
 		UUID user;
@@ -43,7 +44,7 @@ public class CommandRank extends Command {
 		if (user == null) {
 			BaseComponent noExist = new TextComponent("Player " + split[1] + " does not exist");
 			noExist.setColor(ChatColor.RED);
-			sender.sendMessage(noExist);
+			MessageSender.sendMessage(sender, noExist);
 			return;
 		}
 		String rank = split[2];

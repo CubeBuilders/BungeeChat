@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.geolocation.Geolocation;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
@@ -394,7 +395,7 @@ public class CommandList extends Command {
 				/*TextComponent playerListComponent = new TextComponent(playerListString);
 				 playerListComponent.setColor(ChatColor.WHITE);
 				 playersHere.addExtra(playerListComponent);*/
-				sender.sendMessage(playersHere);
+				MessageSender.sendMessage(sender, playersHere);
 			}
 			int totalPlayers = ProxyServer.getInstance().getOnlineCount();
 			TextComponent totalOnline = new TextComponent("Total Players Online: ");
@@ -407,7 +408,7 @@ public class CommandList extends Command {
 			}
 			totalOnlineCount.setColor(ChatColor.WHITE);
 			totalOnline.addExtra(totalOnlineCount);
-			sender.sendMessage(totalOnline);
+			MessageSender.sendMessage(sender, totalOnline);
 
 			if (sender.hasPermission("hk.siggi.bungeechat.punishmentalert")) {
 				TextComponent probation = new TextComponent("");
@@ -510,7 +511,7 @@ public class CommandList extends Command {
 					}
 				}
 				if (addedProbation) {
-					sender.sendMessage(probation);
+					MessageSender.sendMessage(sender, probation);
 				}
 			}
 			if (mySession != null) {
@@ -633,7 +634,7 @@ public class CommandList extends Command {
 								}
 								siggiIOFriends.addExtra(tc);
 							}
-							sender.sendMessage(siggiIOFriends);
+							MessageSender.sendMessage(sender, siggiIOFriends);
 						}
 					}
 				} catch (Exception e) {
@@ -642,7 +643,7 @@ public class CommandList extends Command {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			sender.sendMessage("An error has occurred. :/");
+			MessageSender.sendMessage(sender, "An error has occurred. :/");
 		}
 	}
 

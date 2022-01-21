@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.util.APIUtil;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
@@ -30,51 +31,51 @@ public class CommandRegister extends Command {
 		String em = strings.length > 0 ? strings[0] : null;
 		if (em != null && em.equalsIgnoreCase("resend")) {
 			if (user.isEmailVerified()) {
-				p.sendMessage(unify(processChat(null, "&6Your email is already confirmed!")));
+				MessageSender.sendMessage(p, "&6Your email is already confirmed!");
 				return;
 			}
 			if (session.didResendEmail) {
-				p.sendMessage(unify(processChat(null, "&6The email was already resent!")));
+				MessageSender.sendMessage(p, "&6The email was already resent!");
 				return;
 			}
 			if (APIUtil.resendEmail(p.getUniqueId())) {
 				session.didResendEmail = true;
-				p.sendMessage(unify(processChat(null, "&6A new email has been sent to &b"+user.getEmail()+"&6!")));
+				MessageSender.sendMessage(p, "&6A new email has been sent to &b"+user.getEmail()+"&6!");
 			} else {
-				p.sendMessage(unify(processChat(null, "&6Something went wrong! Please try again!")));
+				MessageSender.sendMessage(p, "&6Something went wrong! Please try again!");
 			}
 			return;
 		}
 		if (em != null && em.contains("@")) {
 			if (!session.emailNeedsConfirmation && user.getEmail() != null && em.equalsIgnoreCase(user.getEmail())) {
-				p.sendMessage(unify(processChat(null, "&6Your email address is already set to &b" + user.getEmail() + "&6! :)")));
+				MessageSender.sendMessage(p, "&6Your email address is already set to &b" + user.getEmail() + "&6! :)");
 			} else if (session.emailNeedsConfirmation && em.equalsIgnoreCase(user.getEmail())) {
 				session.emailNeedsConfirmation = false;
 				if (APIUtil.setEmail(p.getUniqueId(), em)) {
-					p.sendMessage(unify(processChat(null, "&6Thanks for keeping your information up to date! <3")));
+					MessageSender.sendMessage(p, "&6Thanks for keeping your information up to date! <3");
 				} else {
-					p.sendMessage(unify(processChat(null, "&6Something went wrong! Please try again!")));
+					MessageSender.sendMessage(p, "&6Something went wrong! Please try again!");
 				}
 			} else if (session.changeEmailTo != null && session.changeEmailTo.equals(em)) {
 				if (APIUtil.setEmail(p.getUniqueId(), em)) {
 					if (user.getUserData().isMember) {
-						p.sendMessage(unify(processChat(null, "&6Email set! Please check your email for a link to confirm the change!")));
+						MessageSender.sendMessage(p, "&6Email set! Please check your email for a link to confirm the change!");
 					} else {
-						p.sendMessage(unify(processChat(null, "&6Email set! Please check your email for a link to confirm it! You must confirm your email to become a member!")));
+						MessageSender.sendMessage(p, "&6Email set! Please check your email for a link to confirm it! You must confirm your email to become a member!");
 					}
 				} else {
-					p.sendMessage(unify(processChat(null, "&6Could not set email! Please try again!")));
+					MessageSender.sendMessage(p, "&6Could not set email! Please try again!");
 				}
 			} else {
 				session.changeEmailTo = em;
-				p.sendMessage(unify(processChat(null, "&6Is this your email? &b" + strings[0])));
-				p.sendMessage(unify(processChat(null, "&6Please double-check and type it one more time to confirm it!")));
+				MessageSender.sendMessage(p, "&6Is this your email? &b" + strings[0]);
+				MessageSender.sendMessage(p, "&6Please double-check and type it one more time to confirm it!");
 			}
 		} else {
 			if (user.getUserData().isMember) {
-				p.sendMessage(unify(processChat(null, "&b/register [email] &6- Update your Email address!")));
+				MessageSender.sendMessage(p, "&b/register [email] &6- Update your Email address!");
 			} else {
-				p.sendMessage(unify(processChat(null, "&b/register [email] &6- Register your Email to become a member!")));
+				MessageSender.sendMessage(p, "&b/register [email] &6- Register your Email to become a member!");
 			}
 		}
 	}

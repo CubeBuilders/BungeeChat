@@ -2,6 +2,7 @@ package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import java.util.Map;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -26,7 +27,7 @@ public class CommandHub extends Command {
 		Map servers = ProxyServer.getInstance().getServers();
 		ServerInfo server = (ServerInfo) servers.get("hub");
 		if (server == null) {
-			player.sendMessage("An error has occurred. :/");
+			MessageSender.sendMessage(player, "An error has occurred. :/");
 			return;
 		}
 		player.connect(server);

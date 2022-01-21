@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.chat;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
@@ -50,9 +51,9 @@ public final class GroupChat implements ChatHandler {
 		if (!allowedToSend) {
 			if (session.getChatHandler() == this) {
 				session.setChatHandler(null, false); // revert to Public Chat
-				sender.sendMessage(unify(processChat(null, "&cYou can't send messages to this chat. Your default chat has been changed to &ePublic Chat&c.")));
+				MessageSender.sendMessage(sender, "&cYou can't send messages to this chat. Your default chat has been changed to &ePublic Chat&c.");
 			} else {
-				sender.sendMessage(unify(processChat(null, "&cYou can't send messages to this chat.")));
+				MessageSender.sendMessage(sender, "&cYou can't send messages to this chat.");
 			}
 			return;
 		} else if (!isJoined(sender)) {
@@ -97,7 +98,7 @@ public final class GroupChat implements ChatHandler {
 				} else {
 					controller.bungeechat.addAll(chatMessage, chat.uncensored);
 				}
-				recipient.sendMessage(chatMessage);
+				MessageSender.sendMessage(recipient, chatMessage);
 			}
 			if (recipientSb.length() != 0) {
 				recipientSb.append(",");

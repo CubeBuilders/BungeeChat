@@ -2,6 +2,7 @@ package hk.siggi.bungeecord.bungeechat.chat.handler;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.chat.ChatController;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,8 +53,8 @@ public class PrivateChatHandler implements ChatHandler {
 			extra = new TextComponent(" is currently offline.");
 			extra.setColor(ChatColor.RED);
 			msg.addExtra(extra);
-			
-			sender.sendMessage(msg);
+
+			MessageSender.sendMessage(sender, msg);
 			return;
 		}
 		controller.sendPM(sender, dest, message);

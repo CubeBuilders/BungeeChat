@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -17,7 +18,7 @@ public class CommandStrikeHistory extends Command {
 	public void execute(CommandSender sender, String[] args) {
 		BaseComponent commandRemovedMessage = new TextComponent("This command has been removed.");
 		commandRemovedMessage.setColor(ChatColor.AQUA);
-		sender.sendMessage(commandRemovedMessage);
+		MessageSender.sendMessage(sender, commandRemovedMessage);
 		return;
 	}
 }

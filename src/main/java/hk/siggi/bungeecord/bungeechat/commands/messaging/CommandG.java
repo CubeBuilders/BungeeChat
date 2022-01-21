@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.ChatController;
 import hk.siggi.bungeecord.bungeechat.chat.GroupChat;
@@ -37,7 +38,7 @@ public class CommandG extends Command implements TabExecutor {
 			BaseComponent extra = new TextComponent("/g <group> <message>");
 			extra.setColor(ChatColor.WHITE);
 			usage.addExtra(extra);
-			sender.sendMessage(usage);
+			MessageSender.sendMessage(sender, usage);
 			return;
 		}
 		ProxiedPlayer player = (ProxiedPlayer) sender;
@@ -56,7 +57,7 @@ public class CommandG extends Command implements TabExecutor {
 			extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to edit message")}));
 			extra.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/g " + Util.getLine(args, 0)));
 			message.addExtra(extra);
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 			return;
 		}
 		if (args.length < 2) {

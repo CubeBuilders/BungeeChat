@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.moderation;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import net.md_5.bungee.api.CommandSender;
@@ -23,20 +24,20 @@ public class CommandNoSpy extends Command {
 			ProxiedPlayer player = ((ProxiedPlayer) sender);
 			name = player.getName();
 			if (!player.hasPermission("hk.siggi.bungeechat.spy")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
-			sender.sendMessage("This command can only be used in-game.");
+			MessageSender.sendMessage(sender, "This command can only be used in-game.");
 			return;
 		}
 		PlayerAccount info = plugin.getPlayerInfo(((ProxiedPlayer) sender).getUniqueId());
 		if (info.isNoSpy()) {
 			info.setNoSpy(false);
-			sender.sendMessage("You now receive spy messages again.");
+			MessageSender.sendMessage(sender, "You now receive spy messages again.");
 		} else {
 			info.setNoSpy(true);
-			sender.sendMessage("Spy messages hidden. They will be shown again after you type the command again, or if you are offline for at least one hour.");
+			MessageSender.sendMessage(sender, "Spy messages hidden. They will be shown again after you type the command again, or if you are offline for at least one hour.");
 		}
 	}
 }

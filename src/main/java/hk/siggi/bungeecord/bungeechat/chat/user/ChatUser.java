@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.chat.user;
 
 import java.util.UUID;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -38,7 +39,7 @@ public class ChatUser {
 	public void sendMessage(BaseComponent component) {
 		ProxiedPlayer pl = getPlayer();
 		if (pl != null) {
-			pl.sendMessage(component);
+			MessageSender.sendMessage(pl, component);
 		}
 		users.webChat.send(uuid, component);
 	}

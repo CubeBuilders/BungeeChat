@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,24 +32,24 @@ public class CommandPunish extends Command implements TabExecutor {
 			allowTroll = allowBan = player.hasPermission("hk.siggi.bungeechat.ban");
 			allowMute = player.hasPermission("hk.siggi.bungeechat.mute");
 			if (!allowTroll && !allowMute && !allowBan) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
 			issuer = BungeeChat.console;
 			issuerName = "<Console>";
-			sender.sendMessage("ONLY CONSOLE NIGGUH!");
+			MessageSender.sendMessage(sender, "ONLY CONSOLE NIGGUH!");
 			return;
 		}
 		
 		if (args.length < 1) {
-			sender.sendMessage("Usage: /punish [playername]");
+			MessageSender.sendMessage(sender, "Usage: /punish [playername]");
 			return;
 		}
 		String target = args[0];
 		UUID targetUUID = plugin.getPlayerNameHandler().getPlayerByName(target);
 		if (targetUUID == null) {
-			sender.sendMessage("Player not found!");
+			MessageSender.sendMessage(sender, "Player not found!");
 			return;
 		}
 		BungeeChat.getSession((ProxiedPlayer) sender).openPunisher(targetUUID, allowTroll, allowMute, allowBan);

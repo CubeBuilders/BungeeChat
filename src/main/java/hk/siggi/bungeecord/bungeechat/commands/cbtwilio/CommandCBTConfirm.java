@@ -4,6 +4,7 @@ import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import java.io.*;
 import java.util.*;
 import java.net.*;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -29,7 +30,7 @@ public class CommandCBTConfirm extends Command {
 			issuer = player.getUniqueId();
 			issuerName = player.getName();
 		} else {
-			sender.sendMessage("This command can only be used in-game.");
+			MessageSender.sendMessage(sender, "This command can only be used in-game.");
 			return;
 		}
 		if (args.length < 1) {
@@ -38,7 +39,7 @@ public class CommandCBTConfirm extends Command {
 			BaseComponent extra = new TextComponent("/cbtconfirm <code>");
 			extra.setColor(ChatColor.WHITE);
 			message.addExtra(extra);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 			return;
 		}
 		String code = args[0];
@@ -56,10 +57,10 @@ public class CommandCBTConfirm extends Command {
 				message.addExtra(extra);
 				extra = new TextComponent(" to your account!");
 				message.addExtra(extra);
-				player.sendMessage(message);
+				MessageSender.sendMessage(player, message);
 				message = new TextComponent("This service is provided free of charge by CubeBuilders. Texting rates may apply depending on your carrier and service plan.");
 				message.setColor(ChatColor.AQUA);
-				player.sendMessage(message);
+				MessageSender.sendMessage(player, message);
 			} else if (result.equalsIgnoreCase("ServiceAlreadyActive")) {
 				BaseComponent message = new TextComponent("You already have a phone number registered. Info: ");
 				message.setColor(ChatColor.RED);
@@ -68,19 +69,19 @@ public class CommandCBTConfirm extends Command {
 				extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[] {new TextComponent("Click for information")}));
 				extra.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cbt"));
 				message.addExtra(extra);
-				player.sendMessage(message);
+				MessageSender.sendMessage(player, message);
 				message = new TextComponent("If you no longer have access to your old phone, contact Siggi88 to remove it from your account.");
 				message.setColor(ChatColor.RED);
-				player.sendMessage(message);
+				MessageSender.sendMessage(player, message);
 			} else if (result.equalsIgnoreCase("InvalidCode")) {
 				BaseComponent message = new TextComponent("You entered an invalid confirmation code!");
 				message.setColor(ChatColor.RED);
-				player.sendMessage(message);
+				MessageSender.sendMessage(player, message);
 			}
 		} catch (Exception e) {
 			BaseComponent message = new TextComponent("An error has occurred. :/");
 			message.setColor(ChatColor.RED);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 		}
 	}
 }

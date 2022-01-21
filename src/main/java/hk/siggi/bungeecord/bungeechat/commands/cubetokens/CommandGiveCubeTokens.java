@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.cubetokens;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import hk.siggi.cubetokens.CT;
 import java.util.UUID;
@@ -36,7 +37,7 @@ public class CommandGiveCubeTokens extends Command {
 		if (uuid == null) {
 			BaseComponent noExist = new TextComponent("Player " + split[0] + " does not exist");
 			noExist.setColor(ChatColor.RED);
-			sender.sendMessage(noExist);
+			MessageSender.sendMessage(sender, noExist);
 			return;
 		}
 		long cubeTokens = Long.parseLong(split[1]);
@@ -51,11 +52,11 @@ public class CommandGiveCubeTokens extends Command {
 		if (CT.get().giveCubeTokens(uuid, cubeTokens, reason)) {
 			BaseComponent ok = new TextComponent("Gave " + username + " " + cubeTokens + " CT.");
 			ok.setColor(ChatColor.GREEN);
-			sender.sendMessage(ok);
+			MessageSender.sendMessage(sender, ok);
 		} else {
 			BaseComponent fail = new TextComponent("Transaction rejected by CubeTokens server.");
 			fail.setColor(ChatColor.RED);
-			sender.sendMessage(fail);
+			MessageSender.sendMessage(sender, fail);
 		}
 	}
 }

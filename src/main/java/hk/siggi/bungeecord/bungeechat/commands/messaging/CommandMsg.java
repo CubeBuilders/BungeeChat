@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerNameHandler;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
@@ -40,7 +41,7 @@ public class CommandMsg extends Command implements TabExecutor {
 			BaseComponent extra = new TextComponent("/msg <username> <message>");
 			extra.setColor(ChatColor.WHITE);
 			usage.addExtra(extra);
-			sender.sendMessage(usage);
+			MessageSender.sendMessage(sender, usage);
 			return;
 		}
 		ProxiedPlayer player = (ProxiedPlayer) sender;
@@ -101,7 +102,7 @@ public class CommandMsg extends Command implements TabExecutor {
 				extra.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/m " + Util.getLine(args, 0)));
 				message.addExtra(extra);
 			}
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 			return;
 		}
 		BungeeChat bc = BungeeChat.getInstance();

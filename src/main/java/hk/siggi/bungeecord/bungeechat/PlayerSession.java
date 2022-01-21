@@ -543,9 +543,9 @@ public class PlayerSession {
 			msg1.addAll(processChat(null, "&9Your default chat is now "));
 			msg1.addAll(chatHandler.getDisplay());
 			msg1.addAll(processChat(null, "&9."));
-			p.sendMessage(unify(msg1));
+			MessageSender.sendMessage(p, unify(msg1));
 			if (!(chatHandler instanceof PublicChatHandler)) {
-				p.sendMessage(unify(processChat(null, "&9To return to Public chat, type &6/pub&9.")));
+				MessageSender.sendMessage(p, "&9To return to Public chat, type &6/pub&9.");
 			}
 		}
 	}
@@ -657,7 +657,7 @@ public class PlayerSession {
 				if (pl == p) {
 					continue;
 				}
-				pl.sendMessage(msg);
+				MessageSender.sendMessage(pl, msg);
 			}
 		}
 		if (sendToTo && serverTo != null) {
@@ -678,12 +678,12 @@ public class PlayerSession {
 			TextComponent m = new TextComponent(sb.toString());
 			m.setColor(ChatColor.AQUA);
 			msg.addExtra(m);
-			p.sendMessage(msg);
+			MessageSender.sendMessage(p, msg);
 			for (ProxiedPlayer pl : serverTo.getPlayers()) {
 				if (pl == p) {
 					continue;
 				}
-				pl.sendMessage(msg);
+				MessageSender.sendMessage(pl, msg);
 			}
 		}
 	}
@@ -762,7 +762,7 @@ public class PlayerSession {
 			msg.addExtra(attentionGrabber);
 			msg.addExtra(hey);
 			msg.addExtra(command);
-			p.sendMessage(msg);
+			MessageSender.sendMessage(p, msg);
 		}
 	}
 

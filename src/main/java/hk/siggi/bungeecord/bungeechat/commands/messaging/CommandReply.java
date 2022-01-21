@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.chat.handler.PrivateChatHandler;
@@ -32,7 +33,7 @@ public class CommandReply extends Command {
 		 BaseComponent extra = new TextComponent("/r <message>");
 		 extra.setColor(ChatColor.WHITE);
 		 usage.addExtra(extra);
-		 sender.sendMessage(usage);
+		 MessageSender.sendMessage(sender, usage);
 		 return;
 		 }*/
 		ProxiedPlayer player = (ProxiedPlayer) sender;
@@ -44,7 +45,7 @@ public class CommandReply extends Command {
 			extra.setColor(ChatColor.RED);
 			message.addExtra(extra);
 
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 			return;
 		}
 		ProxiedPlayer destinationPlayer = plugin.getProxy().getPlayer(destination);
@@ -63,7 +64,7 @@ public class CommandReply extends Command {
 			extra.setColor(ChatColor.RED);
 			message.addExtra(extra);
 
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 			return;
 		}
 

@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
@@ -28,7 +29,7 @@ public class CommandUnmute extends Command {
 			issuer = player.getUniqueId();
 			issuerName = player.getName();
 			if (!player.hasPermission("hk.siggi.bungeechat.mute")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
@@ -37,7 +38,7 @@ public class CommandUnmute extends Command {
 		}
 		BaseComponent commandRemovedMessage = new TextComponent("This command is no longer being used. Use the website moderator centre to modify mutes and bans.");
 		commandRemovedMessage.setColor(ChatColor.AQUA);
-		sender.sendMessage(commandRemovedMessage);
+		MessageSender.sendMessage(sender, commandRemovedMessage);
 		return;
 	}
 }

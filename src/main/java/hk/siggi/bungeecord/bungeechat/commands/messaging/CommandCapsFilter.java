@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public class CommandCapsFilter extends Command implements TabExecutor {
 		onOff.setColor(ChatColor.AQUA);
 		base.addExtra(chatCensor);
 		base.addExtra(onOff);
-		cs.sendMessage(base);
+		MessageSender.sendMessage(cs, base);
 
 		if (strings.length != 1) {
 			TextComponent base2 = new TextComponent("");
@@ -55,7 +56,7 @@ public class CommandCapsFilter extends Command implements TabExecutor {
 			command.setColor(ChatColor.AQUA);
 			base2.addExtra(usage);
 			base2.addExtra(command);
-			cs.sendMessage(base2);
+			MessageSender.sendMessage(cs, base2);
 		}
 	}
 

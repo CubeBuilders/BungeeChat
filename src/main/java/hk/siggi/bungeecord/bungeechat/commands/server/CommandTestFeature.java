@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.chat.string.ChatString;
 import hk.siggi.bungeecord.bungeechat.chat.string.patcher.ChatPatcher;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
@@ -37,7 +38,7 @@ public class CommandTestFeature extends Command {
 		ProxiedPlayer pl = (ProxiedPlayer) cs;
 		File testenvcheck = new File(plugin.getDataFolder(), "testenv");
 		if (!testenvcheck.exists()) {
-			pl.sendMessage(unify(processChat(null, "&6This command is not available on the production environment.")));
+			MessageSender.sendMessage(pl, "&6This command is not available on the production environment.");
 			return;
 		}
 		try {
@@ -49,7 +50,7 @@ public class CommandTestFeature extends Command {
 					try (FileWriter fw = new FileWriter(new File(plugin.getDataFolder(), "pajson.json"))) {
 						fw.write(toJson);
 					}
-					pl.sendMessage("OK");
+					MessageSender.sendMessage(pl, "OK");
 				}
 				break;
 				case "pajson2": {
@@ -62,7 +63,7 @@ public class CommandTestFeature extends Command {
 					try (FileWriter fw = new FileWriter(new File(plugin.getDataFolder(), "pajson2.json"))) {
 						fw.write(toJson);
 					}
-					pl.sendMessage("OK");
+					MessageSender.sendMessage(pl, "OK");
 				}
 				break;
 				case "chatstring": {
@@ -74,13 +75,13 @@ public class CommandTestFeature extends Command {
 						sb.append(strings[i]);
 					}
 					String chatStr = sb.toString();
-					pl.sendMessage("Q: " + chatStr);
+					MessageSender.sendMessage(pl, "Q: " + chatStr);
 					ChatString chatString = new ChatString(chatStr, true);
 					TextComponent a = new TextComponent("");
 					a.addExtra("A: ");chatString.appendTo(a);
-					pl.sendMessage(a);
-					pl.sendMessage("B: " + chatString.toUnformattedString());
-					pl.sendMessage("C: " + chatString.toFormattedString());
+					MessageSender.sendMessage(pl, a);
+					MessageSender.sendMessage(pl, "B: " + chatString.toUnformattedString());
+					MessageSender.sendMessage(pl, "C: " + chatString.toFormattedString());
 				}
 				break;
 				case "chatpatcher": {
@@ -117,7 +118,7 @@ public class CommandTestFeature extends Command {
 						word.insert(0, "it is amazing");
 					});
 					
-					pl.sendMessage(chatString.toTextComponent());
+					MessageSender.sendMessage(pl, chatString.toTextComponent());
 				}
 				break;
 			}
@@ -132,7 +133,7 @@ public class CommandTestFeature extends Command {
 				String line;
 				int l = 0;
 				while ((line = reader.readLine()) != null) {
-					pl.sendMessage(line);
+					MessageSender.sendMessage(pl, line);
 					l += 1;
 					if (l >= 9) {
 						break;

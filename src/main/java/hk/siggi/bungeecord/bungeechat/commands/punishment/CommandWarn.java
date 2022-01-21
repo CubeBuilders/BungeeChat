@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +36,7 @@ public class CommandWarn extends Command implements TabExecutor {
 			issuer = player.getUniqueId();
 			issuerName = player.getName();
 			if (!player.hasPermission("hk.siggi.bungeechat.warn")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		} else {
@@ -48,7 +49,7 @@ public class CommandWarn extends Command implements TabExecutor {
 			BaseComponent extra = new TextComponent("/warn <name> <reason>");
 			extra.setColor(ChatColor.WHITE);
 			usage.addExtra(extra);
-			sender.sendMessage(usage);
+			MessageSender.sendMessage(sender, usage);
 			return;
 		}
 		String receiver = args[0];
@@ -59,10 +60,10 @@ public class CommandWarn extends Command implements TabExecutor {
 			BaseComponent extra = new TextComponent("/warn <name> <reason>");
 			extra.setColor(ChatColor.WHITE);
 			usage.addExtra(extra);
-			sender.sendMessage(usage);
+			MessageSender.sendMessage(sender, usage);
 			BaseComponent message = new TextComponent("You must include name, and reason!");
 			message.setColor(ChatColor.RED);
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 			return;
 		}
 		UUID receiverUUID = plugin.getPlayerNameHandler().getPlayerByName(receiver);
@@ -81,10 +82,10 @@ public class CommandWarn extends Command implements TabExecutor {
 					extra.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/warn " + receiverPlayer.getName() + " " + reason));
 					extra.setColor(ChatColor.AQUA);
 					message.addExtra(extra);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 					message = new TextComponent("If this is wrong, please enter the command again. To warn faster next time, please enter the player's full name.");
 					message.setColor(ChatColor.GOLD);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 					return;
 				}
 			}
@@ -95,7 +96,7 @@ public class CommandWarn extends Command implements TabExecutor {
 			message.addExtra(extra);
 			extra = new TextComponent(". Did you enter the name correctly?");
 			message.addExtra(extra);
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 			return;
 		}
 		receiver = plugin.getUUIDCache().getNameFromUUID(receiverUUID);
@@ -110,7 +111,7 @@ public class CommandWarn extends Command implements TabExecutor {
 			BaseComponent extra = new TextComponent(reason);
 			extra.setColor(ChatColor.WHITE);
 			message.addExtra(extra);
-			pl.sendMessage(message);
+			MessageSender.sendMessage(pl, message);
 		}
 	}
 

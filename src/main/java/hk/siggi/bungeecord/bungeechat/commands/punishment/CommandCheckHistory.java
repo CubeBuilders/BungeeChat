@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.MCBan;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
@@ -67,7 +68,7 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 				message.addExtra(extra);
 				extra = new TextComponent(". Did you enter the name correctly?");
 				message.addExtra(extra);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 				return;
 			}
 		}
@@ -97,42 +98,42 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 				if (muteExpires == -1L) {
 					BaseComponent message = new TextComponent(receiver + " is permanently muted.");
 					message.setColor(ChatColor.AQUA);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				} else {
 					BaseComponent message = new TextComponent(receiver + " is muted, expires on " + plugin.formatDate(muteExpires, tz) + " (in " + TimeUtil.timeDifference(System.currentTimeMillis(), muteExpires) + ").");
 					message.setColor(ChatColor.AQUA);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				}
 				BaseComponent message = new TextComponent("Mute Reason: " + muteReason);
 				message.setColor(ChatColor.AQUA);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 			}
 			if (user.isBanned()) {
 				long banExpires = user.getExpiry(Punishment.PunishmentAction.BAN);
 				if (banExpires == -1L) {
 					BaseComponent message = new TextComponent(receiver + " is permanently banned.");
 					message.setColor(ChatColor.AQUA);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				} else {
 					BaseComponent message = new TextComponent(receiver + " is banned, expires on " + plugin.formatDate(banExpires, tz) + " (in " + TimeUtil.timeDifference(System.currentTimeMillis(), banExpires) + ").");
 					message.setColor(ChatColor.AQUA);
-					sender.sendMessage(message);
+					MessageSender.sendMessage(sender, message);
 				}
 				BaseComponent message = new TextComponent("Ban Reason: " + banReason);
 				message.setColor(ChatColor.AQUA);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 			}
 		}
 		if (punishments.length == 0) {
 			BaseComponent message = new TextComponent(receiver + " has a clean record on CubeBuilders!");
 			message.setColor(ChatColor.AQUA);
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 		} else {
 			int pageCount = getPageCount(punishments.length, perPage);
 			int offset = (pageNumber - 1) * perPage;
 			BaseComponent top = new TextComponent("Recent offences for " + receiver);
 			top.setColor(ChatColor.AQUA);
-			sender.sendMessage(top);
+			MessageSender.sendMessage(sender, top);
 			for (int i = punishments.length - 1; i >= Math.max(0, punishments.length - 10); i--) {
 				long longLength = punishments[i].getLength();
 				String length = "n/a";
@@ -158,7 +159,7 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 					punishment.setStrikethrough(true);
 					punishment.setColor(ChatColor.GRAY);
 				}
-				sender.sendMessage(punishment);
+				MessageSender.sendMessage(sender, punishment);
 			}
 		}
 		if (!playerInfo.isMCBansExempt()) {
@@ -167,17 +168,17 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 				int j = Math.min(3, mcBans.length);
 				BaseComponent alert = new TextComponent(receiver + " has history on MCBans.com:");
 				alert.setColor(ChatColor.RED);
-				sender.sendMessage(alert);
+				MessageSender.sendMessage(sender, alert);
 				for (int i = 0; i < j; i++) {
 					BaseComponent punishment = new TextComponent(mcBans[i].server + ": " + mcBans[i].reason + " (" + mcBans[i].prosecutor + ")");
 					punishment.setColor(ChatColor.AQUA);
-					sender.sendMessage(punishment);
+					MessageSender.sendMessage(sender, punishment);
 				}
 			}
 		}
 		BaseComponent moreInfo = new TextComponent("Click Here For More Information");
 		moreInfo.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cubebuilders.net/mod/offences/" + (playerInfo.getPlayerUUID().toString().replaceAll("-", "").toLowerCase())));
-		sender.sendMessage(moreInfo);
+		MessageSender.sendMessage(sender, moreInfo);
 //		if (sender instanceof ProxiedPlayer && pageCount > 1) {
 //			BaseComponent pageSelector = new TextComponent("Go: ");
 //			BaseComponent nextPage = new TextComponent("Next Page ");
@@ -186,7 +187,7 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 //			previousPage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/phistory " + receiver + " " + (pageNumber-1)));
 //			if (pageNumber < pageCount) pageSelector.addExtra(nextPage);
 //			if (pageNumber > 1) pageSelector.addExtra(previousPage);
-//			sender.sendMessage(pageSelector);
+//			MessageSender.sendMessage(sender, pageSelector);
 //		}
 	}
 

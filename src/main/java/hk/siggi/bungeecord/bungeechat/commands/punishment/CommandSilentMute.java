@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class CommandSilentMute extends Command implements TabExecutor {
 		if (sender instanceof ProxiedPlayer) {
 			player = (ProxiedPlayer) sender;
 			if (!player.hasPermission("hk.siggi.bungeechat.silentmute")) {
-				player.sendMessage(Util.randomNotPermittedMessage());
+				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
 		}
@@ -61,7 +62,7 @@ public class CommandSilentMute extends Command implements TabExecutor {
 				message.addExtra(extra);
 				extra = new TextComponent(". Did you enter the name correctly?");
 				message.addExtra(extra);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 				return;
 			}
 		}
@@ -79,7 +80,7 @@ public class CommandSilentMute extends Command implements TabExecutor {
 			onTxt.setColor(ChatColor.GREEN);
 			message.addExtra(username);
 			message.addExtra(onTxt);
-			sender.sendMessage(message);
+			MessageSender.sendMessage(sender, message);
 			return;
 		}
 		BaseComponent message = new TextComponent("Silent muted for ");
@@ -90,7 +91,7 @@ public class CommandSilentMute extends Command implements TabExecutor {
 		onTxt.setColor(ChatColor.GREEN);
 		message.addExtra(username);
 		message.addExtra(onTxt);
-		sender.sendMessage(message);
+		MessageSender.sendMessage(sender, message);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.moderation;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -22,18 +23,18 @@ public class CommandStream extends Command {
 			ProxiedPlayer player = ((ProxiedPlayer) sender);
 			name = player.getName();
 		} else {
-			sender.sendMessage("This command can only be used in-game.");
+			MessageSender.sendMessage(sender, "This command can only be used in-game.");
 			return;
 		}
 		PlayerAccount info = plugin.getPlayerInfo(((ProxiedPlayer) sender).getUniqueId());
 		if (info.isStreamModeActive()) {
 			info.setStreamMode(false);
-			sender.sendMessage("Stream mode has been disabled. (nospy is still disabled)");
+			MessageSender.sendMessage(sender, "Stream mode has been disabled. (nospy is still disabled)");
 		} else {
 			long expiry = System.currentTimeMillis() + 4200000L;
 			info.setStreamMode(true);
 			info.setNoSpy(true);
-			sender.sendMessage("Stream mode and nospy has been enabled.");
+			MessageSender.sendMessage(sender, "Stream mode and nospy has been enabled.");
 		}
 	}
 }

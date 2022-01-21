@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -28,7 +29,7 @@ public class CommandDontKickMe extends Command {
 			TextComponent a = new TextComponent("You don't have permission to use this command!");
 			a.setColor(ChatColor.RED);
 			noPerm.addExtra(a);
-			sender.sendMessage(noPerm);
+			MessageSender.sendMessage(sender, noPerm);
 			return;
 		}
 //		{
@@ -36,7 +37,7 @@ public class CommandDontKickMe extends Command {
 //			TextComponent a = new TextComponent("NO!  No more /dontkickme bc everyone abuses it!  Sounds are played as a warning that you're about to get kicked, so just don't turn off your sound and don't leave your computer.");
 //			a.setColor(ChatColor.RED);
 //			tc.addExtra(a);
-//			sender.sendMessage(tc);
+//			MessageSender.sendMessage(sender, tc);
 //			if (true) {
 //				return;
 //			}

@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.chat;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.chat.string.ChatCharacter;
@@ -156,7 +157,7 @@ public final class ChatController implements Listener {
 		}
 		if (message.equalsIgnoreCase("/pt")) {
 			event.setCancelled(true);
-			player.sendMessage("Usage: /pt [passthrough]");
+			MessageSender.sendMessage(player, "Usage: /pt [passthrough]");
 			return;
 		} else if (message.toLowerCase().startsWith("/pt ")) {
 			// passthrough command
@@ -164,7 +165,7 @@ public final class ChatController implements Listener {
 				event.setMessage(message.substring(4));
 			} else {
 				event.setCancelled(true);
-				player.sendMessage("You don't have permission to use this command.");
+				MessageSender.sendMessage(player, "You don't have permission to use this command.");
 			}
 			return;
 		} else if (message.startsWith("/")) {
@@ -298,7 +299,7 @@ public final class ChatController implements Listener {
 			maximumChats = 4;
 		}
 		if (session.getChatCount(maxAge) >= maximumChats) {
-			player.sendMessage(unify(processChat(null, "&cOh my gawd, you need to like take a chill pill! Slow down! :o")));
+			MessageSender.sendMessage(player, "&cOh my gawd, you need to like take a chill pill! Slow down! :o");
 			return true;
 		}
 		return false;
@@ -370,7 +371,7 @@ public final class ChatController implements Listener {
 				} else {
 					bungeechat.addAll(chatMessage, chat.uncensored);
 				}
-				recipient.sendMessage(chatMessage);
+				MessageSender.sendMessage(recipient, chatMessage);
 			}
 		}
 		bungeechat.logChat("Public-" + publicChatGroup + ":" + from.getName() + "/" + Util.uuidToString(from.getUniqueId()) + ":" + message);
@@ -460,9 +461,9 @@ public final class ChatController implements Listener {
 		}
 
 		sessionFrom.playSound("UI_BUTTON_CLICK", 1.0f, 2.0f, 0);
-		from.sendMessage(baseFrom);
+		MessageSender.sendMessage(from, baseFrom);
 		if (!fromAccount.isSilentMuted() || toAccount.isSilentMuted() || to.hasPermission("hk.siggi.bungeechat.silentmute")) {
-			to.sendMessage(baseTo);
+			MessageSender.sendMessage(to, baseTo);
 			sessionTo.playSound("BLOCK_NOTE_BLOCK_BELL", 1.0f, 1.0f, 0);
 		}
 
@@ -479,7 +480,7 @@ public final class ChatController implements Listener {
 			msg.addExtra(name);
 			msg.addExtra(xtra);
 			msg.addExtra(xtra2);
-			from.sendMessage(msg);
+			MessageSender.sendMessage(from, msg);
 		}
 
 		bungeechat.setLastMessage(from.getName(), to.getName());

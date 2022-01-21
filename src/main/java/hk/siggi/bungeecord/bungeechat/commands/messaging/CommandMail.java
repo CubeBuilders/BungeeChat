@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.messaging;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerNameHandler;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.player.Mail;
@@ -41,7 +42,7 @@ public class CommandMail extends Command implements TabExecutor {
 				BaseComponent extra = new TextComponent("/mail send <name> <message> - Send a message");
 				extra.setColor(ChatColor.WHITE);
 				usage.addExtra(extra);
-				sender.sendMessage(usage);
+				MessageSender.sendMessage(sender, usage);
 			}
 			{
 				BaseComponent usage = new TextComponent("Usage: ");
@@ -49,7 +50,7 @@ public class CommandMail extends Command implements TabExecutor {
 				BaseComponent extra = new TextComponent("/mail read - Read messages");
 				extra.setColor(ChatColor.WHITE);
 				usage.addExtra(extra);
-				sender.sendMessage(usage);
+				MessageSender.sendMessage(sender, usage);
 			}
 			{
 				BaseComponent usage = new TextComponent("Usage: ");
@@ -57,7 +58,7 @@ public class CommandMail extends Command implements TabExecutor {
 				BaseComponent extra = new TextComponent("/mail clear - Deletes all your messages");
 				extra.setColor(ChatColor.WHITE);
 				usage.addExtra(extra);
-				sender.sendMessage(usage);
+				MessageSender.sendMessage(sender, usage);
 			}
 			return;
 		}
@@ -72,7 +73,7 @@ public class CommandMail extends Command implements TabExecutor {
 				BaseComponent extra = new TextComponent("/mail send <name> <message>");
 				extra.setColor(ChatColor.WHITE);
 				usage.addExtra(extra);
-				sender.sendMessage(usage);
+				MessageSender.sendMessage(sender, usage);
 				return;
 			}
 			if (session.user.isMuted()) {
@@ -82,7 +83,7 @@ public class CommandMail extends Command implements TabExecutor {
 			if (args[1].equalsIgnoreCase("Server")) {
 				BaseComponent fail = new TextComponent("Cannot send mail: Server does not accept incoming messages. Perhaps you meant to send it to Siggi88?");
 				fail.setColor(ChatColor.RED);
-				sender.sendMessage(fail);
+				MessageSender.sendMessage(sender, fail);
 				return;
 			}
 			UUID recipientUUID = plugin.getPlayerNameHandler().getPlayerByName(args[1]);
@@ -94,7 +95,7 @@ public class CommandMail extends Command implements TabExecutor {
 				message.addExtra(extra);
 				extra = new TextComponent(". Did you enter the name correctly?");
 				message.addExtra(extra);
-				sender.sendMessage(message);
+				MessageSender.sendMessage(sender, message);
 				return;
 			}
 			String message = Util.getLine(args, 2);
@@ -126,7 +127,7 @@ public class CommandMail extends Command implements TabExecutor {
 			if (recipient.getMail().length >= recipient.getMaxMail()) {
 				BaseComponent cannotSend = new TextComponent("Cannot send mail: Recipient inbox is full!");
 				cannotSend.setColor(ChatColor.RED);
-				sender.sendMessage(cannotSend);
+				MessageSender.sendMessage(sender, cannotSend);
 			} else {
 				recipient.sendMail(player.getUniqueId(), message, true, true);
 			}
@@ -135,7 +136,7 @@ public class CommandMail extends Command implements TabExecutor {
 			if (mail.length == 0) {
 				BaseComponent message = new TextComponent("You have no mail.");
 				message.setColor(ChatColor.GOLD);
-				player.sendMessage(message);
+				MessageSender.sendMessage(player, message);
 				return;
 			}
 			for (int i = 0; i < mail.length; i++) {
@@ -149,7 +150,7 @@ public class CommandMail extends Command implements TabExecutor {
 				extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click here to reply")}));
 				extra.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/mail send " + mail[i].getFrom() + " "));
 				message.addExtra(extra);
-				player.sendMessage(message);
+				MessageSender.sendMessage(player, message);
 			}
 			BaseComponent message = new TextComponent("To clear mail, type ");
 			message.setColor(ChatColor.GOLD);
@@ -158,12 +159,12 @@ public class CommandMail extends Command implements TabExecutor {
 			extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("(or you could click here!)")}));
 			extra.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mail clear"));
 			message.addExtra(extra);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 		} else if (args[0].equalsIgnoreCase("clear")) {
 			playerInfo.clearMail();
 			BaseComponent message = new TextComponent("Mail cleared");
 			message.setColor(ChatColor.GOLD);
-			player.sendMessage(message);
+			MessageSender.sendMessage(player, message);
 		}
 	}
 	
