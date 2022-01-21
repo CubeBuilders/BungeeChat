@@ -728,6 +728,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				sendSkin0(acc.getPlayerUUID(), skinToSend);
 			}
 		}
+		new PeriodicAnnouncements(this, new File(getDataFolder(), "announcements.txt")).start();
 	}
 
 	private VotifierModule votifierModule = null;
