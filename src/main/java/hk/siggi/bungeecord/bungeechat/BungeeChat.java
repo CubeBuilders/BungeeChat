@@ -3891,6 +3891,12 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				case "quartz":
 					oreColor = "&f";
 					break;
+				case "ancientdebris":
+					oreColor = "&#614332";
+					break;
+				case "copper":
+					oreColor = "&#bd632b";
+					break;
 			}
 			String countStr = count >= 100000 ? "100000+" : (count + "x");
 			String oreMessage = "&c[!] &e" + player.getName() + "&c found &e" + countStr + " " + oreColor + ore + "&c in light level &e" + lightLevel + "/15&c" + " (" + server.getName() + ")";
