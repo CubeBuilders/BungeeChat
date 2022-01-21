@@ -196,8 +196,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 
 	@Override
 	public void respond(HTTPRequest request) throws Exception {
-		String timezone = request.cookies.getOrDefault("timezone", "America/Toronto");
-		request.getCacheMap().put("timezone", timezone);
+		String timezone = "GMT";
 
 		boolean allowSeeingProsecutor = false;
 		boolean allowChatlogs = false;
@@ -222,6 +221,8 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 					userUUID = UUID.fromString(reader.readLine().replaceAll("-", "").replaceAll("([0-9A-Fa-f]{8})([0-9A-Fa-f]{4})([0-9A-Fa-f]{4})([0-9A-Fa-f]{4})([0-9A-Fa-f]{12})", "$1-$2-$3-$4-$5"));
 					username = reader.readLine();
 					allowChatlogs = allowSeeingProsecutor = reader.readLine().equals("1");
+					timezone = reader.readLine();
+					request.getCacheMap().put("timezone", timezone);
 				}
 				reader.close();
 			}
@@ -1438,37 +1439,6 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 			request.response.write(b);
 			return;
 		}
-		if (requestedPage.equalsIgnoreCase("/bc/script.js")) {
-			request.response.setHeader("Content-Type", "application/javascript");
-			request.response.setHeader("Cache-Control", "max-age=3600");
-			request.response.setHeader("User-Cache-Control", "max-age=3600");
-			request.response.setHeader("Pragma", "cache");
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			out.write("document.cookie=\"timezone=\"+jstz.determine().name()+\";expires=Wed, 1 Jan 2020 12:00:00 UTC;path=/\";".getBytes());
-			out.write("var retina=window.devicePixelRatio>1;".getBytes());
-			out.write("document.cookie=\"hidpi=\"+(retina?\"1\":\"0\")+\";expires=Wed, 1 Jan 2020 12:00:00 UTC;path=/;\";".getBytes());
-			byte[] b = out.toByteArray();
-			request.response.setHeader("Content-Length", Integer.toString(b.length));
-			request.response.write(b);
-			return;
-		}
-		if (requestedPage.equalsIgnoreCase("/bc/jstz.js")) {
-			request.response.setHeader("Content-Type", "application/javascript");
-			request.response.setHeader("Cache-Control", "max-age=3600");
-			request.response.setHeader("User-Cache-Control", "max-age=3600");
-			request.response.setHeader("Pragma", "cache");
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			InputStream in = BungeeResponder.class.getResourceAsStream("/jstz.js");
-			int c;
-			byte[] buffer = new byte[4096];
-			while ((c = in.read(buffer, 0, buffer.length)) != -1) {
-				out.write(buffer, 0, c);
-			}
-			byte[] b = out.toByteArray();
-			request.response.setHeader("Content-Length", Integer.toString(b.length));
-			request.response.write(b);
-			return;
-		}
 		if (requestedPage.equals("/private/chatcensor")) {
 			String word = request.post.get("word");
 			if (word != null) {
@@ -1679,7 +1649,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 	};
 
 	private String generateDailyReport_classic(OnTimeSessionRecord[] records, long startTime, HashMap<String, OnTimeInfo> onTimeInfoMap, HTTPRequest request, String graphName) {
-		boolean hidpi = request.cookies.getOrDefault("hidpi", "0").equals("1");
+		boolean hidpi = true;
 		for (OnTimeInfo info : onTimeInfoMap.values()) {
 			info.time = 0L;
 		}
@@ -1855,7 +1825,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 	}
 
 	private String generateWeeklyReport_classic(OnTimeSessionRecord[] records, long startTime, HashMap<String, OnTimeInfo> onTimeInfoMap, HTTPRequest request, String graphName) {
-		boolean hidpi = request.cookies.getOrDefault("hidpi", "0").equals("1");
+		boolean hidpi = true;
 		for (OnTimeInfo info : onTimeInfoMap.values()) {
 			info.time = 0L;
 		}
@@ -2056,7 +2026,7 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 
 		records = OnTime.trim(records, startOfMonth, endOfMonth);
 
-		boolean hidpi = request.cookies.getOrDefault("hidpi", "0").equals("1");
+		boolean hidpi = true;
 		BufferedImage image = new BufferedImage(width * (hidpi ? 2 : 1), height * (hidpi ? 2 : 1), BufferedImage.TYPE_INT_RGB);
 		Graphics g = image.getGraphics();
 		Graphics2D g2d = (Graphics2D) g;
@@ -2208,8 +2178,6 @@ public class BungeeResponder implements HTTPResponder, HTTPWebSocketHandler {
 				.append(title)
 				.append("</title>")
 				.append("<link rel=\"STYLESHEET\" href=\"/bc/style.css\">")
-				.append("<script src=\"/bc/jstz.js\"></script>")
-				.append("<script src=\"/bc/script.js\"></script>")
 				.append(head == null ? "" : head)
 				.append("</head>")
 				.append("<body>")
