@@ -597,18 +597,7 @@ public final class ChatController implements Listener {
 		patcher.forEach("mineplex", (w) -> w.replace(0, "another ").insert(8, "dumb server"));
 
 		patcher.forEach("Are.I.P", (w) -> w.delete(1, 3).replace(0, "R")); // replace Are.I.P with R.I.P
-
-		// democrat -> demoncrat
-		patcher.forEach("democrat", (w) -> w.insert(4, w.charAt(3) == 'O' ? "N" : "n"));
-		patcher.forEach("democrats", (w) -> w.insert(4, w.charAt(3) == 'O' ? "N" : "n"));
-
-		// liberal -> libtard
-		patcher.forEach("liberal", (w) -> w.replace(3, "tard"));
-		patcher.forEach("liberals", (w) -> w.replace(3, "tard"));
-
-		// obama -> obummer
-		patcher.forEach("obama", (w) -> w.replace(2, "u").replace(4, "e").insert(5, "r").insert(4, "m"));
-
+		
 		// fuck -> fluff
 		patcher.forEach("fuck", (w) -> w.replace(1, "luf").insert(4, "f"));
 
