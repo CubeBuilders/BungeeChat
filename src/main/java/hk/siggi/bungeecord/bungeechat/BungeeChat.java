@@ -73,6 +73,7 @@ import hk.siggi.bungeecord.bungeechat.commands.server.CommandSecretCode;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandSeen;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandServer;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandSetGroup;
+import hk.siggi.bungeecord.bungeechat.commands.server.CommandStore;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandTestFeature;
 import hk.siggi.bungeecord.bungeechat.commands.socialmedia.CommandSocialMedia;
 import hk.siggi.bungeecord.bungeechat.commands.socialmedia.CommandVote;
@@ -535,6 +536,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerCommand(this, new CommandSocialMedia(this));
 
 		pm.registerCommand(this, new CommandCapsFilter(this));
+
+		pm.registerCommand(this, new CommandStore(this));
 
 		pm.registerCommand(this, new CommandTestFeature(this));
 
