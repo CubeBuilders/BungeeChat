@@ -48,8 +48,10 @@ public class PeriodicAnnouncements {
 		}
 		while (true) {
 			Message message = announcements.get(nextAnnouncement);
-			if (message.canShow())
+			if (message.canShow()) {
+				lastAnnouncement = nextAnnouncement;
 				return message;
+			}
 			if (nextAnnouncement == lastAnnouncement) {
 				return null;
 			}
