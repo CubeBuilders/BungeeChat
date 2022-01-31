@@ -43,6 +43,9 @@ public class PeriodicAnnouncements {
 		if (announcements.isEmpty())
 			return null;
 		int nextAnnouncement = lastAnnouncement + 1;
+		if (nextAnnouncement >= announcements.size()) {
+			nextAnnouncement = 0;
+		}
 		while (true) {
 			Message message = announcements.get(nextAnnouncement);
 			if (message.canShow())
