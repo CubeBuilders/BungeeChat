@@ -569,6 +569,7 @@ public final class ChatController implements Listener {
 		patcher.forEach("Sigi88", (w) -> w.replace(0, "S").insert(3, "g"));
 		patcher.forEach("Siggi8", (w) -> w.replace(0, "S").insert(6, "8"));
 		patcher.forEach("Sigi8", (w) -> w.replace(0, "S").insert(3, "g").insert(6, "8"));
+		patcher.forEach("SiggiJG", (w) -> w.replace(0, "SiggiJG"));
 
 		patcher.forEach("Cube Builders", (w) -> w.delete(4, 5));
 
