@@ -629,12 +629,6 @@ public class PlayerSession {
 		if (same(serverFromName, serverToName)) {
 			return;
 		}
-		if (serverFrom != null && serverFrom.getName().equals("minigames")) {
-			sendToFrom = false;
-		}
-		if (serverTo != null && serverTo.getName().equals("minigames")) {
-			sendToTo = false;
-		}
 		if (sendToFrom && serverFrom != null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(p.getName());
