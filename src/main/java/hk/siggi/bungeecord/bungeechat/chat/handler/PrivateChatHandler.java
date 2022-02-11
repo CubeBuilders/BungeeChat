@@ -67,7 +67,7 @@ public class PrivateChatHandler implements ChatHandler {
 	@Override
 	public List<BaseComponent> getDisplay() {
 		List<BaseComponent> result = new ArrayList<>();
-		result.addAll(processChat(null, "&7PM To "));
+		result.addAll(processChat(null, "&ePM To "));
 		result.addAll(usernameComponent);
 		return result;
 	}
