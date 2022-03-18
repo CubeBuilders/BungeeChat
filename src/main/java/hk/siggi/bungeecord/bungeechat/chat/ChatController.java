@@ -8,8 +8,6 @@ import hk.siggi.bungeecord.bungeechat.chat.string.ChatCharacter;
 import hk.siggi.bungeecord.bungeechat.chat.string.ChatString;
 import hk.siggi.bungeecord.bungeechat.chat.string.patcher.ChatPatcher;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.io.File;
 import java.util.ArrayList;
@@ -315,7 +313,7 @@ public final class ChatController implements Listener {
 			bungeechat.youAreMuted(from, session.user);
 			return;
 		}
-		final boolean imSilentMuted = info.isSilentMuted();
+		final boolean imShadowMuted = info.isShadowMuted();
 
 		List<ProxiedPlayer> recipients = new LinkedList<>();
 		String publicChatGroup = session.getPublicChatGroup();
@@ -334,8 +332,6 @@ public final class ChatController implements Listener {
 
 		ProcessedChat chat = process(from, message, true);
 
-		BaseComponent prefixComponent = null;
-
 		List<TextComponent> shortPrefix;
 		List<TextComponent> longPrefix;
 
@@ -349,11 +345,15 @@ public final class ChatController implements Listener {
 			if (!bypassIgnore && targetPlayer.isIgnoring(from.getUniqueId())) {
 				continue;
 			}
-			if (!imSilentMuted || targetPlayer.isSilentMuted() || recipient.hasPermission("hk.siggi.bungeechat.silentmute")) {
+			boolean recipientHasShadowMutePermission = recipient.hasPermission("hk.siggi.bungeechat.shadowmute");
+			if (!imShadowMuted || targetPlayer.isShadowMuted() || recipientHasShadowMutePermission) {
 				PlayerSession targetPlayerSession = getSession(recipient);
 				PlayerAccount.ChatPrefixType cpt = targetPlayerSession.getChatPrefixType(targetPlayer.getChatPrefixType());
 				TextComponent chatMessage = new TextComponent("");
-				if (prefixComponent != null) {
+				if (imShadowMuted && recipientHasShadowMutePermission) {
+					TextComponent prefixComponent = new TextComponent("[SM]");
+					prefixComponent.setColor(ChatColor.RED);
+					prefixComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent("This player is shadow muted.")}));
 					chatMessage.addExtra(prefixComponent);
 				}
 				if (cpt == PlayerAccount.ChatPrefixType.COMPACT) {
@@ -462,7 +462,7 @@ public final class ChatController implements Listener {
 
 		sessionFrom.playSound("UI_BUTTON_CLICK", 1.0f, 2.0f, 0);
 		MessageSender.sendMessage(from, baseFrom);
-		if (!fromAccount.isSilentMuted() || toAccount.isSilentMuted() || to.hasPermission("hk.siggi.bungeechat.silentmute")) {
+		if (!fromAccount.isShadowMuted() || toAccount.isShadowMuted() || to.hasPermission("hk.siggi.bungeechat.shadowmute")) {
 			MessageSender.sendMessage(to, baseTo);
 			sessionTo.playSound("BLOCK_NOTE_BLOCK_BELL", 1.0f, 1.0f, 0);
 		}

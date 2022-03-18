@@ -52,7 +52,7 @@ import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandOldTemporaryBan
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandPermanentBan;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandPermanentMute;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandPunish;
-import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandSilentMute;
+import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandShadowMute;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandStrike;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandStrikeHistory;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandTemporaryBan;
@@ -93,8 +93,6 @@ import hk.siggi.bungeecord.bungeechat.player.MCBan;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.relog.RelogHandler;
 import hk.siggi.bungeecord.bungeechat.util.APIUtil;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.IteratorAbstract;
 import hk.siggi.bungeecord.bungeechat.util.Prowl;
 import hk.siggi.bungeecord.bungeechat.util.SimpleIterable;
@@ -488,7 +486,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerCommand(this, new CommandWarn(this));
 		pm.registerCommand(this, new CommandMute(this));
 		pm.registerCommand(this, new CommandPermanentMute(this));
-		pm.registerCommand(this, new CommandSilentMute(this));
+		pm.registerCommand(this, new CommandShadowMute(this));
 		pm.registerCommand(this, new CommandUnmute(this));
 		pm.registerCommand(this, new CommandTemporaryBan(this));
 		pm.registerCommand(this, new CommandOldTemporaryBan(this));

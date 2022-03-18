@@ -53,7 +53,7 @@ public final class PlayerAccount {
 	private MCBan[] mcBanList = new MCBan[0];
 	private boolean mcBansExempt = false;
 	private boolean bypassIPBan = false;
-	private boolean silentMuted = false;
+	private boolean shadowMuted = false;
 	private ChatPrefixType chatPrefixType = ChatPrefixType.AUTO;
 	private boolean mineChatGiftOnNextLogin;
 	private boolean gaveMineChatGift;
@@ -179,14 +179,14 @@ public final class PlayerAccount {
 		return mcBanList.length;
 	}
 
-	public boolean isSilentMuted() {
-		return silentMuted;
+	public boolean isShadowMuted() {
+		return shadowMuted;
 	}
 
-	public void setSilentMuted(boolean silentMuted) {
+	public void setShadowMuted(boolean shadowMuted) {
 		synchronized (BungeeChat.getInstance().fsLock) {
 			load();
-			this.silentMuted = silentMuted;
+			this.shadowMuted = shadowMuted;
 			save();
 		}
 	}
@@ -753,8 +753,8 @@ public final class PlayerAccount {
 							banExpires = Long.parseLong(val);
 						} else if (key.equalsIgnoreCase("BanReason")) {
 							banReason = val;
-						} else if (key.equalsIgnoreCase("SilentMuted")) {
-							silentMuted = val.equals("1");
+						} else if (key.equalsIgnoreCase("ShadowMuted")) {
+							shadowMuted = val.equals("1");
 						} else if (key.equalsIgnoreCase("ChatPrefixType")) {
 							try {
 								chatPrefixType = ChatPrefixType.valueOf(val);
@@ -967,8 +967,8 @@ public final class PlayerAccount {
 			if (banReason != null) {
 				fos.write(("BanReason=" + banReason + "\n").getBytes());
 			}
-			if (silentMuted) {
-				fos.write(("SilentMuted=" + (silentMuted ? "1" : "0") + "\n").getBytes());
+			if (shadowMuted) {
+				fos.write(("ShadowMuted=" + (shadowMuted ? "1" : "0") + "\n").getBytes());
 			}
 			fos.write(("ChatPrefixType=" + chatPrefixType.name() + "\n").getBytes());
 			for (Punishment punishment : punishments) {

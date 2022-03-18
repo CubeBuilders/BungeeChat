@@ -19,12 +19,12 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 import net.md_5.bungee.api.plugin.TabExecutor;
 
-public class CommandSilentMute extends Command implements TabExecutor {
+public class CommandShadowMute extends Command implements TabExecutor {
 
 	public final BungeeChat plugin;
 
-	public CommandSilentMute(BungeeChat plugin) {
-		super("silentmute", null);
+	public CommandShadowMute(BungeeChat plugin) {
+		super("shadowmute", null, "silentmute");
 		this.plugin = plugin;
 	}
 
@@ -38,7 +38,7 @@ public class CommandSilentMute extends Command implements TabExecutor {
 		ProxiedPlayer player = null;
 		if (sender instanceof ProxiedPlayer) {
 			player = (ProxiedPlayer) sender;
-			if (!player.hasPermission("hk.siggi.bungeechat.silentmute")) {
+			if (!player.hasPermission("hk.siggi.bungeechat.shadowmute")) {
 				MessageSender.sendMessage(player, Util.randomNotPermittedMessage());
 				return;
 			}
@@ -71,8 +71,8 @@ public class CommandSilentMute extends Command implements TabExecutor {
 			boolean on = args[1].equalsIgnoreCase("on")
 					|| args[1].equalsIgnoreCase("1")
 					|| args[1].equalsIgnoreCase("yes");
-			info.setSilentMuted(on);
-			BaseComponent message = new TextComponent("Set silent muted for ");
+			info.setShadowMuted(on);
+			BaseComponent message = new TextComponent("Set shadow mute for ");
 			BaseComponent username = new TextComponent(plugin.getUUIDCache().getNameFromUUID(receiverUUID));
 			BaseComponent onTxt = new TextComponent(on ? " On." : " Off.");
 			message.setColor(ChatColor.GOLD);
@@ -83,9 +83,9 @@ public class CommandSilentMute extends Command implements TabExecutor {
 			MessageSender.sendMessage(sender, message);
 			return;
 		}
-		BaseComponent message = new TextComponent("Silent muted for ");
+		BaseComponent message = new TextComponent("Shadow mute for ");
 		BaseComponent username = new TextComponent(plugin.getUUIDCache().getNameFromUUID(receiverUUID));
-		BaseComponent onTxt = new TextComponent(info.isSilentMuted() ? " On." : " Off.");
+		BaseComponent onTxt = new TextComponent(info.isShadowMuted() ? " On." : " Off.");
 		message.setColor(ChatColor.GOLD);
 		username.setColor(ChatColor.AQUA);
 		onTxt.setColor(ChatColor.GREEN);

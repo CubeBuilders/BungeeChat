@@ -6,7 +6,6 @@ import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
-import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import java.io.BufferedReader;
 import java.io.Closeable;
@@ -61,7 +60,7 @@ public final class GroupChat implements ChatHandler {
 		}
 
 		final PlayerAccount info = controller.bungeechat.getPlayerInfo(sender.getUniqueId());
-		final boolean imSilentMuted = info.isSilentMuted();
+		final boolean imShadowMuted = info.isShadowMuted();
 
 		ProcessedChat chat = controller.process(sender, message, !censorDisabled);
 
@@ -84,7 +83,7 @@ public final class GroupChat implements ChatHandler {
 			if (!bypassIgnore && targetPlayer.isIgnoring(sender.getUniqueId())) {
 				continue;
 			}
-			if (!imSilentMuted || targetPlayer.isSilentMuted() || recipient.hasPermission("hk.siggi.bungeechat.silentmute")) {
+			if (!imShadowMuted || targetPlayer.isShadowMuted() || recipient.hasPermission("hk.siggi.bungeechat.shadowmute")) {
 				TextComponent chatMessage = new TextComponent("");
 				controller.bungeechat.addAll(chatMessage, groupPrefix);
 				controller.bungeechat.addAll(chatMessage, shortPrefix);
