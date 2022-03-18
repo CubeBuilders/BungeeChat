@@ -629,6 +629,34 @@ public class PlayerSession {
 		if (same(serverFromName, serverToName)) {
 			return;
 		}
+		if (BungeeChat.getInstance().isGlobalPublicChat()) {
+			if (serverToName == null || serverToName.equals("the game")) serverToName = serverToId;
+			StringBuilder sb = new StringBuilder();
+			sb.append(p.getName());
+			if (serverToName == null) {
+				sb.append(" left.");
+			} else {
+				if (serverFrom == null) {
+					sb.append(" joined to ");
+				} else {
+					sb.append(" went to ");
+				}
+				sb.append(serverToName);
+				sb.append(".");
+			}
+			TextComponent msg = new TextComponent("");
+			TextComponent m = new TextComponent(sb.toString());
+			m.setColor(ChatColor.AQUA);
+			msg.addExtra(m);
+			MessageSender.sendMessage(p, msg);
+			for (ProxiedPlayer pl : BungeeChat.getInstance().getProxy().getPlayers()) {
+				if (pl == p) {
+					continue;
+				}
+				MessageSender.sendMessage(pl, msg);
+			}
+			return;
+		}
 		if (sendToFrom && serverFrom != null) {
 			StringBuilder sb = new StringBuilder();
 			sb.append(p.getName());

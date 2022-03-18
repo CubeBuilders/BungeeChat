@@ -193,6 +193,12 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 	}
 	private boolean pEnabled = false;
 
+	private boolean globalPublicChat = false;
+
+	public boolean isGlobalPublicChat() {
+		return globalPublicChat;
+	}
+
 	private final Map<UUID, PlayerAccount> playerInfo = new HashMap<>();
 	private final HashMap<InetSocketAddress, PlayerSession> sessionMap = new HashMap<>();
 	private final ReentrantReadWriteLock sessionMapLock = new ReentrantReadWriteLock();
@@ -442,6 +448,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		} else {
 			chatCensor.reloadWords();
 		}
+		globalPublicChat = new File(dataFolder, "global-public-chat").exists();
 	}
 
 	public CommandList commandList = null;
@@ -3318,6 +3325,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 	}
 
 	public void sendPublicSpy(String serverKind, String from, String line) {
+		if (isGlobalPublicChat())
+			return; // can see all global public chat anyway
 		BaseComponent msg = new TextComponent(">>C ");
 		msg.setColor(ChatColor.GRAY);
 		BaseComponent extra = new TextComponent(serverKind + ": ");

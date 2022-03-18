@@ -316,16 +316,22 @@ public final class ChatController implements Listener {
 		final boolean imShadowMuted = info.isShadowMuted();
 
 		List<ProxiedPlayer> recipients = new LinkedList<>();
-		String publicChatGroup = session.getPublicChatGroup();
-		bungeechat.getProxy().getPlayers().stream().forEach((p) -> {
-			try {
-				PlayerSession sess = getSession(p);
-				if (sess.getPublicChatGroup().equals(publicChatGroup)) {
-					recipients.add(p);
+		String publicChatGroup;
+		if (bungeechat.isGlobalPublicChat()) {
+			publicChatGroup = "global";
+			recipients.addAll(bungeechat.getProxy().getPlayers());
+		} else {
+			publicChatGroup = session.getPublicChatGroup();
+			bungeechat.getProxy().getPlayers().stream().forEach((p) -> {
+				try {
+					PlayerSession sess = getSession(p);
+					if (sess.getPublicChatGroup().equals(publicChatGroup)) {
+						recipients.add(p);
+					}
+				} catch (Exception e) {
 				}
-			} catch (Exception e) {
-			}
-		});
+			});
+		}
 		//ServerInfo serverInfo = from.getServer().getInfo();
 		//String serverName = serverInfo.getName();
 		//recipients.addAll(serverInfo.getPlayers());
