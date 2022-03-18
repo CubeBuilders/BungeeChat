@@ -637,7 +637,7 @@ public class PlayerSession {
 				sb.append(" left.");
 			} else {
 				if (serverFrom == null) {
-					sb.append(" joined to ");
+					sb.append(" joined in ");
 				} else {
 					sb.append(" went to ");
 				}
