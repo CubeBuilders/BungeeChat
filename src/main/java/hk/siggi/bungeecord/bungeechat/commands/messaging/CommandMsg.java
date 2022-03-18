@@ -123,7 +123,7 @@ public class CommandMsg extends Command implements TabExecutor {
 		List<String> result = new LinkedList<>();
 		ProxiedPlayer p = (ProxiedPlayer) sender;
 		if (args.length == 1) {
-			result.addAll(plugin.getPlayerNameHandler().autocompleteOnlinePlayers(args[0]));
+			result.addAll(plugin.getPlayerNameHandler().autocompleteOnlinePlayers(args[0], sender));
 		}
 		return result;
 	}

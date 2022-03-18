@@ -60,7 +60,7 @@ public class CommandPunish extends Command implements TabExecutor {
 	public Iterable<String> onTabComplete(CommandSender cs, String[] strings) {
 		List<String> list = new ArrayList<>();
 		if (strings.length == 1) {
-			list.addAll(plugin.getPlayerNameHandler().autocompleteOnlinePlayers(strings[0]));
+			list.addAll(plugin.getPlayerNameHandler().autocompleteOnlinePlayers(strings[0], cs));
 		}
 		return list;
 	}

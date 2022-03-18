@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Predicate;
+import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public final class PlayerNameHandler {
@@ -159,11 +160,24 @@ public final class PlayerNameHandler {
 		return matchedNames;
 	}
 
-	public List<String> autocompleteOnlinePlayers(String name) {
-		return autocompleteOnlinePlayers(name, null);
+	public List<String> autocompleteOnlinePlayers(String name, CommandSender sender) {
+		return autocompleteOnlinePlayers(name, sender, null);
 	}
 
-	public List<String> autocompleteOnlinePlayers(String name, Predicate<ProxiedPlayer> allowedPlayers) {
+	public List<String> autocompleteOnlinePlayers(String name, CommandSender sender, Predicate<ProxiedPlayer> allowedPlayers) {
+		if (sender instanceof ProxiedPlayer) {
+			ProxiedPlayer senderPlayer = (ProxiedPlayer) sender;
+			if (!senderPlayer.hasPermission("hk.siggi.bungeechat.vanish")) {
+				Predicate<ProxiedPlayer> originalPredicate = allowedPlayers;
+				allowedPlayers = (p) -> {
+					if (BungeeChat.getInstance().isVanished(p))
+						return false;
+					if (originalPredicate != null)
+						return originalPredicate.test(p);
+					return true;
+				};
+			}
+		}
 		name = name.toLowerCase();
 		int limit = 100;
 		List<String> usernames = new LinkedList<>();
