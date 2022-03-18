@@ -136,6 +136,17 @@ public final class ChatCensor {
 						continue;
 					}
 					String stringToCheck = chatLine.substring(startPos, endPos);
+					while (stringToCheck.startsWith(" ")) {
+						stringToCheck = stringToCheck.substring(1);
+						startPos += 1;
+					}
+					while (stringToCheck.endsWith(" ")) {
+						stringToCheck = stringToCheck.substring(0, stringToCheck.length() - 1);
+						endPos -= 1;
+					}
+					if (stringToCheck.contains(" ") && !isOnWordBoundary(chatLine, startPos, endPos)) {
+						continue;
+					}
 					chatLine = chatLine.substring(0, startPos) + star(stringToCheck) + chatLine.substring(endPos);
 				}
 			}
@@ -144,6 +155,15 @@ public final class ChatCensor {
 			e.printStackTrace();
 		}
 		return chatLine;
+	}
+
+	private static boolean isOnWordBoundary(String line, int startPos, int endPos) {
+		return (startPos == 0 || !isWordCharacter(line.charAt(startPos-1)))
+				&& (endPos == line.length() || !isWordCharacter(line.charAt(endPos)));
+	}
+
+	private static boolean isWordCharacter(char c) {
+		return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c > (char) 127);
 	}
 
 	private static String star(String s) {
