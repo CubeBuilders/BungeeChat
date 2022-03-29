@@ -11,7 +11,6 @@ import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount.ChatPrefixType;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.processChat;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.unify;
-import static hk.siggi.bungeecord.bungeechat.util.Util.same;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.lang.ref.WeakReference;
@@ -25,6 +24,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
 import net.cubebuilders.user.CBUser;
@@ -621,7 +621,7 @@ public class PlayerSession {
 		String serverToId = serverTo == null ? null : serverTo.getName();
 		String serverFromName = serverNameFor(serverFromId);
 		String serverToName = serverNameFor(serverToId);
-		if (same(serverFromName, serverToName)) {
+		if (Objects.equals(serverFromName, serverToName)) {
 			return;
 		}
 		if (BungeeChat.getInstance().isGlobalPublicChat()) {

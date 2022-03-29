@@ -226,16 +226,6 @@ public class Util {
 		OSSpecificUtil.get().compressFile(file);
 	}
 
-	public static boolean same(Object a, Object b) {
-		if (a == null) {
-			return b == null;
-		}
-		if (b == null) {
-			return false;
-		}
-		return a.equals(b);
-	}
-
 	public static int random(int max) {
 		return (int) Math.floor(Math.random() * max);
 	}
