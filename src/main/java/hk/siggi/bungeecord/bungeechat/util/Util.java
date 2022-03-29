@@ -222,10 +222,6 @@ public class Util {
 		return baos.toByteArray();
 	}
 
-	public static void compressFile(File file) {
-		OSSpecificUtil.get().compressFile(file);
-	}
-
 	public static int random(int max) {
 		return (int) Math.floor(Math.random() * max);
 	}

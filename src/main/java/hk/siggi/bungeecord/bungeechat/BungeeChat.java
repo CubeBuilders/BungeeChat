@@ -3178,9 +3178,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		} catch (Exception e) {
 		} finally {
 			chatLogOutputStream = null;
-			if (lastChatLogFile != null) {
-				Util.compressFile(lastChatLogFile);
-			}
 		}
 	}
 
