@@ -2692,7 +2692,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		synchronized (messageReply) {
 			messageReply.remove(player.getName().toLowerCase());
 		}
-		syncSiggiIO(player.getUniqueId(), "CubeBuilders", null);
 	}
 
 	@EventHandler
@@ -2796,58 +2795,9 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		ProxiedPlayer p = event.getPlayer();
 		Server server = event.getServer();
 		sendInfoUpdate(p, server);
-		updateStatus(p, server.getInfo());
 		PlayerSession session = getSession(p);
 		session.travelTo(server.getInfo());
 		session.clearHotbar();
-	}
-
-	public void updateStatus(ProxiedPlayer p) {
-		Server server = p.getServer();
-		if (server != null) {
-			updateStatus(p, server.getInfo());
-		}
-	}
-
-	public void updateStatus(ProxiedPlayer p, ServerInfo server) {
-		if (isVanished(p)) {
-			server = null;
-		}
-		PlayerSession session = getSession(p);
-		if (session.loggingOut) {
-			return;
-		}
-		session.lastAppStatusUpdate = System.currentTimeMillis();
-		String status = null;
-		if (server != null) {
-			String serverName = server.getName();
-			if (serverName.startsWith("hub")) {
-				status = "At the lobby";
-			} else if (serverName.startsWith("factions")) {
-				status = "Playing Factions";
-			} else if (serverName.startsWith("personalspace")) {
-				status = "Personal Space";
-			} else if (serverName.startsWith("creative")) {
-				status = "Creative";
-			} else if (serverName.startsWith("skins")) {
-				status = "Skin Wardrobe";
-			} else if (serverName.startsWith("skyblock")) {
-				status = "Playing Skyblock";
-			} else if (serverName.startsWith("minigames")) {
-				status = "At the minigames lobby";
-			} else if (serverName.startsWith("colorshuffle")) {
-				status = "Playing Color Shuffle";
-			} else if (serverName.startsWith("ffapvp")) {
-				status = "FFA PvP";
-			} else if (serverName.startsWith("mobarena")) {
-				status = "Playing Mob Arena";
-			} else if (serverName.startsWith("quake")) {
-				status = "Playing Quake";
-			} else if (serverName.startsWith("splurge")) {
-				status = "Playing Splurge";
-			}
-		}
-		syncSiggiIO(p.getUniqueId(), "CubeBuilders", status);
 	}
 
 	@EventHandler
@@ -3589,11 +3539,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 		String vList = vanishString.toString();
 		variableServer.updateVariable("vanishlist", vList);
-		if (vanish) {
-			syncSiggiIO(player.getUniqueId(), "CubeBuilders", null);
-		} else {
-			updateStatus(player);
-		}
 	}
 
 	public void fakeJoin(String player) {
@@ -3714,51 +3659,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			s.sendData("BungeeCord", baos.toByteArray());
 		} catch (Exception e) {
 		}
-	}
-
-	public void syncSiggiIO(final UUID uuid, final String app, final String status) {
-		String secret = "Siggi is awesome, and Siggi loves Asia more than America";
-
-		final String userIdentifier = "mc=" + Util.uuidToString(uuid);
-		final long date = System.currentTimeMillis();
-		final String dateStr = Long.toString(date);
-		final String correctSecretCode = Util.bytesToHex(Util.sha1(secret + "/" + userIdentifier + "/" + app + "/" + status + "/" + dateStr));
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					Properties props = new Properties();
-					props.setProperty("uid", userIdentifier);
-					props.setProperty("app", app);
-					if (status != null) {
-						props.setProperty("status", status);
-					}
-					props.setProperty("date", dateStr);
-					props.setProperty("secretcode", correctSecretCode);
-					HttpURLConnection postSiggiIOAPI = Util.postSiggiIOAPI("apistatus", props);
-					byte[] resultBytes = Util.readFullyToArray(postSiggiIOAPI.getInputStream());
-					String result = new String(resultBytes);
-					JsonParser parser = new JsonParser();
-					JsonObject resultObject = (JsonObject) parser.parse(result);
-					JsonElement error = resultObject.get("error");
-					if (error != null) {
-						String errorMsg = error.getAsString();
-						ProxiedPlayer p = getProxy().getPlayer(uuid);
-						if (p != null) {
-							PlayerSession session = getSession(p);
-							session.setSiggiIOAPIResult(null);
-						}
-					} else {
-						ProxiedPlayer p = getProxy().getPlayer(uuid);
-						if (p != null) {
-							PlayerSession session = getSession(p);
-							session.setSiggiIOAPIResult(resultObject);
-						}
-					}
-				} catch (Exception ex) {
-				}
-			}
-		}).start();
 	}
 
 	public void updateGeolocationForOnlinePlayers() {

@@ -111,7 +111,6 @@ public class PlayerSession {
 	}
 
 	private ChatHandler chatHandler = null;
-	long lastAppStatusUpdate;
 	boolean loggingOut = false;
 
 	private JsonObject siggiIOAPIResult = null;
@@ -454,10 +453,6 @@ public class PlayerSession {
 			lastEmptyHotbar = emptyHotbar;
 		} else {
 			lastEmptyHotbar = true;
-		}
-
-		if (now - lastAppStatusUpdate > 10000L) {
-			bc.updateStatus(p);
 		}
 
 		getPlayerInfo().updateTimers();

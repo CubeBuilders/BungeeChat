@@ -174,10 +174,6 @@ public class Util {
 		return sb.toString();
 	}
 
-	public static HttpURLConnection postSiggiIOAPI(String req, Properties request) {
-		return post("http://127.0.0.1:7488/api/" + req, request);
-	}
-
 	public static HttpURLConnection post(String req, Properties request) {
 		try {
 			byte[] and = "&".getBytes();
