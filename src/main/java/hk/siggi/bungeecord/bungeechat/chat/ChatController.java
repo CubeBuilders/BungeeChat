@@ -4,6 +4,7 @@ import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
+import hk.siggi.bungeecord.bungeechat.chat.handler.PublicChatHandler;
 import hk.siggi.bungeecord.bungeechat.chat.string.ChatCharacter;
 import hk.siggi.bungeecord.bungeechat.chat.string.ChatString;
 import hk.siggi.bungeecord.bungeechat.chat.string.patcher.ChatPatcher;
@@ -171,6 +172,11 @@ public final class ChatController implements Listener {
 			return;
 		}
 		ChatHandler chatHandler = session.getChatHandler();
+		if (bungeechat.isVanished(player) && chatHandler instanceof PublicChatHandler) {
+			MessageSender.sendMessage(player, "Use /pub to chat in public chat while vanished.");
+			event.setCancelled(true);
+			return;
+		}
 		doProcessChat(chatHandler, player, message);
 		event.setCancelled(true);
 	}
