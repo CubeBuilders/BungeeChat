@@ -2346,6 +2346,9 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				InitialHandler ih = (InitialHandler) connection;
 				LoginResult result = ih.getLoginProfile();
 				LoginResult.Property[] properties = result.getProperties();
+				if (properties == null) {
+					properties = new LoginResult.Property[0];
+				}
 				for (LoginResult.Property prop : properties) {
 					if (prop.getName().equals("textures")) {
 						return prop;
