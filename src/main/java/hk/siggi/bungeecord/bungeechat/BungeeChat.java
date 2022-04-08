@@ -2352,7 +2352,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 					}
 				}
 				if (add) {
-					LoginResult.Property[] newProps = new LoginResult.Property[properties.length];
+					LoginResult.Property[] newProps = new LoginResult.Property[properties.length + 1];
 					for (int i = 0; i < properties.length; i++) {
 						newProps[i] = properties[i];
 					}
