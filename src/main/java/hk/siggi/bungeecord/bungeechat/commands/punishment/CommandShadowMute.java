@@ -66,8 +66,11 @@ public class CommandShadowMute extends Command implements TabExecutor {
 				return;
 			}
 		}
+		if (args.length == 1) {
+			args = new String[]{args[0], "on"};
+		}
 		PlayerAccount info = plugin.getPlayerInfo(receiverUUID);
-		if (args.length == 2) {
+		if (!args[1].equals("check")) {
 			boolean on = args[1].equalsIgnoreCase("on")
 					|| args[1].equalsIgnoreCase("1")
 					|| args[1].equalsIgnoreCase("yes");
@@ -108,6 +111,7 @@ public class CommandShadowMute extends Command implements TabExecutor {
 			};
 			addSuggestion.accept("on");
 			addSuggestion.accept("off");
+			addSuggestion.accept("check");
 		}
 		return list;
 	}
