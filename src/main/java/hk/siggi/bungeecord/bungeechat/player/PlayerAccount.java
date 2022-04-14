@@ -53,7 +53,7 @@ public final class PlayerAccount {
 	private MCBan[] mcBanList = new MCBan[0];
 	private boolean mcBansExempt = false;
 	private boolean bypassIPBan = false;
-	private boolean shadowMuted = false;
+	private long shadowMuteExpiry = 0L;
 	private ChatPrefixType chatPrefixType = ChatPrefixType.AUTO;
 	private boolean mineChatGiftOnNextLogin;
 	private boolean gaveMineChatGift;
@@ -180,13 +180,29 @@ public final class PlayerAccount {
 	}
 
 	public boolean isShadowMuted() {
-		return shadowMuted;
+		long expiry = getShadowMuteExpiry();
+		return expiry != 0L && expiry > System.currentTimeMillis();
 	}
 
 	public void setShadowMuted(boolean shadowMuted) {
+		if (!shadowMuted) {
+			setShadowMuteExpiry(0L);
+			return;
+		}
+		long now = System.currentTimeMillis();
+		long beginningOfDayUTC = now - (now % 86400000L);
+		long plus2Days = beginningOfDayUTC + (86400000L * 2L);
+		setShadowMuteExpiry(plus2Days);
+	}
+
+	public long getShadowMuteExpiry() {
+		return shadowMuteExpiry;
+	}
+
+	public void setShadowMuteExpiry(long shadowMuteExpiry) {
 		synchronized (BungeeChat.getInstance().fsLock) {
 			load();
-			this.shadowMuted = shadowMuted;
+			this.shadowMuteExpiry = shadowMuteExpiry;
 			save();
 		}
 	}
@@ -753,8 +769,8 @@ public final class PlayerAccount {
 							banExpires = Long.parseLong(val);
 						} else if (key.equalsIgnoreCase("BanReason")) {
 							banReason = val;
-						} else if (key.equalsIgnoreCase("ShadowMuted")) {
-							shadowMuted = val.equals("1");
+						} else if (key.equalsIgnoreCase("ShadowMuteExpiry")) {
+							shadowMuteExpiry = Long.parseLong(val);
 						} else if (key.equalsIgnoreCase("ChatPrefixType")) {
 							try {
 								chatPrefixType = ChatPrefixType.valueOf(val);
@@ -920,6 +936,7 @@ public final class PlayerAccount {
 		if (true) {
 			return;
 		}
+		long now = System.currentTimeMillis();
 		FileOutputStream fos = null;
 		try {
 			fos = new FileOutputStream(getPlayerFileTxt(player));
@@ -967,8 +984,8 @@ public final class PlayerAccount {
 			if (banReason != null) {
 				fos.write(("BanReason=" + banReason + "\n").getBytes());
 			}
-			if (shadowMuted) {
-				fos.write(("ShadowMuted=" + (shadowMuted ? "1" : "0") + "\n").getBytes());
+			if (shadowMuteExpiry > now) {
+				fos.write(("ShadowMuteExpiry=" + shadowMuteExpiry + "\n").getBytes());
 			}
 			fos.write(("ChatPrefixType=" + chatPrefixType.name() + "\n").getBytes());
 			for (Punishment punishment : punishments) {
