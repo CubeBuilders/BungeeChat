@@ -319,6 +319,22 @@ public final class ChatController implements Listener {
 			bungeechat.youAreMuted(from, session.user);
 			return;
 		}
+		long playTime = session.getPlayTime();
+		if (playTime < (3600000L * 4L)) {
+			if (playTime < (1800000L) && !message.contains("** **")) {
+				// quick and dirty way of detecting if one curse word directly follows another
+				String filtered = bungeechat.getChatCensor().filter(message);
+				if (filtered.contains("** **")) {
+					info.setShadowMuted(true);
+				}
+			}
+			String lowercaseMessage = message.toLowerCase();
+			if (
+					lowercaseMessage.contains("nigger")
+			) {
+				info.setShadowMuted(true);
+			}
+		}
 		final boolean imShadowMuted = info.isShadowMuted();
 
 		List<ProxiedPlayer> recipients = new LinkedList<>();
