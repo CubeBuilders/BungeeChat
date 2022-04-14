@@ -565,7 +565,11 @@ public final class ChatController implements Listener {
 		patcher.forEach("wut", (w) -> w.insert(1, "h").replace(2, "a"));
 
 		patcher.forEach("u", (w) -> w.insert(0, w.charAt(0) == 'U' ? "Yo" : "yo").replace(2, "u"));
-		patcher.forEach("y", (w) -> w.insert(0, w.charAt(0) == 'Y' ? "Wh" : "wh").replace(2, "y"));
+		patcher.forEach("y", (w) -> {
+			if (!w.getAfter().toLowerCase().startsWith("'all")) { // do not replace y'all with why'all
+				w.insert(0, w.charAt(0) == 'Y' ? "Wh" : "wh").replace(2, "y");
+			}
+		});
 
 		patcher.forEach("iz", (w) -> w.replaceWhole(w.charAt(0) == 'I' ? "Is" : "is"));
 

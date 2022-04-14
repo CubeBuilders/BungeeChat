@@ -68,4 +68,12 @@ public class ChatMatchedWord implements CharSequence {
 	public ChatMatchedWord subSequence(int start, int end) {
 		return new ChatMatchedWord(string, position + start, position + end);
 	}
+
+	public String getBefore() {
+		return string.toRawString().substring(0, position);
+	}
+
+	public String getAfter() {
+		return string.toRawString().substring(position + length);
+	}
 }
