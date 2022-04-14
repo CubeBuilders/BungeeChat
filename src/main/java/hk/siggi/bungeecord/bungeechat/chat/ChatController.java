@@ -554,6 +554,10 @@ public final class ChatController implements Listener {
 		patcher.forEach("wont", (w) -> w.insert(3, "'"));
 		patcher.forEach("wouldnt", (w) -> w.insert(6, "'"));
 		patcher.forEach("couldnt", (w) -> w.insert(6, "'"));
+		patcher.forEach("shouldnt", (w) -> w.insert(7, "'"));
+		patcher.forEach("would of", (w) -> w.replace(6, "ha").insert(8, "ve"));
+		patcher.forEach("could of", (w) -> w.replace(6, "ha").insert(8, "ve"));
+		patcher.forEach("should of", (w) -> w.replace(7, "ha").insert(9, "ve spent more time in English class"));
 		patcher.forEach("didnt", (w) -> w.insert(4, "'"));
 		patcher.forEach("doesnt", (w) -> w.insert(5, "'"));
 		patcher.forEach("im", (w) -> w.insert(1, "'"));
