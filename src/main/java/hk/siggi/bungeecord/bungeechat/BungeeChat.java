@@ -3234,7 +3234,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 		if (c instanceof PublicChatLog) {
 			PublicChatLog cc = (PublicChatLog) c;
-			sendPublicSpy(cc.server, cc.sender.username, cc.message);
+			sendPublicSpy(cc.server, cc.sender.username, cc.sender.uuid, cc.message);
 			return true;
 		} else if (c instanceof FactionChatLog) {
 			FactionChatLog cc = (FactionChatLog) c;
@@ -3243,15 +3243,15 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			for (int i = 0; i < recipients.length; i++) {
 				recipients[i] = witnesses[i].username;
 			}
-			sendFactionSpy(cc.server, cc.sender.username, recipients, cc.message);
+			sendFactionSpy(cc.server, cc.sender.username, cc.sender.uuid, recipients, cc.message);
 			return true;
 		} else if (c instanceof PrivateChatLog) {
 			PrivateChatLog cc = (PrivateChatLog) c;
-			sendPrivateSpy(cc.sender.username, cc.recipient.username, cc.message);
+			sendPrivateSpy(cc.sender.username, cc.sender.uuid, cc.recipient.username, cc.recipient.uuid, cc.message);
 			return true;
 		} else if (c instanceof MailChatLog) {
 			MailChatLog cc = (MailChatLog) c;
-			sendMailSpy(cc.sender.username, cc.recipient.username, cc.message);
+			sendMailSpy(cc.sender.username, cc.sender.uuid, cc.recipient.username, cc.recipient.uuid, cc.message);
 			return true;
 		} else if (c instanceof GroupChatLog) {
 			GroupChatLog cc = (GroupChatLog) c;
@@ -3265,7 +3265,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			if (gc != null) {
 				chatName = gc.getName();
 			}
-			sendGroupSpy(gc, chatName, cc.groupName, cc.sender.username, recipients, cc.message);
+			sendGroupSpy(gc, chatName, cc.groupName, cc.sender.username, cc.sender.uuid, recipients, cc.message);
 			return true;
 		} else if (c instanceof StaffChatLog) {
 			StaffChatLog cc = (StaffChatLog) c;
@@ -3274,7 +3274,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		return false;
 	}
 
-	public void sendPublicSpy(String serverKind, String from, String line) {
+	public void sendPublicSpy(String serverKind, String from, UUID fromUuid, String line) {
 		if (isGlobalPublicChat())
 			return; // can see all global public chat anyway
 		BaseComponent msg = new TextComponent(">>C ");
@@ -3289,7 +3289,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		msg.addExtra(extra);
 		extra = new TextComponent(line);
 		msg.addExtra(extra);
-		ArrayList<ProxiedPlayer> except = new ArrayList<>();
+		Set<ProxiedPlayer> except = new HashSet<>();
 		getProxy().getPlayers().stream().forEach((p) -> {
 			try {
 				PlayerSession session = getSession(p);
@@ -3299,10 +3299,10 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			} catch (Exception e) {
 			}
 		});
-		sendSpyMessage(msg, except);
+		sendSpyMessage(msg, Arrays.asList(fromUuid), except);
 	}
 
-	public void sendPrivateSpy(String from, String to, String line) {
+	public void sendPrivateSpy(String from, UUID fromUuid, String to, UUID toUuid, String line) {
 		ProxiedPlayer pFrom = getProxy().getPlayer(from);
 		ProxiedPlayer pTo = getProxy().getPlayer(to);
 		PlayerAccount accountFrom = getPlayerInfo(getUUIDCache().getUUIDFromName(from));
@@ -3312,7 +3312,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			return;
 		}
 
-		ArrayList<ProxiedPlayer> exceptPlayers = new ArrayList<>();
+		Set<ProxiedPlayer> exceptPlayers = new HashSet<>();
 		{
 			if (pFrom != null) {
 				exceptPlayers.add(pFrom);
@@ -3335,10 +3335,10 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		extra = new TextComponent(line);
 		extra.setColor(ChatColor.WHITE);
 		msg.addExtra(extra);
-		sendSpyMessage(msg, exceptPlayers);
+		sendSpyMessage(msg, Arrays.asList(fromUuid, toUuid), exceptPlayers);
 	}
 
-	public void sendMailSpy(String from, String to, String line) {
+	public void sendMailSpy(String from, UUID fromUuid, String to, UUID toUuid, String line) {
 		ProxiedPlayer pFrom = getProxy().getPlayer(from);
 		ProxiedPlayer pTo = getProxy().getPlayer(to);
 		PlayerAccount accountFrom = getPlayerInfo(getUUIDCache().getUUIDFromName(from));
@@ -3348,7 +3348,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			return;
 		}
 
-		ArrayList<ProxiedPlayer> exceptPlayers = new ArrayList<>();
+		Set<ProxiedPlayer> exceptPlayers = new HashSet<>();
 		{
 			if (pFrom != null) {
 				exceptPlayers.add(pFrom);
@@ -3371,11 +3371,11 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		extra = new TextComponent(line);
 		extra.setColor(ChatColor.WHITE);
 		msg.addExtra(extra);
-		sendSpyMessage(msg, exceptPlayers);
+		sendSpyMessage(msg, Arrays.asList(fromUuid, toUuid), exceptPlayers);
 	}
 
-	public void sendGroupSpy(GroupChat gc, String chatName, String canonicalName, String from, String[] to, String line) {
-		ArrayList<ProxiedPlayer> exceptPlayers = new ArrayList<>();
+	public void sendGroupSpy(GroupChat gc, String chatName, String canonicalName, String from, UUID fromUuid, String[] to, String line) {
+		Set<ProxiedPlayer> exceptPlayers = new HashSet<>();
 		{
 			for (UUID uuid : gc.getUsers()) {
 				ProxiedPlayer p = getProxiedPlayer(uuid);
@@ -3407,11 +3407,11 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 		extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(seenBy)}));
 		msg.addExtra(extra);
-		sendSpyMessage(msg, exceptPlayers);
+		sendSpyMessage(msg, Arrays.asList(fromUuid), exceptPlayers);
 	}
 
-	public void sendFactionSpy(String serverKind, String from, String[] to, String line) {
-		ArrayList<ProxiedPlayer> exceptPlayers = new ArrayList<>();
+	public void sendFactionSpy(String serverKind, String from, UUID fromUuid, String[] to, String line) {
+		Set<ProxiedPlayer> exceptPlayers = new HashSet<>();
 		{
 			ProxiedPlayer fr = getProxy().getPlayer(from);
 			if (fr != null) {
@@ -3421,9 +3421,9 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				if (s == null) {
 					continue;
 				}
-				fr = getProxy().getPlayer(s);
-				if (fr != null) {
-					exceptPlayers.add(fr);
+				ProxiedPlayer recipient = getProxy().getPlayer(s);
+				if (recipient != null) {
+					exceptPlayers.add(recipient);
 				}
 			}
 		}
@@ -3450,19 +3450,23 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 		extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(seenBy)}));
 		msg.addExtra(extra);
-		sendSpyMessage(msg, exceptPlayers);
+		sendSpyMessage(msg, Arrays.asList(fromUuid), exceptPlayers);
 	}
 
-	public void sendSpyMessage(BaseComponent message, List<ProxiedPlayer> exceptPlayers) {
+	public void sendSpyMessage(BaseComponent message, Collection<UUID> involvedPlayers, Set<ProxiedPlayer> exceptPlayers) {
+		outerLoop:
 		for (ProxiedPlayer p : getProxy().getPlayers()) {
 			if (exceptPlayers.contains(p)) {
 				continue;
 			}
 			if (p.hasPermission("hk.siggi.bungeechat.spy")) {
-				boolean iAmASpy;
-				PlayerAccount pp = getPlayerInfo(p.getUniqueId());
-				iAmASpy = !pp.isNoSpy();
-				if (iAmASpy) {
+				PlayerAccount info = getPlayerInfo(p.getUniqueId());
+				for (UUID involvedPlayer : involvedPlayers) {
+					if (info.isIgnoring(involvedPlayer)) {
+						continue outerLoop;
+					}
+				}
+				if (!info.isNoSpy()) {
 					MessageSender.sendMessage(p, message);
 				}
 			}
