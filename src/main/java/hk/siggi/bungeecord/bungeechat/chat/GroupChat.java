@@ -80,7 +80,7 @@ public final class GroupChat implements ChatHandler {
 				continue;
 			}
 			PlayerAccount targetPlayer = controller.bungeechat.getPlayerInfo(recipient.getUniqueId());
-			if (!bypassIgnore && targetPlayer.isIgnoring(sender.getUniqueId())) {
+			if ((!bypassIgnore && targetPlayer.isIgnoring(sender.getUniqueId())) || info.isIgnoring(recipient.getUniqueId())) {
 				continue;
 			}
 			if (!imShadowMuted || targetPlayer.isShadowMuted() || recipient.hasPermission("hk.siggi.bungeechat.shadowmute")) {

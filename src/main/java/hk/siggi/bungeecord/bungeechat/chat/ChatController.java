@@ -370,7 +370,7 @@ public final class ChatController implements Listener {
 		boolean bypassIgnore = from.hasPermission("hk.siggi.bungeechat.ignoreexempt");
 		for (ProxiedPlayer recipient : recipients) {
 			PlayerAccount targetPlayer = bungeechat.getPlayerInfo(recipient.getUniqueId());
-			if (!bypassIgnore && targetPlayer.isIgnoring(from.getUniqueId())) {
+			if ((!bypassIgnore && targetPlayer.isIgnoring(from.getUniqueId())) || info.isIgnoring(recipient.getUniqueId())) {
 				continue;
 			}
 			boolean recipientHasShadowMutePermission = recipient.hasPermission("hk.siggi.bungeechat.shadowmute");
