@@ -624,6 +624,8 @@ public class PlayerSession {
 		if (Objects.equals(serverFromName, serverToName)) {
 			return;
 		}
+		UUID myUuid = p.getUniqueId();
+		PlayerAccount myAccount = BungeeChat.getInstance().getPlayerInfo(myUuid);
 		if (BungeeChat.getInstance().isGlobalPublicChat()) {
 			if (serverToName == null || serverToName.equals("the game")) serverToName = serverToId;
 			StringBuilder sb = new StringBuilder();
@@ -646,6 +648,9 @@ public class PlayerSession {
 			MessageSender.sendMessage(p, msg);
 			for (ProxiedPlayer pl : BungeeChat.getInstance().getProxy().getPlayers()) {
 				if (pl == p) {
+					continue;
+				}
+				if (myAccount.isIgnoring(pl.getUniqueId()) || BungeeChat.getInstance().getPlayerInfo(pl.getUniqueId()).isIgnoring(myUuid)) {
 					continue;
 				}
 				MessageSender.sendMessage(pl, msg);
@@ -674,6 +679,9 @@ public class PlayerSession {
 				if (pl == p) {
 					continue;
 				}
+				if (myAccount.isIgnoring(pl.getUniqueId()) || BungeeChat.getInstance().getPlayerInfo(pl.getUniqueId()).isIgnoring(myUuid)) {
+					continue;
+				}
 				MessageSender.sendMessage(pl, msg);
 			}
 		}
@@ -698,6 +706,9 @@ public class PlayerSession {
 			MessageSender.sendMessage(p, msg);
 			for (ProxiedPlayer pl : serverTo.getPlayers()) {
 				if (pl == p) {
+					continue;
+				}
+				if (myAccount.isIgnoring(pl.getUniqueId()) || BungeeChat.getInstance().getPlayerInfo(pl.getUniqueId()).isIgnoring(myUuid)) {
 					continue;
 				}
 				MessageSender.sendMessage(pl, msg);
