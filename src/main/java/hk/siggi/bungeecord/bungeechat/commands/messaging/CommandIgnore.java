@@ -10,6 +10,7 @@ import hk.siggi.bungeecord.bungeechat.UUIDCache;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Consumer;
 import net.md_5.bungee.api.CommandSender;
@@ -81,7 +82,16 @@ public class CommandIgnore extends Command implements TabExecutor {
 			}
 			break;
 			case "list": {
-
+				Set<UUID> ignoreUUIDs = playerInfo.getIgnores();
+				if (ignoreUUIDs.isEmpty()) {
+					MessageSender.sendMessage(pl, "&6You are not ignoring anyone at this time.");
+				} else {
+					MessageSender.sendMessage(pl, "&6Your ignore list:");
+					for (UUID ignoreUUID : ignoreUUIDs) {
+						String name = playerNameHandler.getNameByPlayer(ignoreUUID);
+						MessageSender.sendMessage(pl, "&6- " + name);
+					}
+				}
 			}
 			break;
 			default: {
