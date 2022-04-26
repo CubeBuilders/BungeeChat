@@ -421,24 +421,11 @@ public final class ChatController implements Listener {
 
 		PlayerAccount toAccount = bungeechat.getPlayerInfo(to.getUniqueId());
 
-		if (fromAccount.isIgnoring(to.getUniqueId())) {
+		if (fromAccount.isIgnoring(to.getUniqueId()) || (toAccount.isIgnoring(from.getUniqueId()) && !from.hasPermission("hk.siggi.bungeechat.ignoreexempt"))) {
 			TextComponent baseFail = new TextComponent("");
-			TextComponent cannotPM = new TextComponent("Cannot PM ");
+			TextComponent cannotPM = new TextComponent("Unable to send a message to ");
 			List<TextComponent> usernameComponents = bungeechat.getGroupInfo().usernameComponent(to, true, false, false, false);
-			TextComponent because = new TextComponent(" because you are ignoring them.");
-			cannotPM.setColor(ChatColor.RED);
-			because.setColor(ChatColor.RED);
-			baseFail.addExtra(cannotPM);
-			bungeechat.addAll(baseFail, usernameComponents);
-			baseFail.addExtra(because);
-			MessageSender.sendMessage(from, baseFail);
-			return;
-		}
-		if (toAccount.isIgnoring(from.getUniqueId()) && !from.hasPermission("hk.siggi.bungeechat.ignoreexempt")) {
-			TextComponent baseFail = new TextComponent("");
-			TextComponent cannotPM = new TextComponent("Cannot PM ");
-			List<TextComponent> usernameComponents = bungeechat.getGroupInfo().usernameComponent(to, true, false, false, false);
-			TextComponent because = new TextComponent(" because you are on their ignore list.");
+			TextComponent because = new TextComponent(". This may be due to privacy settings on your account or their account.");
 			cannotPM.setColor(ChatColor.RED);
 			because.setColor(ChatColor.RED);
 			baseFail.addExtra(cannotPM);
