@@ -431,6 +431,7 @@ public final class ChatController implements Listener {
 			baseFail.addExtra(cannotPM);
 			bungeechat.addAll(baseFail, usernameComponents);
 			baseFail.addExtra(because);
+			MessageSender.sendMessage(from, baseFail);
 			return;
 		}
 		if (toAccount.isIgnoring(from.getUniqueId()) && !from.hasPermission("hk.siggi.bungeechat.ignoreexempt")) {
@@ -443,6 +444,7 @@ public final class ChatController implements Listener {
 			baseFail.addExtra(cannotPM);
 			bungeechat.addAll(baseFail, usernameComponents);
 			baseFail.addExtra(because);
+			MessageSender.sendMessage(from, baseFail);
 			return;
 		}
 
