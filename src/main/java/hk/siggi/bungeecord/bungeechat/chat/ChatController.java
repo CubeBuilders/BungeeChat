@@ -370,7 +370,13 @@ public final class ChatController implements Listener {
 		boolean bypassIgnore = from.hasPermission("hk.siggi.bungeechat.ignoreexempt");
 		for (ProxiedPlayer recipient : recipients) {
 			PlayerAccount targetPlayer = bungeechat.getPlayerInfo(recipient.getUniqueId());
-			if ((!bypassIgnore && targetPlayer.isIgnoring(from.getUniqueId())) || info.isIgnoring(recipient.getUniqueId())) {
+			boolean recipientBypassIgnore = recipient.hasPermission("hk.siggi.bungeechat.ignoreexempt");
+			if (ChatController.isHidden(
+					info.isIgnoring(recipient.getUniqueId()),
+					bypassIgnore,
+					targetPlayer.isIgnoring(from.getUniqueId()),
+					recipientBypassIgnore
+			)) {
 				continue;
 			}
 			boolean recipientHasShadowMutePermission = recipient.hasPermission("hk.siggi.bungeechat.shadowmute");
@@ -420,8 +426,12 @@ public final class ChatController implements Listener {
 		ProcessedChat chat = process(from, message, true);
 
 		PlayerAccount toAccount = bungeechat.getPlayerInfo(to.getUniqueId());
-
-		if (fromAccount.isIgnoring(to.getUniqueId()) || (toAccount.isIgnoring(from.getUniqueId()) && !from.hasPermission("hk.siggi.bungeechat.ignoreexempt"))) {
+		if (ChatController.isHidden(
+				fromAccount.isIgnoring(to.getUniqueId()),
+				from.hasPermission("hk.siggi.bungeechat.ignoreexempt"),
+				toAccount.isIgnoring(from.getUniqueId()),
+				to.hasPermission("hk.siggi.bungeechat.ignoreexempt")
+		)) {
 			TextComponent baseFail = new TextComponent("");
 			TextComponent cannotPM = new TextComponent("Unable to send a message to ");
 			List<TextComponent> usernameComponents = bungeechat.getGroupInfo().usernameComponent(to, true, false, false, false);
@@ -801,5 +811,9 @@ public final class ChatController implements Listener {
 		public int getEnd() {
 			return offset + original.length();
 		}
+	}
+
+	public static boolean isHidden(boolean user1Ignoring, boolean user1Exempt, boolean user2Ignoring, boolean user2Exempt) {
+		return ((user1Ignoring && !user2Exempt) || (user2Ignoring && !user1Exempt));
 	}
 }

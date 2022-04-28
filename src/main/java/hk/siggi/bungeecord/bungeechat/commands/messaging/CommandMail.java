@@ -4,6 +4,7 @@ import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerNameHandler;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
+import hk.siggi.bungeecord.bungeechat.chat.ChatController;
 import hk.siggi.bungeecord.bungeechat.player.Mail;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.Util;
@@ -100,28 +101,22 @@ public class CommandMail extends Command implements TabExecutor {
 			}
 			String message = Util.getLine(args, 2);
 			PlayerAccount recipient = plugin.getPlayerInfo(recipientUUID);
-			if (playerInfo.isIgnoring(player.getUniqueId())) {
+			if (ChatController.isHidden(
+					playerInfo.isIgnoring(recipientUUID),
+					player.hasPermission("hk.siggi.bungeechat.ignoreexempt"),
+					recipient.isIgnoring(player.getUniqueId()),
+					false
+			)) {
 				TextComponent baseFail = new TextComponent("");
 				TextComponent cannotPM = new TextComponent("Cannot send mail to ");
 				TextComponent targetUserTC = new TextComponent(plugin.getPlayerNameHandler().getNameByPlayer(recipientUUID));
-				TextComponent because = new TextComponent(" because you are ignoring them.");
+				TextComponent because = new TextComponent(" due to privacy settings.");
 				cannotPM.setColor(ChatColor.RED);
 				because.setColor(ChatColor.RED);
 				baseFail.addExtra(cannotPM);
 				baseFail.addExtra(targetUserTC);
 				baseFail.addExtra(because);
-				return;
-			}
-			if (recipient.isIgnoring(player.getUniqueId()) && !player.hasPermission("hk.siggi.bungeechat.ignoreexempt")) {
-				TextComponent baseFail = new TextComponent("");
-				TextComponent cannotPM = new TextComponent("Cannot send mail to ");
-				TextComponent targetUserTC = new TextComponent(plugin.getPlayerNameHandler().getNameByPlayer(recipientUUID));
-				TextComponent because = new TextComponent(" because you are on their ignore list.");
-				cannotPM.setColor(ChatColor.RED);
-				because.setColor(ChatColor.RED);
-				baseFail.addExtra(cannotPM);
-				baseFail.addExtra(targetUserTC);
-				baseFail.addExtra(because);
+				sender.sendMessage(baseFail);
 				return;
 			}
 			if (recipient.getMail().length >= recipient.getMaxMail()) {

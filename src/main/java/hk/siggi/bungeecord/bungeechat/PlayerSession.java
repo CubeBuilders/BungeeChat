@@ -2,6 +2,7 @@ package hk.siggi.bungeecord.bungeechat;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import hk.siggi.bungeecord.bungeechat.chat.ChatController;
 import hk.siggi.bungeecord.bungeechat.chat.handler.ChatHandler;
 import hk.siggi.bungeecord.bungeechat.chat.handler.PublicChatHandler;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandImpersonate;
@@ -626,6 +627,7 @@ public class PlayerSession {
 		}
 		UUID myUuid = p.getUniqueId();
 		PlayerAccount myAccount = BungeeChat.getInstance().getPlayerInfo(myUuid);
+		boolean imIgnoreExempt = p.hasPermission("hk.siggi.bungeechat.ignoreexempt");
 		if (BungeeChat.getInstance().isGlobalPublicChat()) {
 			if (serverToName == null || serverToName.equals("the game")) serverToName = serverToId;
 			StringBuilder sb = new StringBuilder();
@@ -650,7 +652,12 @@ public class PlayerSession {
 				if (pl == p) {
 					continue;
 				}
-				if (myAccount.isIgnoring(pl.getUniqueId()) || BungeeChat.getInstance().getPlayerInfo(pl.getUniqueId()).isIgnoring(myUuid)) {
+				if (ChatController.isHidden(
+						myAccount.isIgnoring(pl.getUniqueId()),
+						imIgnoreExempt,
+						BungeeChat.getInstance().getPlayerInfo(pl.getUniqueId()).isIgnoring(myUuid),
+						pl.hasPermission("hk.siggi.bungeechat.ignoreexempt")
+				)) {
 					continue;
 				}
 				MessageSender.sendMessage(pl, msg);
@@ -679,7 +686,12 @@ public class PlayerSession {
 				if (pl == p) {
 					continue;
 				}
-				if (myAccount.isIgnoring(pl.getUniqueId()) || BungeeChat.getInstance().getPlayerInfo(pl.getUniqueId()).isIgnoring(myUuid)) {
+				if (ChatController.isHidden(
+						myAccount.isIgnoring(pl.getUniqueId()),
+						imIgnoreExempt,
+						BungeeChat.getInstance().getPlayerInfo(pl.getUniqueId()).isIgnoring(myUuid),
+						pl.hasPermission("hk.siggi.bungeechat.ignoreexempt")
+				)) {
 					continue;
 				}
 				MessageSender.sendMessage(pl, msg);
@@ -708,7 +720,12 @@ public class PlayerSession {
 				if (pl == p) {
 					continue;
 				}
-				if (myAccount.isIgnoring(pl.getUniqueId()) || BungeeChat.getInstance().getPlayerInfo(pl.getUniqueId()).isIgnoring(myUuid)) {
+				if (ChatController.isHidden(
+						myAccount.isIgnoring(pl.getUniqueId()),
+						imIgnoreExempt,
+						BungeeChat.getInstance().getPlayerInfo(pl.getUniqueId()).isIgnoring(myUuid),
+						pl.hasPermission("hk.siggi.bungeechat.ignoreexempt")
+				)) {
 					continue;
 				}
 				MessageSender.sendMessage(pl, msg);
