@@ -57,7 +57,7 @@ public class PlayerSession {
 	public long ontimeOnLogin = 0L;
 	public long timeInLast2Weeks = 0L;
 	public volatile boolean showingAfkTimer = false;
-	public volatile int afkKickTimer = 1200;
+	public volatile int afkKickTimer = 86400;
 	public volatile int afkTime = 0;
 	private WeakReference<ProxiedPlayer> playerRef = null;
 	public String clientBrand = "";
