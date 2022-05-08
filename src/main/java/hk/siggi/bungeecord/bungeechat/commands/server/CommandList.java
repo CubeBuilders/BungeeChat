@@ -174,72 +174,7 @@ public class CommandList extends Command {
 						continue;
 					}
 					TextComponent playerInfo = new TextComponent((plugin.getGroupInfo().isStaff(p) ? BungeeChat.staroutline : "") + p.getDisplayName());
-					//int memberRank = 0;
-					//int staffRank = 0;
-					boolean retiredStaff = false;
-					for (String group : p.getGroups()) {
-						/*if (group.equalsIgnoreCase("default")) {
-						 memberRank = Math.max(memberRank, 0);
-						 } else {
-						 memberRank = Math.max(memberRank, 1);
-						 }
-						 if (group.equalsIgnoreCase("member")) {
-						 memberRank = Math.max(memberRank, 1);
-						 }
-						 if (group.equalsIgnoreCase("stonedonator")) {
-						 memberRank = Math.max(memberRank, 2);
-						 }
-						 if (group.equalsIgnoreCase("irondonator")) {
-						 memberRank = Math.max(memberRank, 3);
-						 }
-						 if (group.equalsIgnoreCase("golddonator")) {
-						 memberRank = Math.max(memberRank, 4);
-						 }
-						 if (group.equalsIgnoreCase("diamonddonator")) {
-						 memberRank = Math.max(memberRank, 5);
-						 }
-						 if (group.equalsIgnoreCase("emeralddonator")) {
-						 memberRank = Math.max(memberRank, 6);
-						 }
-						 if (group.equalsIgnoreCase("obsidiandonator")) {
-						 memberRank = Math.max(memberRank, 7);
-						 }
-						 if (group.equalsIgnoreCase("bedrockdonator")) {
-						 memberRank = Math.max(memberRank, 8);
-						 }
-						 if (staffRank >= 0) {
-						 if (group.equalsIgnoreCase("helper")) {
-						 staffRank = Math.max(staffRank, 1);
-						 }
-						 if (group.equalsIgnoreCase("moderator")) {
-						 staffRank = Math.max(staffRank, 2);
-						 }
-						 if (group.equalsIgnoreCase("admin")) {
-						 staffRank = Math.max(staffRank, 3);
-						 }
-						 if (group.equalsIgnoreCase("headadmin")) {
-						 staffRank = Math.max(staffRank, 4);
-						 }
-						 if (group.equalsIgnoreCase("manager")) {
-						 staffRank = Math.max(staffRank, 5);
-						 }
-						 if (group.equalsIgnoreCase("coowner")) {
-						 staffRank = Math.max(staffRank, 6);
-						 }
-						 if (group.equalsIgnoreCase("owner")) {
-						 staffRank = Math.max(staffRank, 7);
-						 }
-						 }*/
-						if (group.equalsIgnoreCase("retired")) {
-							retiredStaff = true;
-						}
-						/*if (group.equalsIgnoreCase("hiddenstaff")) {
-						 staffRank = -1;
-						 }*/
-					}
-					//if (staffRank == -1) {
-					//	staffRank = 0;
-					//}
+					boolean retiredStaff = p.getGroups().contains("retired");
 
 					TextComponent hover = new TextComponent("");
 					boolean didHoverText = false;
