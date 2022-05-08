@@ -65,14 +65,6 @@ public class CommandList extends Command {
 	}
 
 	public boolean isHidden(ProxiedPlayer p) {
-		/*try {
-		 Plugin pl = plugin.getProxy().getPluginManager().getPlugin("BungeeChat");
-		 Class clazz = pl.getClass();
-		 Method method = clazz.getMethod("isVanished", ProxiedPlayer.class);
-		 return ((Boolean) method.invoke(pl, p)).booleanValue();
-		 } catch (Exception e) {
-		 }
-		 return false;*/
 		return plugin.isVanished(p);
 	}
 
@@ -327,9 +319,6 @@ public class CommandList extends Command {
 						playerCount.setText(" (" + playerCountInt + "): ");
 					}
 				}
-				/*TextComponent playerListComponent = new TextComponent(playerListString);
-				 playerListComponent.setColor(ChatColor.WHITE);
-				 playersHere.addExtra(playerListComponent);*/
 				MessageSender.sendMessage(sender, playersHere);
 			}
 			int totalPlayers = ProxyServer.getInstance().getOnlineCount();
