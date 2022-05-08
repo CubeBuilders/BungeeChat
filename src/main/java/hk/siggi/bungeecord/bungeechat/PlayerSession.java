@@ -114,8 +114,6 @@ public class PlayerSession {
 	private ChatHandler chatHandler = null;
 	boolean loggingOut = false;
 
-	private JsonObject siggiIOAPIResult = null;
-
 	public long lastSpeedReport = 0L;
 	public long highSpeedXZ = 0L;
 	public long highSpeedY = 0L;
@@ -559,33 +557,6 @@ public class PlayerSession {
 
 	public boolean allowHotbarMessage() {
 		return !showingAfkTimer;
-	}
-
-	public void setSiggiIOAPIResult(JsonObject siggiIOAPIResult) {
-		this.siggiIOAPIResult = siggiIOAPIResult;
-	}
-
-	public JsonObject getSiggiIOAPIResult() {
-		return siggiIOAPIResult;
-	}
-
-	public String[] getAppsInUse() {
-		List<String> list = new ArrayList<>();
-		try {
-			if (siggiIOAPIResult != null) {
-				JsonArray myApps = siggiIOAPIResult.getAsJsonArray("apps");
-				if (myApps != null) {
-					for (int i = 0; i < myApps.size(); i++) {
-						String app = myApps.get(i).getAsString();
-						if (!app.equals("CubeBuilders") && !app.startsWith("CubeBuilders::")) {
-							list.add(app);
-						}
-					}
-				}
-			}
-		} catch (Exception e) {
-		}
-		return list.toArray(new String[list.size()]);
 	}
 
 	private ServerInfo currentServer = null;
