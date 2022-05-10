@@ -26,6 +26,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.UUID;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.Util;
@@ -85,21 +87,7 @@ public class CommandList extends Command {
 					serversString = serversString + (serversString.equals("") ? "" : ",") + additionalServers;
 				}
 				String[] serverList = serversString.split(",");
-				ArrayList<PlayerInfo> players = new ArrayList<>();
-				Geolocation myGeolocation = null;
-				if (sender instanceof ProxiedPlayer) {
-					myGeolocation = plugin.getGeolocation((ProxiedPlayer) sender);
-				}
-				Comparator<PlayerInfo> sorter = sortAlphabetically;
-				if (args.length > 0) {
-					if (sender.hasPermission("hk.siggi.bungeechat.seenip")) {
-						try {
-							myGeolocation = plugin.getGeolocation(plugin.getProxy().getPlayer(args[0]));
-							sorter = sortByDistance;
-						} catch (Exception e) {
-						}
-					}
-				}
+				SortedSet<ProxiedPlayer> players = new TreeSet<>(sortAlphabetically);
 				for (int i = 0; i < serverList.length; i++) {
 					if (i == 0) {
 						primaryServer = serverList[i];
@@ -109,26 +97,9 @@ public class CommandList extends Command {
 						continue;
 					}
 					if (server.canAccess(sender)) {
-						for (ProxiedPlayer player : server.getPlayers()) {
-							double distance = Double.MAX_VALUE;
-							if (sorter == sortByDistance && myGeolocation != null) {
-								Geolocation geolocation = plugin.getGeolocation(player);
-								if (geolocation != null) {
-									try {
-										distance = distFrom(Double.parseDouble(myGeolocation.latitude),
-												Double.parseDouble(myGeolocation.longitude),
-												Double.parseDouble(geolocation.latitude),
-												Double.parseDouble(geolocation.longitude));
-									} catch (Exception e) {
-									}
-								}
-							}
-							players.add(new PlayerInfo(player, distance));
-						}
+						players.addAll(server.getPlayers());
 					}
 				}
-				Collections.sort(players, sorter);
-				String playerListString = Util.format(players, ChatColor.RESET + ", ");
 				TextComponent playersHere = new TextComponent(serverGroup);
 				playersHere.setColor(ChatColor.GREEN);
 				TextComponent joinButton = new TextComponent(" [Join]");
@@ -146,9 +117,7 @@ public class CommandList extends Command {
 				playerCount.setColor(ChatColor.YELLOW);
 				playersHere.addExtra(playerCount);
 				boolean didList = false;
-				for (int i = 0; i < players.size(); i++) {
-					PlayerInfo info = players.get(i);
-					ProxiedPlayer p = info.player;
+				for (ProxiedPlayer p : players) {
 					if (p == null) {
 						continue;
 					}
@@ -263,20 +232,6 @@ public class CommandList extends Command {
 		}
 	}
 
-	public static double distFrom(double lat1, double lng1, double lat2, double lng2) {
-		double earthRadius = 6371.0; // km (change to 3958.75 to get miles)
-		double dLat = Math.toRadians(lat2 - lat1);
-		double dLng = Math.toRadians(lng2 - lng1);
-		double sindLat = Math.sin(dLat / 2);
-		double sindLng = Math.sin(dLng / 2);
-		double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
-				* Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		double dist = earthRadius * c;
-
-		return dist;
-	}
-
 	public void addAdditionalServer(String serverGroup, String server) {
 		if (serverGroup == null || server == null) {
 			return;
@@ -333,36 +288,11 @@ public class CommandList extends Command {
 		}
 	}
 
-	private class PlayerInfo {
-
-		public final ProxiedPlayer player;
-		public final double distance;
-
-		public PlayerInfo(ProxiedPlayer player, double distance) {
-			this.player = player;
-			this.distance = distance;
-		}
-	}
-
-	public final Comparator<PlayerInfo> sortAlphabetically = new Comparator<PlayerInfo>() {
+	public final Comparator<ProxiedPlayer> sortAlphabetically = new Comparator<ProxiedPlayer>() {
 
 		@Override
-		public int compare(PlayerInfo p1, PlayerInfo p2) {
-			return p1.player.getDisplayName().compareTo(p2.player.getDisplayName());
-		}
-	};
-
-	public final Comparator<PlayerInfo> sortByDistance = new Comparator<PlayerInfo>() {
-
-		@Override
-		public int compare(PlayerInfo p1, PlayerInfo p2) {
-			if (p1.distance == p2.distance) {
-				return p1.player.getDisplayName().compareTo(p2.player.getDisplayName());
-			}
-			if (p1.distance > p2.distance) {
-				return 1;
-			}
-			return -1;
+		public int compare(ProxiedPlayer p1, ProxiedPlayer p2) {
+			return p1.getDisplayName().toLowerCase().compareTo(p2.getDisplayName().toLowerCase());
 		}
 	};
 }
