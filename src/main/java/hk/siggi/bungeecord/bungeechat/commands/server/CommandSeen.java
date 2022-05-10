@@ -252,6 +252,10 @@ public class CommandSeen extends Command implements TabExecutor {
 				correctedName = playerToCheck.toString().replace("-", "").toLowerCase();
 			}
 			ProxiedPlayer onlinePlayer = plugin.getProxy().getPlayer(playerToCheck);
+			PlayerSession targetSession = null;
+			if (onlinePlayer != null) {
+				targetSession = BungeeChat.getSession(onlinePlayer);
+			}
 			try {
 				IPInfo recentIP = null;
 				HashMap<String, IPInfo> ipMap = new HashMap<>();
@@ -322,6 +326,7 @@ public class CommandSeen extends Command implements TabExecutor {
 						MessageSender.sendMessage(sender, message);
 					}
 				}
+				boolean visibleToMe = false;
 				lastSeen:
 				if (onlinePlayer == null || fakeLastOnline > 0L) {
 					long lastSeen = fakeLastOnline > 0L ? fakeLastOnline : onTimePlayer.getLastOnline();
@@ -344,6 +349,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					message.setColor(ChatColor.RED);
 					MessageSender.sendMessage(sender, message);
 				} else {
+					visibleToMe = true;
 					message = new TextComponent("");
 					BaseComponent lastSeen = new TextComponent("Last Seen: ");
 					BaseComponent lastSeenNow;
@@ -368,6 +374,16 @@ public class CommandSeen extends Command implements TabExecutor {
 					timeOn.setColor(ChatColor.AQUA);
 					message.addExtra(totalTimeOn);
 					message.addExtra(timeOn);
+					MessageSender.sendMessage(sender, message);
+				}
+				if (visibleToMe && targetSession != null && targetSession.isAfk()) {
+					message = new TextComponent("");
+					BaseComponent timeAfkFor = new TextComponent("AFK for: ");
+					BaseComponent afkFor = new TextComponent(TimeUtil.timeToString(((long) targetSession.afkTime) * 1000L, 4, true));
+					timeAfkFor.setColor(ChatColor.GREEN);
+					afkFor.setColor(ChatColor.AQUA);
+					message.addExtra(timeAfkFor);
+					message.addExtra(afkFor);
 					MessageSender.sendMessage(sender, message);
 				}
 

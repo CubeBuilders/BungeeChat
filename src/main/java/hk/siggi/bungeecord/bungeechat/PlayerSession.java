@@ -556,6 +556,10 @@ public class PlayerSession {
 		return !showingAfkTimer;
 	}
 
+	public boolean isAfk() {
+		return afkTime >= 120;
+	}
+
 	private ServerInfo currentServer = null;
 
 	public void travelTo(ServerInfo newServer) {

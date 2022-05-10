@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
+import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
 import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.Util;
 import net.md_5.bungee.api.ChatColor;
@@ -187,6 +188,14 @@ public class CommandList extends Command {
 							TextComponent hoverText2 = new TextComponent(" is connected using MineChat.");
 							mineChat.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{hoverText1, hoverText2}));
 							playersHere.addExtra(mineChat);
+						}
+						if (session.isAfk()) {
+							TextComponent afk = new TextComponent("[AFK]");
+							afk.setColor(ChatColor.GRAY);
+							TextComponent hoverText1 = new TextComponent(p.getName());
+							TextComponent hoverText2 = new TextComponent(" has been AFK for " + TimeUtil.timeToString(((long) session.afkTime) * 1000L, 2, true) + ".");
+							afk.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{hoverText1, hoverText2}));
+							playersHere.addExtra(afk);
 						}
 					}
 					if (session != null && !session.clientBrand.equalsIgnoreCase("vanilla")) {
