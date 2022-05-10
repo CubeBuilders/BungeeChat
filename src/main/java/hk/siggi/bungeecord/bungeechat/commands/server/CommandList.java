@@ -47,7 +47,7 @@ public class CommandList extends Command {
 	private byte[] servergroups;
 
 	public CommandList(BungeeChat plugin) {
-		super("glist", null, "list");
+		super("glist", null, "list", "playerlist", "online", "who");
 		this.plugin = plugin;
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
