@@ -62,13 +62,9 @@ public class CommandSeen extends Command implements TabExecutor {
 			MessageSender.sendMessage(sender, message);
 			return;
 		}
-		boolean maskIPAndLocation = false;
 		ProxiedPlayer p = (ProxiedPlayer) sender;
 		PlayerAccount account = plugin.getPlayerInfo(p.getUniqueId());
 		PlayerSession session = BungeeChat.getSession(p);
-		if (account.isStreamModeActive()) {
-			maskIPAndLocation = true;
-		}
 		String entityToCheck = args[0];
 		if (entityToCheck.contains(".") || entityToCheck.contains(":") || entityToCheck.contains("/")) {
 			if (!sender.hasPermission("hk.siggi.bungeechat.seenip")) {
@@ -79,15 +75,15 @@ public class CommandSeen extends Command implements TabExecutor {
 				MessageSender.sendMessage(sender, message);
 				return;
 			}
-			String ipAsStr = unmaskIP(entityToCheck);
-			if (isIPInvalid(ipAsStr)) {
+			if (account.isStreamModeActive()) {
 				BaseComponent message = new TextComponent("");
-				BaseComponent notAvailable = new TextComponent("IP address is invalid. If you're entering a masked IP address from a stream session, the mapping may have expired.");
+				BaseComponent notAvailable = new TextComponent("Disable stream mode to lookup IP addresses.");
 				notAvailable.setColor(ChatColor.RED);
 				message.addExtra(notAvailable);
 				MessageSender.sendMessage(sender, message);
 				return;
 			}
+			String ipAsStr = entityToCheck;
 			try {
 				IP ip = IP.getIP(ipAsStr);
 				Iterable<UUID> playerList = plugin.getUUIDs(ip);
@@ -125,7 +121,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				}
 				String location = null;
 				if (geolocation != null) {
-					location = (maskIPAndLocation ? "****" : geolocation.cityName) + ", " + geolocation.regionName + ", " + geolocation.countryName;
+					location = geolocation.cityName + ", " + geolocation.regionName + ", " + geolocation.countryName;
 				}
 				BaseComponent message = new TextComponent("");
 				BaseComponent seenIP = new TextComponent("==== IP Address ====");
@@ -133,17 +129,9 @@ public class CommandSeen extends Command implements TabExecutor {
 				message.addExtra(seenIP);
 				MessageSender.sendMessage(sender, message);
 
-				if (maskIPAndLocation) {
-					message = new TextComponent("");
-					BaseComponent note = new TextComponent("Exit Stream Mode to unmask IP addresses");
-					note.setColor(ChatColor.GOLD);
-					message.addExtra(note);
-					MessageSender.sendMessage(sender, message);
-				}
-
 				message = new TextComponent("");
 				BaseComponent ipAddressIs = new TextComponent(isSubnet ? "Subnet: " : "IP Address: ");
-				BaseComponent ipAddress = new TextComponent(maskIPAndLocation ? maskIP(ipAsStr) : ipAsStr);
+				BaseComponent ipAddress = new TextComponent(ipAsStr);
 				ipAddressIs.setColor(ChatColor.GREEN);
 				ipAddress.setColor(ChatColor.AQUA);
 				message.addExtra(ipAddressIs);
@@ -155,7 +143,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					String subnet64Str = subnet64.toShortString();
 					message = new TextComponent("");
 					BaseComponent subnet64Is = new TextComponent(isSubnet ? "Broader Subnet: " : "Subnet: ");
-					BaseComponent subnet64TC = new TextComponent(maskIPAndLocation ? maskIP(subnet64Str) : subnet64Str);
+					BaseComponent subnet64TC = new TextComponent(subnet64Str);
 					subnet64Is.setColor(ChatColor.GREEN);
 					subnet64TC.setColor(ChatColor.AQUA);
 					subnet64TC.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to view other users in this subnet")}));
@@ -391,7 +379,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					MessageSender.sendMessage(p, phoneIsRegistered);
 				}
 
-				if (!sender.hasPermission("hk.siggi.bungeechat.seenip")) {
+				if (!sender.hasPermission("hk.siggi.bungeechat.seenip") || account.isStreamModeActive()) {
 					return;
 				}
 
@@ -404,17 +392,9 @@ public class CommandSeen extends Command implements TabExecutor {
 					return;
 				}
 
-				if (maskIPAndLocation) {
-					message = new TextComponent("");
-					BaseComponent note = new TextComponent("Exit Stream Mode to unmask IP addresses");
-					note.setColor(ChatColor.GOLD);
-					message.addExtra(note);
-					MessageSender.sendMessage(sender, message);
-				}
-
 				message = new TextComponent("");
 				BaseComponent ipIs = new TextComponent("IP Address: ");
-				BaseComponent ipTxt = new TextComponent(maskIPAndLocation ? maskIP(recentIP.ip) : shorten(recentIP.ip));
+				BaseComponent ipTxt = new TextComponent(shorten(recentIP.ip));
 				ipIs.setColor(ChatColor.GREEN);
 				ipTxt.setColor(ChatColor.AQUA);
 				ipTxt.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/seen " + recentIP.ip));
@@ -437,7 +417,7 @@ public class CommandSeen extends Command implements TabExecutor {
 				if (geolocation != null) {
 					message = new TextComponent("");
 					BaseComponent locationIs = new TextComponent("Approximate Location: ");
-					BaseComponent locationTxt = new TextComponent((maskIPAndLocation ? "****" : geolocation.cityName) + ", " + geolocation.regionName + ", " + geolocation.countryName);
+					BaseComponent locationTxt = new TextComponent(geolocation.cityName + ", " + geolocation.regionName + ", " + geolocation.countryName);
 					locationIs.setColor(ChatColor.GREEN);
 					locationTxt.setColor(ChatColor.AQUA);
 					message.addExtra(locationIs);
@@ -468,7 +448,7 @@ public class CommandSeen extends Command implements TabExecutor {
 					} else {
 						addedAnIP = true;
 					}
-					BaseComponent ipAddressText = new TextComponent(maskIPAndLocation ? maskIP(info.ip) : shorten(info.ip));
+					BaseComponent ipAddressText = new TextComponent(shorten(info.ip));
 					ipAddressText.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to see other players on this IP")}));
 					ipAddressText.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/seen " + info.ip));
 					message.addExtra(ipAddressText);
@@ -498,156 +478,6 @@ public class CommandSeen extends Command implements TabExecutor {
 				MessageSender.sendMessage(sender, message);
 			}
 		}
-	}
-
-	private static boolean isIPInvalid(String ip) {
-		if (ip.contains("hidden")) {
-			return true;
-		}
-		return isIPInvalid(IP.getIP(ip));
-	}
-
-	private static boolean isIPInvalid(IP ip) {
-		for (IP i : illegalSubnets) {
-			if (i.contains(ip)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	private static final IP[] illegalSubnets = new IP[]{
-		IP.getIP("0/8"),
-		IP.getIP("10/8"),
-		IP.getIP("100.64/10"),
-		IP.getIP("169.254/16"),
-		IP.getIP("172.16/12"),
-		IP.getIP("192.0.0/24"),
-		IP.getIP("192.0.2/24"),
-		IP.getIP("192.168/16"),
-		IP.getIP("198.51.100/24"),
-		IP.getIP("203.0.113/24"),
-		IP.getIP("224/4"),
-		IP.getIP("240/4"),
-		IP.getIP("255.255.255.255"),
-		IP.getIP("::"),
-		IP.getIP("::ff:0:0/96"),
-		IP.getIP("100::/64"),
-		IP.getIP("2001::/32"),
-		IP.getIP("2001:10::/28"),
-		IP.getIP("2001:20::/28"),
-		IP.getIP("2001:db8::/32"),
-		IP.getIP("2002::/16"),
-		IP.getIP("fc00::/7"),
-		IP.getIP("fe80::/10"),
-		IP.getIP("ff00::/8")
-	};
-
-	private static final HashMap<IPv4, String> maskedIPv4s = new HashMap<>();
-	private static final HashMap<String, IPv4> reverseMaskedIPv4s = new HashMap<>();
-
-	private static final HashMap<String, String> maskedIPv6Subnets = new HashMap<>();
-	private static final HashMap<String, String> reverseMaskedIPv6Subnets = new HashMap<>();
-
-	private static final HashMap<String, String> maskedIPv6Devices = new HashMap<>();
-	private static final HashMap<String, String> reverseMaskedIPv6Devices = new HashMap<>();
-
-	private static String maskIP(String ip) {
-		IP addrA = IP.getIP(ip);
-		String result = "<MaskedIP (" + (addrA instanceof IPv4 ? "IPv4" : (addrA instanceof IPv6 ? "IPv6" : "?")) + ")>";
-		if (addrA instanceof IPv4) {
-			if (addrA.getPrefixLength() < 32) {
-				return "<HiddenSubnet (IPv4)>";
-			}
-			IPv4 addr = (IPv4) addrA;
-			result = maskedIPv4s.get(addr);
-			while (result == null) {
-				result = "hidden-ipv4:" + randomMaskString();
-				if (reverseMaskedIPv4s.containsKey(result)) {
-					result = null;
-				} else {
-					maskedIPv4s.put(addr, result);
-					reverseMaskedIPv4s.put(result, addr);
-				}
-			}
-		} else if (addrA instanceof IPv6) {
-			IPv6 addr = (IPv6) addrA;
-			IPv6 subnet = addr;
-			if (addr.getPrefixLength() < 128 && addr.getPrefixLength() != 64) {
-				return "<MaskedSubnet (IPv6)>";
-			}
-			subnet = new IPv6(addr.getBytes(), 64);
-			String fullAddr = addr.toLongString();
-			String subnetPart = fullAddr.substring(0, 19);
-			String maskedSubnet = maskedIPv6Subnets.get(subnetPart);
-			while (maskedSubnet == null) {
-				maskedSubnet = "hidden-ipv6:" + randomMaskString();
-				if (reverseMaskedIPv6Subnets.containsKey(maskedSubnet)) {
-					maskedSubnet = null;
-				} else {
-					maskedIPv6Subnets.put(subnetPart, maskedSubnet);
-					reverseMaskedIPv6Subnets.put(maskedSubnet, subnetPart);
-				}
-			}
-			if (addr.getPrefixLength() == 128) {
-				String devicePart = fullAddr.substring(20);
-				String maskedDevice = maskedIPv6Devices.get(devicePart);
-				while (maskedDevice == null) {
-					maskedDevice = randomMaskString();
-					if (reverseMaskedIPv6Devices.containsKey(maskedDevice)) {
-						maskedDevice = null;
-					} else {
-						maskedIPv6Devices.put(devicePart, maskedDevice);
-						reverseMaskedIPv6Devices.put(maskedDevice, devicePart);
-					}
-				}
-				result = maskedSubnet + "/" + maskedDevice;
-			} else {
-				result = maskedSubnet;
-			}
-		}
-		return result;
-	}
-
-	private static String unmaskIP(String ip) {
-		try {
-			String result = ip;
-			if (ip.contains("v4")) {
-				IP g = reverseMaskedIPv4s.get(ip);
-				if (g != null) {
-					result = g.toShortString();
-				}
-			} else if (ip.contains("v6")) {
-				int colonPos = ip.indexOf(":");
-				if (colonPos == -1) {
-					return ip;
-				}
-				int slashPos = ip.indexOf("/", colonPos);
-				if (slashPos == -1) {
-					String subnet = reverseMaskedIPv6Subnets.get("hidden-ipv6:" + ip.substring(colonPos + 1));
-					if (subnet != null) {
-						result = IP.getIP(subnet + "/64").toShortString();
-					}
-				} else {
-					String subnet = reverseMaskedIPv6Subnets.get("hidden-ipv6:" + ip.substring(colonPos + 1, slashPos));
-					String device = reverseMaskedIPv6Devices.get(ip.substring(slashPos + 1));
-					if (subnet != null && device != null) {
-						result = IP.getIP(subnet + ":" + device).toShortString();
-					}
-				}
-			}
-			return result;
-		} catch (Exception e) {
-			return ip;
-		}
-	}
-
-	private static String randomMaskString() {
-		StringBuilder sb = new StringBuilder();
-		char[] chars = "0123456789abcdef".toCharArray();
-		while (sb.length() < 6) {
-			sb.append(chars[(int) Math.floor(Math.random() * chars.length)]);
-		}
-		return sb.toString();
 	}
 
 	private static String shorten(String ip) {
