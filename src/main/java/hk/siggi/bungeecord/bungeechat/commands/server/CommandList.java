@@ -16,8 +16,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,24 +43,12 @@ import net.md_5.bungee.api.plugin.Command;
 public class CommandList extends Command {
 
 	public final BungeeChat plugin;
-	private byte[] servergroups;
+	private final File serverGroupsFile;
 
 	public CommandList(BungeeChat plugin) {
 		super("glist", null, "list", "playerlist", "online", "who");
 		this.plugin = plugin;
-		try {
-			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			byte[] b = new byte[4096];
-			int c;
-			FileInputStream in = new FileInputStream(new File(plugin.getDataFolder(), "servergroups.txt"));
-			while ((c = in.read(b, 0, b.length)) != -1) {
-				baos.write(b, 0, c);
-			}
-			servergroups = baos.toByteArray();
-		} catch (Exception e) {
-			e.printStackTrace();
-			servergroups = new byte[0];
-		}
+		this.serverGroupsFile = new File(plugin.getDataFolder(), "servergroups.txt");
 	}
 
 	public boolean isHidden(ProxiedPlayer p) {
@@ -71,7 +58,7 @@ public class CommandList extends Command {
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(servergroups)));
+			BufferedReader reader = new BufferedReader(new FileReader(serverGroupsFile));
 			String line;
 			Map servers = ProxyServer.getInstance().getServers();
 			int globalHiddenPlayerCount = 0;
