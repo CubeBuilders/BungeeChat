@@ -310,6 +310,11 @@ public final class ChatController implements Listener {
 	}
 
 	public void publicChat(ProxiedPlayer from, String message) {
+		String lowerMessage = message.toLowerCase();
+		if (lowerMessage.contains("i joined using chatcraft") && lowerMessage.contains("download it for free")) {
+			// bruh you can't force your users to advertise your garbage on my server
+			return;
+		}
 		PlayerSession session = getSession(from);
 		if (rateLimitChat(from)) {
 			return;
