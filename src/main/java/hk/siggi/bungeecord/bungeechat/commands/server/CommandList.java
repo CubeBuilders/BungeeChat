@@ -219,16 +219,6 @@ public class CommandList extends Command {
 							mineChat.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{hoverText1, hoverText2}));
 							playersHere.addExtra(mineChat);
 						}
-						String discordStatus = session.discordStatus;
-						if (discordStatus != null) {
-							if (!discordStatus.toLowerCase().contains("minecraft") || discordStatus.toLowerCase().contains("story")) {
-								TextComponent ds = new TextComponent("[S]");
-								ds.setColor(ChatColor.BLUE);
-								TextComponent hoverText = new TextComponent(discordStatus + "\nStatus provided by Discord");
-								ds.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{hoverText}));
-								playersHere.addExtra(ds);
-							}
-						}
 					}
 					if (session != null && !session.clientBrand.equalsIgnoreCase("vanilla")) {
 						String brand = session.clientBrand;
