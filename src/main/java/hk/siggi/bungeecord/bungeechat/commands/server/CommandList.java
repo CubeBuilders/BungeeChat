@@ -224,21 +224,6 @@ public class CommandList extends Command {
 					playerInfo.setColor(plugin.getGroupInfo().getColor(p));
 					PlayerSession session = BungeeChat.getSession(p);
 					if (session != null) {
-						if (session.teamSpeakOnline) {
-							TextComponent teamSpeak = new TextComponent("[TS]");
-							teamSpeak.setColor(ChatColor.GREEN);
-							TextComponent hoverText1 = new TextComponent(p.getName());
-							hoverText1.setColor(ChatColor.AQUA);
-							TextComponent hoverText2 = new TextComponent(" is on TeamSpeak!\nJoin our TeamSpeak server at ");
-							hoverText2.setColor(ChatColor.WHITE);
-							TextComponent hoverText3 = new TextComponent("cubebuilders.net");
-							hoverText3.setColor(ChatColor.GOLD);
-							TextComponent hoverText4 = new TextComponent("!");
-							hoverText4.setColor(ChatColor.WHITE);
-							teamSpeak.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{hoverText1, hoverText2, hoverText3, hoverText4}));
-							teamSpeak.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "ts3server://cubebuilders.net"));
-							playersHere.addExtra(teamSpeak);
-						}
 						if (session.isMineChat) {
 							TextComponent mineChat = new TextComponent("[MC]");
 							mineChat.setColor(ChatColor.BLUE);

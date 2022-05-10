@@ -46,9 +46,6 @@ public class PlayerSession {
 	public final InetSocketAddress address;
 	private UUID uuid;
 	public boolean alertedMCBans;
-	public String teamSpeakVerifyUID = null;
-	public String teamSpeakVerifyCode = null;
-	public boolean teamSpeakOnline = false;
 	public CBUser user = null;
 	public long recentMute = 0L;
 	public long recentBan = 0L;
