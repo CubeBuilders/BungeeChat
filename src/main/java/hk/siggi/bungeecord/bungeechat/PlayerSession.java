@@ -789,6 +789,10 @@ public class PlayerSession {
 	private String[] fakeGroups = null;
 
 	public void setFakeGroups(String[] groups) {
+		if (groups == null || groups.length == 0) {
+			this.fakeGroups = null;
+			return;
+		}
 		this.fakeGroups = groups;
 	}
 
