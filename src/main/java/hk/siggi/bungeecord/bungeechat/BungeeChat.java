@@ -1663,8 +1663,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				}
 			}
 		} else {
-			if (p != null) {
-				updateGroup(p);
+			if (p != null && session != null) {
+				updateGroup(p, session);
 			}
 		}
 	}
@@ -1721,7 +1721,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		getProxy().getPluginManager().callEvent(new PunishmentIssuedEvent(punishment));
 	}
 
-	private void updateGroup(final ProxiedPlayer p) {
+	private void updateGroup(final ProxiedPlayer p, final PlayerSession session) {
 		String[] groups = p.getGroups().toArray(emptyStringArray);
 		p.removeGroups(groups);
 		ArrayList<String> newGroups = new ArrayList<String>();
@@ -1752,7 +1752,9 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 		p.addGroups(newGroups.toArray(emptyStringArray));
 
-		getSession(p).updateBungeePermissionCache();
+		session.updateBungeePermissionCache();
+
+		session.setFakeGroups(userData.fakeRanks.toArray(new String[userData.fakeRanks.size()]));
 
 		new Thread(() -> {
 			List<String> commands = APIUtil.pullCommands(p.getUniqueId());
@@ -1782,8 +1784,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 	public void login(PostLoginEvent event) {
 		PlayerSession session;
 		ProxiedPlayer player = event.getPlayer();
-		updateGroup(player);
-		UUID uuid = player.getUniqueId();
 		sessionMapReadLock.lock();
 		try {
 			session = sessionMap.get(player.getAddress());
@@ -1794,6 +1794,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			player.disconnect("An error has occurred.");
 			return;
 		}
+		updateGroup(player, session);
+		UUID uuid = player.getUniqueId();
 		getUUIDCache().storeToCache(player.getName(), uuid);
 		PlayerAccount a = null;
 		synchronized (playerInfo) {

@@ -14,6 +14,7 @@ public class UserData {
 	private static final UserFriend[] zeroFriends = new UserFriend[0];
 
 	public final List<String> ranks = new ArrayList<>();
+	public final List<String> fakeRanks = new ArrayList<>();
 	public String staffRank = null;
 	public boolean hiddenStaff = false;
 	public ArrayList<Punishment> punishments = null;
