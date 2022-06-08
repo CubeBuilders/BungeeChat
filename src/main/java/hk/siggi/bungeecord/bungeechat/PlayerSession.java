@@ -30,6 +30,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import net.cubebuilders.user.CBUser;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -39,7 +40,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.connection.LoginResult;
-import net.md_5.bungee.protocol.packet.Chat;
 
 public class PlayerSession {
 
@@ -170,38 +170,13 @@ public class PlayerSession {
 		this.uuid = uuid;
 	}
 
-	public void sendHotbarMessage(String message) {
-		sendHotbarMessage(TextComponent.fromLegacyText(message));
-	}
-
 	public void sendHotbarMessage(BaseComponent message) {
-		sendHotbarMessageRaw(ComponentSerializer.toString(message));
-	}
-
-	public void sendHotbarMessage(BaseComponent... message) {
-		sendHotbarMessageRaw(ComponentSerializer.toString(message));
+		lastHotbar = System.currentTimeMillis();
+		sendHotbarMessage0(message);
 	}
 
 	public void sendHotbarMessage0(BaseComponent message) {
-		sendHotbarMessageRaw0(ComponentSerializer.toString(message));
-	}
-
-	public void sendHotbarMessage0(BaseComponent... message) {
-		sendHotbarMessageRaw0(ComponentSerializer.toString(message));
-	}
-
-	public void sendHotbarMessageRaw(String message) {
-		lastHotbar = System.currentTimeMillis();
-		sendHotbarMessageRaw0(message);
-	}
-
-	private void sendHotbarMessageRaw0(String message) {
-		Chat c = new Chat(message);
-		c.setPosition((byte) 2);
-		ProxiedPlayer p = getPlayer();
-		if (p != null) {
-			p.unsafe().sendPacket(c);
-		}
+		getPlayer().sendMessage(ChatMessageType.ACTION_BAR, message);
 	}
 
 	public void playSound(String soundName, float volume, float pitch, int delay) {

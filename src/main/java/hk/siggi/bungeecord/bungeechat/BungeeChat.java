@@ -1220,18 +1220,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 							session.sendHotbarMessage(new TextComponent(message));
 						}
 					}
-				} else if (subChannel.equals("HotbarMessageRaw")) {
-					Connection receiver = event.getReceiver();
-					Connection sender = event.getSender();
-					if (receiver instanceof ProxiedPlayer && sender instanceof Server) {
-						event.setCancelled(true);
-						ProxiedPlayer p = ((ProxiedPlayer) receiver);
-						String message = in.readUTF();
-						PlayerSession session = getSession(p);
-						if (session.allowHotbarMessage()) {
-							session.sendHotbarMessageRaw(message);
-						}
-					}
 				} else if (subChannel.equals("AddHotbar")) {
 					Connection receiver = event.getReceiver();
 					Connection sender = event.getSender();
