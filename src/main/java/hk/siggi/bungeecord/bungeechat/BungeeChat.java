@@ -182,6 +182,7 @@ import net.md_5.bungee.conf.Configuration;
 import net.md_5.bungee.connection.InitialHandler;
 import net.md_5.bungee.connection.LoginResult;
 import net.md_5.bungee.event.EventHandler;
+import net.md_5.bungee.protocol.Property;
 import net.md_5.bungee.scheduler.BungeeScheduler;
 
 public class BungeeChat extends Plugin implements Listener, VariableServerConnection.Listener {
@@ -1038,7 +1039,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 						ProxiedPlayer p = ((ProxiedPlayer) receiver);
 						String value = in.readUTF();
 						String signature = in.readUTF();
-						LoginResult.Property skin = getSkinProperty(p.getPendingConnection(), true);
+						Property skin = getSkinProperty(p.getPendingConnection(), true);
 						skin.setValue(value);
 						skin.setSignature(signature);
 						PlayerAccount acc = getPlayerInfo(p.getUniqueId());
@@ -2330,26 +2331,26 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 	}
 
-	public LoginResult.Property getSkinProperty(PendingConnection connection, boolean add) {
+	public Property getSkinProperty(PendingConnection connection, boolean add) {
 		if (connection instanceof InitialHandler) {
 			try {
 				InitialHandler ih = (InitialHandler) connection;
 				LoginResult result = ih.getLoginProfile();
-				LoginResult.Property[] properties = result.getProperties();
+				Property[] properties = result.getProperties();
 				if (properties == null) {
-					properties = new LoginResult.Property[0];
+					properties = new Property[0];
 				}
-				for (LoginResult.Property prop : properties) {
+				for (Property prop : properties) {
 					if (prop.getName().equals("textures")) {
 						return prop;
 					}
 				}
 				if (add) {
-					LoginResult.Property[] newProps = new LoginResult.Property[properties.length + 1];
+					Property[] newProps = new Property[properties.length + 1];
 					for (int i = 0; i < properties.length; i++) {
 						newProps[i] = properties[i];
 					}
-					newProps[properties.length] = new LoginResult.Property("textures", "", null);
+					newProps[properties.length] = new Property("textures", "", null);
 					result.setProperties(newProps);
 					return newProps[properties.length];
 				}
@@ -2369,12 +2370,12 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		PlayerAccount pi = getPlayerInfo(user);
 		String mojangSkin = pi.getMojangSkin();
 		String mojangSkinSignature = pi.getMojangSkinSignature();
-		LoginResult.Property[] properties;
+		Property[] properties;
 		if (mojangSkin != null && mojangSkinSignature != null) {
-			properties = new LoginResult.Property[1];
-			properties[0] = new LoginResult.Property("textures", mojangSkin, mojangSkinSignature);
+			properties = new Property[1];
+			properties[0] = new Property("textures", mojangSkin, mojangSkinSignature);
 		} else {
-			properties = new LoginResult.Property[0];
+			properties = new Property[0];
 		}
 		LoginResult lr = new LoginResult(user.toString().replace("-", "").toLowerCase(), username, properties);
 		return lr;
@@ -2411,7 +2412,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		getUUIDCache().storeToCache(connection.getName(), uuid);
 		final PlayerAccount playerInfo = getPlayerInfo(uuid);
 
-		LoginResult.Property skinProperty = getSkinProperty(connection, false);
+		Property skinProperty = getSkinProperty(connection, false);
 		if (skinProperty != null) {
 			session.skinProperty = skinProperty;
 			playerInfo.setMojangSkin(skinProperty.getValue(), skinProperty.getSignature());

@@ -40,6 +40,8 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.connection.LoginResult;
+import net.md_5.bungee.protocol.Property;
+import net.md_5.bungee.protocol.packet.Chat;
 
 public class PlayerSession {
 
@@ -49,7 +51,7 @@ public class PlayerSession {
 	public CBUser user = null;
 	public long recentMute = 0L;
 	public long recentBan = 0L;
-	public LoginResult.Property skinProperty = null;
+	public Property skinProperty = null;
 	public long loginTime = 0L;
 	public long ontimeOnLogin = 0L;
 	public long timeInLast2Weeks = 0L;
