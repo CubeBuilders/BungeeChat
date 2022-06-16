@@ -60,8 +60,6 @@ public class PlayerSession {
 	public volatile int afkTime = 0;
 	private WeakReference<ProxiedPlayer> playerRef = null;
 	public String clientBrand = "";
-	public boolean didMineChatTeleport = false;
-	public boolean isMineChat = false;
 
 	private final List<Long> chatTimes = new LinkedList<>();
 
@@ -120,8 +118,6 @@ public class PlayerSession {
 
 	public boolean isConfirmedFullClient() {
 		if (clientBrand.isEmpty()) {
-			return false;
-		} else if (clientBrand.equalsIgnoreCase("MineChat")) {
 			return false;
 		}
 		return true;

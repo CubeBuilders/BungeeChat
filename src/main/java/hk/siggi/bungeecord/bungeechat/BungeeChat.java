@@ -958,52 +958,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 						brand = new String(brandBytes);
 					}
 					session.clientBrand = brand;
-					if (session.isConfirmedFullClient()) {
-						PlayerAccount playerAcc = getPlayerInfo(p.getUniqueId());
-						if (playerAcc.getMineChatGiftOnNextLogin()) {
-							playerAcc.setMineChatGiftOnNextLogin(false);
-							if (!playerAcc.gaveMineChatGift()) {
-								playerAcc.setGaveMineChatGift(true);
-
-								TextComponent msg = new TextComponent("");
-
-								TextComponent welcomeBack = new TextComponent("Thanks for coming back on PC! As promised, you would receive a gift for coming back, you've received 500 CubeTokens that you can spend in Factions or Skyblock. To go to the server lobby, type ");
-								welcomeBack.setColor(ChatColor.GOLD);
-
-								TextComponent lobbyCommand = new TextComponent("/lobby");
-								lobbyCommand.setColor(ChatColor.AQUA);
-								lobbyCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/lobby"));
-								lobbyCommand.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to go to the lobby")}));
-
-								TextComponent toBuyStuff = new TextComponent(". To buy things using CubeTokens, type ");
-								toBuyStuff.setColor(ChatColor.GOLD);
-
-								TextComponent cubeTokensCommand = new TextComponent("/cubetokens");
-								cubeTokensCommand.setColor(ChatColor.AQUA);
-								cubeTokensCommand.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/cubetokens"));
-								cubeTokensCommand.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to open CubeTokens Store")}));
-
-								TextComponent thanks = new TextComponent(" while you're in a server that has a CubeTokens Store (for example, Factions, or Skyblock)");
-								thanks.setColor(ChatColor.GOLD);
-
-								msg.addExtra(welcomeBack);
-								msg.addExtra(lobbyCommand);
-								msg.addExtra(toBuyStuff);
-								msg.addExtra(cubeTokensCommand);
-								msg.addExtra(thanks);
-
-								TextComponent blank = new TextComponent("");
-
-								MessageSender.sendMessage(p, blank);
-								MessageSender.sendMessage(p, blank);
-								MessageSender.sendMessage(p, msg);
-								MessageSender.sendMessage(p, blank);
-								MessageSender.sendMessage(p, blank);
-
-								CT.get().giveCubeTokens(p.getUniqueId(), 500, "MineChat Gift");
-							}
-						}
-					}
 				}
 			}
 			if (event.getTag().equals("BungeeCord")) {
@@ -2697,63 +2651,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		ProxiedPlayer player = (ProxiedPlayer) sender;
 		resetAFKTimer(player);
 		PlayerSession session = getSession(player);
-		if (!session.didMineChatTeleport) {
-			session.didMineChatTeleport = true;
-			if (session.clientBrand.isEmpty() || session.clientBrand.equalsIgnoreCase("MineChat")) {
-				session.isMineChat = true;
-				// no client brand: we probably have an old version of MineChat!
-				// client brand=MineChat: we definitely have MineChat!
-				ServerInfo currentServer = player.getServer().getInfo();
-				String currentServerName = currentServer.getName();
-				PlayerAccount playerAcc = getPlayerInfo(player.getUniqueId());
-				if (session.ontimeOnLogin < 1200000L) { // Total OnTime less than 20 minutes
-					if (!playerAcc.gaveMineChatGift()) {
-						playerAcc.setMineChatGiftOnNextLogin(true);
-
-						TextComponent msg = new TextComponent("");
-
-						TextComponent heyYou = new TextComponent("Hey! You're new here! ");
-						heyYou.setColor(ChatColor.LIGHT_PURPLE);
-
-						TextComponent rememberPlotServers = new TextComponent("Do you remember these servers with stupid plot worlds that only give you a small 64x64 block area to build on? ");
-						rememberPlotServers.setColor(ChatColor.YELLOW);
-
-						TextComponent cbIsntLikeThat = new TextComponent("CubeBuilders is not like that! At CubeBuilders, everyone gets their own UNLIMITED superflat world! ");
-						cbIsntLikeThat.setColor(ChatColor.LIGHT_PURPLE);
-
-						TextComponent comeBackOnPC = new TextComponent("Join us later on when you return to your PC! Our address is ");
-						comeBackOnPC.setColor(ChatColor.GOLD);
-
-						TextComponent ourAddr = new TextComponent("cubebuilders.net");
-						ourAddr.setColor(ChatColor.AQUA);
-
-						TextComponent andYoullGetAGift = new TextComponent("! We'll even give you a MineChat exclusive gift so you can get started faster if you prefer playing Factions or Skyblock! SCREENSHOT this now so you remember! <3");
-						andYoullGetAGift.setColor(ChatColor.GOLD);
-
-						msg.addExtra(heyYou);
-						msg.addExtra(rememberPlotServers);
-						msg.addExtra(cbIsntLikeThat);
-						msg.addExtra(comeBackOnPC);
-						msg.addExtra(ourAddr);
-						msg.addExtra(andYoullGetAGift);
-
-						TextComponent blank = new TextComponent("");
-
-						MessageSender.sendMessage(player, blank);
-						MessageSender.sendMessage(player, blank);
-						MessageSender.sendMessage(player, msg);
-						MessageSender.sendMessage(player, blank);
-						MessageSender.sendMessage(player, blank);
-					}
-				}
-				if (currentServerName.equals("hub")) {
-					ServerInfo inf = getProxy().getServerInfo("creative");
-					if (inf != null) {
-						player.connect(inf);
-					}
-				}
-			}
-		}
 		String commandName = event.getMessage().split(" ")[0];
 		if (commandName.equalsIgnoreCase("/stop") || commandName.equalsIgnoreCase("/end")) {
 			BaseComponent message = new TextComponent("This command can only be used via the console.");

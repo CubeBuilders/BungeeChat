@@ -55,7 +55,6 @@ public final class PlayerAccount {
 	private boolean bypassIPBan = false;
 	private long shadowMuteExpiry = 0L;
 	private ChatPrefixType chatPrefixType = ChatPrefixType.AUTO;
-	private boolean mineChatGiftOnNextLogin;
 	private boolean gaveMineChatGift;
 	private String chatNamePrefix = null;
 	private String chatNameSuffix = null;
@@ -440,18 +439,6 @@ public final class PlayerAccount {
 		}
 	}
 
-	public boolean getMineChatGiftOnNextLogin() {
-		return mineChatGiftOnNextLogin;
-	}
-
-	public void setMineChatGiftOnNextLogin(boolean gift) {
-		synchronized (BungeeChat.getInstance().fsLock) {
-			load();
-			mineChatGiftOnNextLogin = gift;
-			save();
-		}
-	}
-
 	public boolean gaveMineChatGift() {
 		return gaveMineChatGift;
 	}
@@ -708,7 +695,6 @@ public final class PlayerAccount {
 			mcBansExempt = false;
 			mcBansMod = false;
 			mcBansRep = 10.0f;
-			mineChatGiftOnNextLogin = false;
 			gaveMineChatGift = false;
 			punishments.clear();
 			mail.clear();
@@ -830,8 +816,6 @@ public final class PlayerAccount {
 								mcBans.add(new MCBan(player, reason, server, prosecutor));
 							} catch (Exception e) {
 							}
-						} else if (key.equalsIgnoreCase("GiveMineChatGiftOnNextLogin")) {
-							mineChatGiftOnNextLogin = val.equals("1");
 						} else if (key.equalsIgnoreCase("GaveMineChatGift")) {
 							gaveMineChatGift = val.equals("1");
 						} else if (key.equalsIgnoreCase("BypassIPBan")) {
@@ -952,9 +936,6 @@ public final class PlayerAccount {
 			}
 			if (bypassIPBan) {
 				fos.write("BypassIPBan=1\n".getBytes());
-			}
-			if (mineChatGiftOnNextLogin) {
-				fos.write("GiveMineChatGiftOnNextLogin=1\n".getBytes());
 			}
 			if (gaveMineChatGift) {
 				fos.write("GaveMineChatGift=1\n".getBytes());

@@ -181,14 +181,6 @@ public class CommandList extends Command {
 					playerInfo.setColor(plugin.getGroupInfo().getColor(p));
 					PlayerSession session = BungeeChat.getSession(p);
 					if (session != null) {
-						if (session.isMineChat) {
-							TextComponent mineChat = new TextComponent("[MC]");
-							mineChat.setColor(ChatColor.BLUE);
-							TextComponent hoverText1 = new TextComponent(p.getName());
-							TextComponent hoverText2 = new TextComponent(" is connected using MineChat.");
-							mineChat.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{hoverText1, hoverText2}));
-							playersHere.addExtra(mineChat);
-						}
 						if (session.isAfk()) {
 							TextComponent afk = new TextComponent("[AFK]");
 							afk.setColor(ChatColor.GRAY);
