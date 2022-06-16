@@ -29,6 +29,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.Connection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
+import net.md_5.bungee.api.event.ChatPreviewRequestEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -179,6 +180,26 @@ public final class ChatController implements Listener {
 		}
 		doProcessChat(chatHandler, player, message);
 		event.setCancelled(true);
+	}
+
+	@EventHandler
+	public void handleChatPreviewRequest(ChatPreviewRequestEvent event) {
+		if (event.getMessage().startsWith("/"))
+			return;
+		ProxiedPlayer player = event.getPlayer();
+		ProcessedChat chat = process(player, wrapLinks(player, event.getMessage()), true);
+		TextComponent preview = new TextComponent();
+		PlayerAccount playerInfo = bungeechat.getPlayerInfo(player.getUniqueId());
+		if (playerInfo.getChatCensor()) {
+			if (playerInfo.getChatCensorSemi()) {
+				bungeechat.addAll(preview, chat.semiCensored);
+			} else {
+				bungeechat.addAll(preview, chat.censored);
+			}
+		} else {
+			bungeechat.addAll(preview, chat.uncensored);
+		}
+		event.setPreview(preview);
 	}
 
 	//private final Pattern linkPattern = Pattern.compile("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)");

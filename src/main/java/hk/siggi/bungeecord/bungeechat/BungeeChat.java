@@ -170,6 +170,7 @@ import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.ChatEvent;
+import net.md_5.bungee.api.event.ChatPreviewRequestEvent;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
@@ -1755,6 +1756,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		Geolocation geolocation = getGeolocation(playerInetAddress.getHostAddress());
 		session.geolocation = geolocation;
 		logIP(player, uuid, playerInetAddress);
+		player.setHandlingChatPreview(true);
 	}
 
 	public void migrateIPLogs() {
