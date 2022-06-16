@@ -357,6 +357,9 @@ public class Util {
 	 * @return
 	 */
 	public static String getTitle(String url) {
+		if (url.startsWith("https://open.spotify.com/") && url.contains("?si=")) {
+			url = url.substring(0, url.indexOf("?si="));
+		}
 		{
 			String title = titles.get(url);
 			if (title != null) {
