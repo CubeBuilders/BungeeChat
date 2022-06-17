@@ -184,7 +184,7 @@ public final class ChatController implements Listener {
 	//private final Pattern linkPattern = Pattern.compile("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)");
 	private final Pattern linkPattern = Pattern.compile("(https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))|([-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.(com?|org|net|edu|gov|us|ca|uk|eu|io|be)\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*))");
 
-	public void doProcessChat(ChatHandler handler, ProxiedPlayer player, String message) {
+	private String wrapLinks(ProxiedPlayer player, String message) {
 		if (player.hasPermission("hk.siggi.bungeechat.chat.link")) {
 			Matcher matcher = linkPattern.matcher(message);
 			while (matcher.find()) {
@@ -197,7 +197,11 @@ public final class ChatController implements Listener {
 				matcher = linkPattern.matcher(message);
 			}
 		}
-		String m = message;
+		return message;
+	}
+
+	public void doProcessChat(ChatHandler handler, ProxiedPlayer player, String message) {
+		String m = wrapLinks(player, message);
 		bungeechat.getScheduler().runAsync(bungeechat, () -> {
 			handler.sendChat(player, m);
 		});
