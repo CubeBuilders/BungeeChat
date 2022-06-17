@@ -65,6 +65,7 @@ import hk.siggi.bungeecord.bungeechat.commands.server.CommandFakeIP;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandHub;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandImpersonate;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandList;
+import hk.siggi.bungeecord.bungeechat.commands.server.CommandLogin;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandNotify;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandRank;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandRegister;
@@ -537,6 +538,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 		pm.registerCommand(this, new CommandSecretCode(this));
 		pm.registerCommand(this, new CommandRegister(this));
+		pm.registerCommand(this, new CommandLogin(this));
 
 		pm.registerCommand(this, new CommandVote(this));
 		pm.registerCommand(this, new CommandSocialMedia(this));

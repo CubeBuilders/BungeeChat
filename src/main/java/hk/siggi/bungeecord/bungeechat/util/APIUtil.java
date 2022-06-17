@@ -26,6 +26,15 @@ public class APIUtil {
 		}
 	}
 
+	public static String codeLogin(UUID uuid, String code, String ipAddress) {
+		if (uuid == null || code == null) return "EXCEPTION";
+		try {
+			return new String(getURL("http://127.0.0.1:2823/api/codelogin?uuid=" + uuidToString(uuid) + "&code=" + URLEncoder.encode(code, "UTF-8") + (ipAddress == null ? "" : ("&ipAddress=" + ipAddress))));
+		} catch (Exception e) {
+			return "EXCEPTION";
+		}
+	}
+
 	public static CBUser getUser(UUID uuid) {
 		byte[] bytes = getURL("http://127.0.0.1:2823/api/getuser?uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()));
 		if (bytes == null) {
