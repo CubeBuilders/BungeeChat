@@ -1094,6 +1094,7 @@ public class BungeeResponder implements HTTPResponder {
 				} else {
 					if (!requestedById && !requestIsEncrypted) {
 						Properties properties = new Properties();
+						properties.setProperty("user", userUUID.toString());
 						properties.setProperty("ipaddress", request.getIPAddress());
 						properties.setProperty("time", Long.toString(System.currentTimeMillis()));
 						properties.setProperty("from", Long.toString(from / 1000L));
