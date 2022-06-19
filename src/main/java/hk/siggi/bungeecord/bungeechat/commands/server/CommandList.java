@@ -190,12 +190,12 @@ public class CommandList extends Command {
 							playersHere.addExtra(afk);
 						}
 					}
-					if (session != null && !session.clientBrand.equalsIgnoreCase("vanilla")) {
+					if (session != null) {
 						String brand = session.clientBrand;
 						if (brand.equals("")) {
 							brand = "Unknown";
 						}
-						TextComponent brandText = new TextComponent((didHoverText ? "\n" : "") + "Using client: " + brand);
+						TextComponent brandText = new TextComponent((didHoverText ? "\n" : "") + "Client brand: " + brand);
 						hover.addExtra(brandText);
 						brandText.setColor(ChatColor.GRAY);
 						didHoverText = true;
