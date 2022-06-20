@@ -786,7 +786,7 @@ public final class ChatController implements Listener {
 				|| c == '{' || c == '}' || c == '(' || c == ')';
 	}
 
-	private final Pattern spotifyRegex = Pattern.compile("(.*), a song by (.*) on Spotify");
+	private final Pattern spotifyRegex = Pattern.compile("(.*) - song by (.*) | Spotify");
 
 	private String simplifyTitle(String title) {
 		if (title == null) {
