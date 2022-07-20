@@ -76,32 +76,29 @@ public class CommandMsg extends Command implements TabExecutor {
 			}
 		}
 		if (destinationPlayer == null) {
+			String correctedName = plByName == null ? destination : playerNameHandler.getNameByPlayer(plByName);
 			BaseComponent message = new TextComponent("The player ");
 			message.setColor(ChatColor.RED);
-			BaseComponent extra = new TextComponent(plByName == null ? destination : playerNameHandler.getNameByPlayer(plByName));
+			BaseComponent extra = new TextComponent(correctedName);
 			extra.setColor(ChatColor.WHITE);
 			message.addExtra(extra);
 			if (plByName == null) {
 				extra = new TextComponent(" was not found. ");
 				message.addExtra(extra);
-				extra = new TextComponent("Edit?");
-				extra.setColor(ChatColor.AQUA);
-				extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to edit message")}));
-				extra.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/m " + Util.getLine(args, 0)));
-				message.addExtra(extra);
 			} else {
 				extra = new TextComponent(" is currently offline. ");
 				message.addExtra(extra);
-				extra = new TextComponent("Retry? ");
+				extra = new TextComponent("Send as Mail? ");
 				extra.setColor(ChatColor.AQUA);
-				extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to try sending again")}));
-				extra.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/m " + Util.getLine(args, 0)));
-				extra = new TextComponent("Edit?");
-				extra.setColor(ChatColor.AQUA);
-				extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to edit message")}));
-				extra.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/m " + Util.getLine(args, 0)));
+				extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to send as mail")}));
+				extra.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/mail send " + correctedName + Util.getLine(args, 1)));
 				message.addExtra(extra);
 			}
+			extra = new TextComponent("Edit?");
+			extra.setColor(ChatColor.AQUA);
+			extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to edit message")}));
+			extra.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/m " + Util.getLine(args, 0)));
+			message.addExtra(extra);
 			MessageSender.sendMessage(sender, message);
 			return;
 		}
