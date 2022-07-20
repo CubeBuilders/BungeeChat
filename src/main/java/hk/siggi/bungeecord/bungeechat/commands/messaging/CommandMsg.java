@@ -81,7 +81,7 @@ public class CommandMsg extends Command implements TabExecutor {
 			BaseComponent extra = new TextComponent(plByName == null ? destination : playerNameHandler.getNameByPlayer(plByName));
 			extra.setColor(ChatColor.WHITE);
 			message.addExtra(extra);
-			if (plByName != null) {
+			if (plByName == null) {
 				extra = new TextComponent(" was not found. ");
 				message.addExtra(extra);
 				extra = new TextComponent("Edit?");
