@@ -118,17 +118,25 @@ public class Util {
 			connection.setConnectTimeout(5000);
 			connection.setReadTimeout(5000);
 			InputStream in = connection.getInputStream();
-			byte[] b = new byte[4096];
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			int c = -1;
-			while ((c = in.read(b, 0, b.length)) != -1) {
-				out.write(b, 0, c);
-			}
-			return out.toByteArray();
+			return readFully(in);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static void copy(InputStream in, OutputStream out) throws IOException {
+		byte[] b = new byte[4096];
+		int c = -1;
+		while ((c = in.read(b, 0, b.length)) != -1) {
+			out.write(b, 0, c);
+		}
+	}
+
+	public static byte[] readFully(InputStream in) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		copy(in, out);
+		return out.toByteArray();
 	}
 
 	public static boolean parseBool(String arg) {
@@ -177,7 +185,7 @@ public class Util {
 		return sb.toString();
 	}
 
-	public static HttpURLConnection post(String url, Map<String,String> parameters) {
+	public static byte[] post(String url, Map<String,String> parameters) {
 		try {
 			byte[] and = "&".getBytes();
 			byte[] eq = "=".getBytes();
@@ -206,7 +214,7 @@ public class Util {
 			httpc.setFixedLengthStreamingMode(data.length);
 			OutputStream out = httpc.getOutputStream();
 			out.write(data);
-			return httpc;
+			return readFully(httpc.getInputStream());
 		} catch (Exception ex) {
 			return null;
 		}
