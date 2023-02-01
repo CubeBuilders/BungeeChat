@@ -177,11 +177,11 @@ public class Util {
 		return sb.toString();
 	}
 
-	public static HttpURLConnection post(String req, Properties request) {
+	public static HttpURLConnection post(String url, Map<String,String> parameters) {
 		try {
 			byte[] and = "&".getBytes();
 			byte[] eq = "=".getBytes();
-			URL urla = new URL(req);
+			URL urla = new URL(url);
 			URLConnection connection = urla.openConnection();
 			HttpURLConnection httpc = (HttpURLConnection) connection;
 			httpc.setConnectTimeout(2000);
@@ -190,17 +190,22 @@ public class Util {
 			httpc.setRequestMethod("POST");
 			httpc.setRequestProperty("User-Agent", USER_AGENT);
 			httpc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			OutputStream out = httpc.getOutputStream();
-			for (Object keyO : request.keySet()) {
-				String key = (String) keyO;
-				String val = request.getProperty(key);
-				out.write(and);
-				out.write(urlEncode(key).getBytes());
-				out.write(eq);
-				out.write(urlEncode(val).getBytes());
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			boolean isFirst = true;
+			for (Map.Entry<String,String> entry : parameters.entrySet()) {
+				if (isFirst) {
+					isFirst = false;
+				} else {
+					baos.write(and);
+				}
+				baos.write(urlEncode(entry.getKey()).getBytes());
+				baos.write(eq);
+				baos.write(urlEncode(entry.getValue()).getBytes());
 			}
-			out.write(and);
-			out.flush();
+			byte[] data = baos.toByteArray();
+			httpc.setFixedLengthStreamingMode(data.length);
+			OutputStream out = httpc.getOutputStream();
+			out.write(data);
 			return httpc;
 		} catch (Exception ex) {
 			return null;
