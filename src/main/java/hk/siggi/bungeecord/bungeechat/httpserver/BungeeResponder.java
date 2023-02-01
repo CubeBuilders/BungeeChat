@@ -228,7 +228,6 @@ public class BungeeResponder implements HTTPResponder {
 //				}
 //			}
 //		}
-		boolean requestIsEncrypted = false;
 		if (request.url.equals("/bc/webchat")) {
 			if (SimpleWebsocket.isWebsocketRequest(request) && userUUID != null && username != null) {
 				plugin.getWebChat().acceptWebSocket(SimpleWebsocket.accept(request), userUUID, username);
@@ -988,6 +987,7 @@ public class BungeeResponder implements HTTPResponder {
 				ArrayList<String> visiblePlayers = new ArrayList<String>();
 				Map<String, String> logRequest = request.get;
 				boolean requestedById = false;
+				boolean createShareLink = request.get.getOrDefault("share", "0").equals("1");
 				if (request.get.get("id") != null) {
 					requestedById = true;
 					long logId = Integer.parseInt(request.get.get("id"));
@@ -1065,7 +1065,7 @@ public class BungeeResponder implements HTTPResponder {
 					sb.append("</form>");
 					autofocus = true;
 				} else {
-					if (!requestedById && !requestIsEncrypted) {
+					if (!requestedById && createShareLink) {
 						Properties properties = new Properties();
 						properties.setProperty("user", userUUID.toString());
 						properties.setProperty("ipaddress", request.getIPAddress());
@@ -1090,7 +1090,7 @@ public class BungeeResponder implements HTTPResponder {
 						request.response.completedRedirect("/bc/chatlog?id=" + logId + "&key=" + key);
 						return;
 					}
-					if (!allowChatlogs || requestIsEncrypted) {
+					if (!allowChatlogs) {
 						if (visiblePlayers.isEmpty()) {
 							sb.append("Players: ");
 							for (int i = 0; i < players.size(); i++) {
@@ -1109,20 +1109,20 @@ public class BungeeResponder implements HTTPResponder {
 						sb.append("<input type=\"hidden\" name=\"to\" value=\"").append(to / 1000L).append("\">");
 						sb.append("Players to show (comma separated): <input type=\"text\" name=\"players\" value=\"").append(playersString == null ? "" : playersString).append("\"> (Leave blank to show all)<br>");
 						sb.append("Unstarred names (case sensitive, comma separated): <input type=\"text\" name=\"vplayers\" value=\"").append(vplayersString == null ? "" : vplayersString).append("\"> (Leave blank to not star any name out)<br>");
+						sb.append("Create sharable link: <input type=\"checkbox\" name=\"share\" value=\"1\"><br>");
 						sb.append("<input type=\"submit\" value=\"OK\">");
 						sb.append("</form>");
 						sb.append("<br>");
-						//sb.append("<a href=\"").append(encryptRequest("request=/bc/chatlog&showchatlog=1&from=" + (from / 1000L) + "&to=" + (to / 1000L) + (playersString == null ? "" : ("&players=" + playersString)) + (vplayersString == null ? "" : ("&vplayers=" + vplayersString)))).append("\">Encrypt chatlog</a> - click this then copy/paste the address bar to share this chatlog.<br><br><br>");
 					}
 					sb.append("<br>");
 					sb.append("Note: All chat messages are shown as they were originally typed in by the player, before any caps filtering or censorship has been applied to it!<br><br>");
 					ChatLogLine[] lines = ChatLogReader.getChatLogs(from, to);
-					if (!requestIsEncrypted) {
+					if (allowChatlogs) {
 						sb.append("<a href=\"/bc/chatlog?from=").append((from / 1000L) - 120L).append("&to=").append(to / 1000L).append(playersString == null ? "" : ("&players=" + playersString)).append(vplayersString == null ? "" : ("&vplayers=" + vplayersString)).append("\"> + 2 minutes before</a>");
 					}
 					sb.append("<table>");
 					sb.append("<tr class=\"tablehead\">");
-					if (!requestIsEncrypted) {
+					if (allowChatlogs) {
 						sb.append("<td>Trim Chat Log</td>");
 					}
 					sb.append("<td>Time</td>");
@@ -1156,7 +1156,7 @@ public class BungeeResponder implements HTTPResponder {
 						if (line instanceof PublicChatLog) {
 							PublicChatLog chat = (PublicChatLog) line;
 							sb.append("<tr class=\"row").append(alternateLine ? "a" : "b").append("\">");
-							if (!requestIsEncrypted) {
+							if (allowChatlogs) {
 								sb.append(startEnd);
 							}
 							sb.append("<td>").append(chat.getDateTime(timezone)).append("</td>");
@@ -1168,7 +1168,7 @@ public class BungeeResponder implements HTTPResponder {
 						} else if (line instanceof FactionChatLog) {
 							FactionChatLog chat = (FactionChatLog) line;
 							sb.append("<tr class=\"row").append(alternateLine ? "a" : "b").append("\">");
-							if (!requestIsEncrypted) {
+							if (allowChatlogs) {
 								sb.append(startEnd);
 							}
 							sb.append("<td>").append(chat.getDateTime(timezone)).append("</td>");
@@ -1199,7 +1199,7 @@ public class BungeeResponder implements HTTPResponder {
 						} else if (line instanceof GroupChatLog) {
 							GroupChatLog chat = (GroupChatLog) line;
 							sb.append("<tr class=\"row").append(alternateLine ? "a" : "b").append("\">");
-							if (!requestIsEncrypted) {
+							if (allowChatlogs) {
 								sb.append(startEnd);
 							}
 							sb.append("<td>").append(chat.getDateTime(timezone)).append("</td>");
@@ -1230,7 +1230,7 @@ public class BungeeResponder implements HTTPResponder {
 						} else if (line instanceof PrivateChatLog) {
 							PrivateChatLog chat = (PrivateChatLog) line;
 							sb.append("<tr class=\"row").append(alternateLine ? "a" : "b").append("\">");
-							if (!requestIsEncrypted) {
+							if (allowChatlogs) {
 								sb.append(startEnd);
 							}
 							sb.append("<td>").append(chat.getDateTime(timezone)).append("</td>");
@@ -1242,7 +1242,7 @@ public class BungeeResponder implements HTTPResponder {
 						} else if (line instanceof MailChatLog) {
 							MailChatLog chat = (MailChatLog) line;
 							sb.append("<tr class=\"row").append(alternateLine ? "a" : "b").append("\">");
-							if (!requestIsEncrypted) {
+							if (allowChatlogs) {
 								sb.append(startEnd);
 							}
 							sb.append("<td>").append(chat.getDateTime(timezone)).append("</td>");
@@ -1254,7 +1254,7 @@ public class BungeeResponder implements HTTPResponder {
 						} else if (line instanceof StaffChatLog) {
 							StaffChatLog chat = (StaffChatLog) line;
 							sb.append("<tr class=\"row").append(alternateLine ? "a" : "b").append("\">");
-							if (!requestIsEncrypted) {
+							if (allowChatlogs) {
 								sb.append(startEnd);
 							}
 							sb.append("<td>").append(chat.getDateTime(timezone)).append("</td>");
@@ -1266,7 +1266,7 @@ public class BungeeResponder implements HTTPResponder {
 						}
 					}
 					sb.append("</table>");
-					if (!requestIsEncrypted) {
+					if (allowChatlogs) {
 						sb.append("<a href=\"/bc/chatlog?from=").append(from / 1000L).append("&to=").append((to / 1000L) + 120L).append(playersString == null ? "" : ("&players=" + playersString)).append(vplayersString == null ? "" : ("&vplayers=" + vplayersString)).append("\"> + 2 minutes after</a>");
 					}
 				}
