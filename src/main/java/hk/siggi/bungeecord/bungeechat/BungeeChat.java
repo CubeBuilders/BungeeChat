@@ -147,8 +147,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.cubebuilders.discordbot.DiscordBotPlugin;
-import net.cubebuilders.discordbot.IDiscordBot;
 import net.cubebuilders.user.CBUser;
 import net.cubebuilders.user.Punishment;
 import net.cubebuilders.user.Punishment.PunishmentAction;
@@ -761,10 +759,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 	}
 
-	private final Object discordUpdateLock = new Object();
-	private long lastDiscordSync = 0L;
-	private boolean discordSyncing = false;
-
 	private void tick() {
 		sessionMapWriteLock.lock();
 		try {
@@ -781,30 +775,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			}
 		} finally {
 			sessionMapWriteLock.unlock();
-		}
-		synchronized (discordUpdateLock) {
-			if (!discordSyncing && System.currentTimeMillis() - lastDiscordSync > 15000L) {
-				discordSyncing = true;
-				new Thread(this::syncDiscord).start();
-			}
-		}
-	}
-
-	private void syncDiscord() {
-		try {
-			IDiscordBot bot = DiscordBotPlugin.getInstance().getBot();
-			for (ProxiedPlayer pl : getProxy().getPlayers()) {
-				String status = bot.getStatus(pl.getUniqueId());
-				PlayerSession session = getSession(pl);
-				session.discordStatus = status;
-			}
-		} catch (Throwable t) {
-			t.printStackTrace();
-		} finally {
-			synchronized (discordUpdateLock) {
-				discordSyncing = false;
-				lastDiscordSync = System.currentTimeMillis();
-			}
 		}
 	}
 

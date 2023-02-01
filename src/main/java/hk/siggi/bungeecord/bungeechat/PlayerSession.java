@@ -93,8 +93,6 @@ public class PlayerSession {
 	public boolean emailNeedsConfirmation = false;
 	public boolean didResendEmail = false;
 
-	public String discordStatus = null;
-
 	public UUID getUUID() {
 		return uuid;
 	}

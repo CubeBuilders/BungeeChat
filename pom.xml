@@ -65,12 +65,6 @@
         </dependency>
         <dependency>
             <groupId>io.siggi</groupId>
-            <artifactId>CubeBuildersDiscordBot</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.siggi</groupId>
             <artifactId>CubeTokens</artifactId>
             <version>1.0</version>
             <scope>provided</scope>
