@@ -109,9 +109,12 @@ public class Util {
 		return notPermittedMessages.get((int) Math.floor(Math.random() * notPermittedMessages.size()));
 	}
 
+	private static final String USER_AGENT = "CubeBuilders (cubebuilders.net)";
+
 	public static byte[] getURL(String url) {
 		try {
 			HttpURLConnection connection = (HttpURLConnection)(new URL(url).openConnection());
+			connection.setRequestProperty("User-Agent", USER_AGENT);
 			connection.setConnectTimeout(5000);
 			connection.setReadTimeout(5000);
 			InputStream in = connection.getInputStream();
@@ -185,7 +188,7 @@ public class Util {
 			httpc.setReadTimeout(2000);
 			httpc.setDoOutput(true);
 			httpc.setRequestMethod("POST");
-			httpc.setRequestProperty("User-Agent", "CubeBuilders (cubebuilders.net)");
+			httpc.setRequestProperty("User-Agent", USER_AGENT);
 			httpc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 			OutputStream out = httpc.getOutputStream();
 			for (Object keyO : request.keySet()) {
