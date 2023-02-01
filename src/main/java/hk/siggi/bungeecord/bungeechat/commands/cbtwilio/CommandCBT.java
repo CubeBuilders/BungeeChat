@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.cbtwilio;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.Endpoints;
 import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import java.io.BufferedReader;
@@ -52,7 +53,7 @@ public class CommandCBT extends Command {
 		PlayerAccount pi = plugin.getPlayerInfo(issuer);
 		try {
 			if (args.length == 0) {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://127.0.0.1:8895/twilio/cubebuilders/getnumber?username=" + URLEncoder.encode(player.getName()) + "&uuid=" + URLEncoder.encode(player.getUniqueId().toString().toLowerCase().replaceAll("-", ""))).openConnection().getInputStream()));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(Endpoints.get("twilio") + "/twilio/cubebuilders/getnumber?username=" + URLEncoder.encode(player.getName()) + "&uuid=" + URLEncoder.encode(player.getUniqueId().toString().toLowerCase().replaceAll("-", ""))).openConnection().getInputStream()));
 				String result = reader.readLine();
 				if (result.startsWith("OK:")) {
 					String number = result.substring(3);
@@ -92,7 +93,7 @@ public class CommandCBT extends Command {
 					return;
 				}
 				String code = args[1];
-				BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://127.0.0.1:8895/twilio/cubebuilders/register?username=" + URLEncoder.encode(player.getName()) + "&uuid=" + URLEncoder.encode(player.getUniqueId().toString().toLowerCase().replaceAll("-", "")) + "&pincode=" + URLEncoder.encode(code)).openConnection().getInputStream()));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(Endpoints.get("twilio") + "/twilio/cubebuilders/register?username=" + URLEncoder.encode(player.getName()) + "&uuid=" + URLEncoder.encode(player.getUniqueId().toString().toLowerCase().replaceAll("-", "")) + "&pincode=" + URLEncoder.encode(code)).openConnection().getInputStream()));
 				String result = reader.readLine();
 				if (result.startsWith("OK:")) {
 					String number = result.substring(3);
@@ -137,7 +138,7 @@ public class CommandCBT extends Command {
 					Thread.sleep(2000L);
 				} catch (Exception e) {
 				}
-				BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://127.0.0.1:8895/twilio/cubebuilders/deregister?username=" + URLEncoder.encode(player.getName()) + "&uuid=" + URLEncoder.encode(player.getUniqueId().toString().toLowerCase().replaceAll("-", ""))).openConnection().getInputStream()));
+				BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(Endpoints.get("twilio") + "/twilio/cubebuilders/deregister?username=" + URLEncoder.encode(player.getName()) + "&uuid=" + URLEncoder.encode(player.getUniqueId().toString().toLowerCase().replaceAll("-", ""))).openConnection().getInputStream()));
 				pi.setPhoneNumber(null);
 				String result = reader.readLine();
 				if (result.equalsIgnoreCase("OK")) {

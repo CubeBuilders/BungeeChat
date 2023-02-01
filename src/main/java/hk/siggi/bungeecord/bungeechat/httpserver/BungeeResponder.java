@@ -2,6 +2,7 @@ package hk.siggi.bungeecord.bungeechat.httpserver;
 
 import com.google.gson.stream.JsonWriter;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.Endpoints;
 import hk.siggi.bungeecord.bungeechat.NicknameCache;
 import hk.siggi.bungeecord.bungeechat.ServerActivityReport;
 import hk.siggi.bungeecord.bungeechat.UUIDCache;
@@ -196,7 +197,7 @@ public class BungeeResponder implements HTTPResponder {
 		try {
 			sessionCookie = request.cookies.get("SessID");
 			if (sessionCookie != null) {
-				HttpURLConnection conn = (HttpURLConnection) (new URL("http://127.0.0.1:2823/api/bc?cookie=" + sessionCookie).openConnection());
+				HttpURLConnection conn = (HttpURLConnection) (new URL(Endpoints.get("website") + "/api/bc?cookie=" + sessionCookie).openConnection());
 				BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 				boolean loggedIn = reader.readLine().equals("1");
 				cubeSession = true;

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.Endpoints;
 import hk.siggi.bungeecord.bungeechat.MessageSender;
 import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.geolocation.Geolocation;
@@ -217,7 +218,7 @@ public class CommandSeen extends Command implements TabExecutor {
 			if (playerToCheck == null) {
 				if (entityToCheck.matches("[A-Za-z0-9_]{1,16}")) {
 					try {
-						URL url = new URL("http://127.0.0.1:8592/" + entityToCheck + "/latest");
+						URL url = new URL(Endpoints.get("uuidserver") + "/" + entityToCheck + "/latest");
 						HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 						conn.setConnectTimeout(1000);
 						conn.setReadTimeout(1000);

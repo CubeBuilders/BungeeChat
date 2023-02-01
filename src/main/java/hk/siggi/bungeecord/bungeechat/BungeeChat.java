@@ -449,6 +449,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			chatCensor.reloadWords();
 		}
 		globalPublicChat = new File(dataFolder, "global-public-chat").exists();
+		Endpoints.loadFrom(new File(dataFolder, "endpoints.txt"));
 	}
 
 	public CommandList commandList = null;
@@ -643,7 +644,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			boolean updatePhoneNumbers = false;
 			Map<UUID, String> phoneNumbers = new HashMap<>();
 			try {
-				URLConnection urlc = new URL("http://127.0.0.1:8895/twilio/cubebuilders/registereduuids").openConnection();
+				URLConnection urlc = new URL(Endpoints.get("twilio") + "/twilio/cubebuilders/registereduuids").openConnection();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(urlc.getInputStream()));
 				String line;
 				while ((line = reader.readLine()) != null) {
@@ -694,7 +695,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			pullUUIDs.delete();
 			try {
 				uuidCache.preventSaving();
-				URL url = new URL("http://127.0.0.1:8592/dump");
+				URL url = new URL(Endpoints.get("uuidserver") + "/dump");
 				try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openConnection().getInputStream()))) {
 					String line;
 					while ((line = reader.readLine()) != null) {
@@ -1603,7 +1604,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 	public boolean postOffence(Punishment punishment) {
 		try {
 			String data = punishment.toJson(false);
-			URL url = new URL("http://127.0.0.1:2823/api/postoffence");
+			URL url = new URL(Endpoints.get("website") + "/api/postoffence");
 			URLConnection urlc = url.openConnection();
 			HttpURLConnection http = (HttpURLConnection) urlc;
 			http.setRequestMethod("POST");
@@ -2420,7 +2421,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 						} catch (Exception e) {
 						}
 					}
-					bytes = Util.getURL("http://127.0.0.1:2823/api/userlogin?name=" + connection.getName() + "&uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()) + "&ip=" + userIPAddress);
+					bytes = Util.getURL(Endpoints.get("website") + "/api/userlogin?name=" + connection.getName() + "&uuid=" + (uuid.toString().replaceAll("-", "").toLowerCase()) + "&ip=" + userIPAddress);
 					if (bytes != null) {
 						break;
 					}
@@ -2845,7 +2846,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 	public String textSync(UUID player, String message) {
 		String username = getUUIDCache().getNameFromUUID(player);
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://127.0.0.1:8895/twilio/cubebuilders/sendtext?username=" + URLEncoder.encode(username) + "&uuid=" + URLEncoder.encode(player.toString().toLowerCase().replaceAll("-", "")) + "&message=" + URLEncoder.encode(message)).openConnection().getInputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(Endpoints.get("twilio") + "/twilio/cubebuilders/sendtext?username=" + URLEncoder.encode(username) + "&uuid=" + URLEncoder.encode(player.toString().toLowerCase().replaceAll("-", "")) + "&message=" + URLEncoder.encode(message)).openConnection().getInputStream()));
 			return reader.readLine();
 		} catch (Exception e) {
 			return "ServiceUnavailable";
@@ -3509,7 +3510,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 	public boolean addPlus(UUID pl, String paymentRef, long time) {
 		try {
-			URL url = new URL("http://127.0.0.1:2823/api/addplus?uuid=" + pl.toString() + "&ref=" + Util.urlEncode(paymentRef) + "&time=" + time);
+			URL url = new URL(Endpoints.get("website") + "/api/addplus?uuid=" + pl.toString() + "&ref=" + Util.urlEncode(paymentRef) + "&time=" + time);
 			URLConnection urlc = url.openConnection();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(urlc.getInputStream()));
 			return reader.readLine().equals("OK");
@@ -3541,7 +3542,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			JsonObject skinsObject = texturesObject.getAsJsonObject("SKIN");
 			String skinUrl = skinsObject.get("url").getAsString();
 			String skinUrlEncoded = URLEncoder.encode(skinUrl, "UTF-8");
-			URL url = new URL("http://127.0.0.1:2823/api/updateskin?uuid=" + (user.toString().replace("-", "").toLowerCase()) + "&url=" + skinUrlEncoded);
+			URL url = new URL(Endpoints.get("website") + "/api/updateskin?uuid=" + (user.toString().replace("-", "").toLowerCase()) + "&url=" + skinUrlEncoded);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			int responseCode = connection.getResponseCode();
 		} catch (Exception e) {

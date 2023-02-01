@@ -1,6 +1,7 @@
 package hk.siggi.bungeecord.bungeechat.commands.cbtwilio;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
+import hk.siggi.bungeecord.bungeechat.Endpoints;
 import java.io.*;
 import java.util.*;
 import java.net.*;
@@ -44,7 +45,7 @@ public class CommandCBTConfirm extends Command {
 		}
 		String code = args[0];
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL("http://127.0.0.1:8895/twilio/cubebuilders/register?username=" + URLEncoder.encode(player.getName()) + "&uuid=" + URLEncoder.encode(player.getUniqueId().toString().toLowerCase().replaceAll("-", "")) + "&pincode=" + URLEncoder.encode(code)).openConnection().getInputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(new URL(Endpoints.get("twilio") + "/twilio/cubebuilders/register?username=" + URLEncoder.encode(player.getName()) + "&uuid=" + URLEncoder.encode(player.getUniqueId().toString().toLowerCase().replaceAll("-", "")) + "&pincode=" + URLEncoder.encode(code)).openConnection().getInputStream()));
 			String result = reader.readLine();
 			if (result.startsWith("OK:")) {
 				String number = result.substring(3);
