@@ -43,7 +43,6 @@ public class Serialization {
 		gb.registerTypeAdapter(PlayerAccount.class, simpleTypeAdapter(PlayerAccount.class));
 		gb.registerTypeAdapter(PlayerAccount.ChatPrefixType.class, enumTypeAdapter(PlayerAccount.ChatPrefixType.class));
 		gb.registerTypeAdapter(Mail.class, simpleTypeAdapter(Mail.class));
-		gb.registerTypeAdapter(MCBan.class, simpleTypeAdapter(MCBan.class));
 		gb.registerTypeAdapter(Punishment.class, simpleTypeAdapter(Punishment.class));
 		gb.registerTypeAdapter(Punishment.PunishmentAction.class, enumTypeAdapter(Punishment.PunishmentAction.class));
 		gb.registerTypeAdapter(PlayerTitle.class, simpleTypeAdapter(PlayerTitle.class));

@@ -46,7 +46,6 @@ import hk.siggi.bungeecord.bungeechat.commands.moderation.CommandVanish;
 import hk.siggi.bungeecord.bungeechat.commands.moderation.CommandVanishOnLogin;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandBanName;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandCheckHistory;
-import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandMCBanExempt;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandMute;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandOldTemporaryBan;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandPermanentBan;
@@ -90,7 +89,6 @@ import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTimePlayer;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTimeSessionRecord;
 import hk.siggi.bungeecord.bungeechat.permissionloader.PermissionLoader;
-import hk.siggi.bungeecord.bungeechat.player.MCBan;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.relog.RelogHandler;
 import hk.siggi.bungeecord.bungeechat.util.APIUtil;
@@ -504,7 +502,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerCommand(this, new CommandUnban(this));
 		pm.registerCommand(this, new CommandPunish(this));
 		pm.registerCommand(this, new CommandCheckHistory(this));
-		pm.registerCommand(this, new CommandMCBanExempt(this));
 		pm.registerCommand(this, new CommandStrike(this));
 		pm.registerCommand(this, new CommandStrikeHistory(this));
 		pm.registerCommand(this, new CommandCBT(this));
@@ -583,16 +580,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 					reIP(server, ip, port);
 				} catch (Exception e) {
 				}
-			}
-			reader.close();
-		} catch (Exception e) {
-		}
-		try {
-			File mcBansApiKeyFile = new File(getDataFolder(), "mcbans_apikey.txt");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(mcBansApiKeyFile)));
-			String line = reader.readLine();
-			if (line != null) {
-				mcBansApiKey = line;
 			}
 			reader.close();
 		} catch (Exception e) {
@@ -882,7 +869,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			MessageSender.sendMessage(p, t2);
 		}
 	}
-	private String mcBansApiKey = null;
 
 	public NicknameCache getNicknameCache() {
 		return nicknameCache;
@@ -2520,107 +2506,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			event.setCancelled(true);
 			youAreBanned(connection, user);
 			return;
-		}
-		final String ip = event.getConnection().getAddress().getAddress().getHostAddress();
-		String ipFS = ip.replace("[", "").replace("]", "").replace(":", "-");
-		mcBans(connection, playerInfo, event, session);
-		getProxy().getScheduler().runAsync(this, () -> {
-			if (mcBansApiKey != null) {
-				PlayerAccount pI = playerInfo;
-				try {
-					String searchUUID = uuid.toString().replaceAll("-", "").toLowerCase();
-					if (searchUUID.startsWith("00000000") || !searchUUID.substring(12, 13).equals("4")) {
-						return;
-					}
-					URLConnection urlc = new URL("http://api.mcbans.com/v3/" + mcBansApiKey + "/login/" + searchUUID + "/" + ip + "/4.3.5").openConnection();
-					urlc.setConnectTimeout(5000);
-					urlc.setReadTimeout(5000);
-					InputStream in = urlc.getInputStream();
-					ByteArrayOutputStream out = new ByteArrayOutputStream();
-					byte[] b = new byte[4096];
-					int c = 0;
-					while ((c = in.read(b, 0, b.length)) != -1) {
-						out.write(b, 0, c);
-					}
-					in.close();
-					String str = new String(out.toByteArray(), Charset.forName("utf8"));
-					String[] parts = str.split(";");
-					if (parts.length == 11) {
-						String banstatus = parts[0];
-						float reputation = Float.parseFloat(parts[2]);
-						boolean mcbansMod = parts[4].equalsIgnoreCase("y");
-
-						String otherServerBans[] = parts[7].split(",");
-						ArrayList<MCBan> mcBanList = new ArrayList<>();
-						for (String string : otherServerBans) {
-							if (string.equals("")) {
-								continue;
-							}
-							String[] banInfo = string.split("\\$");
-							String reason = banInfo[0];
-							String server = banInfo[1];
-							String prosecutor = banInfo[2];
-							mcBanList.add(new MCBan(uuid, reason, server, prosecutor));
-						}
-						pI = getPlayerInfo(uuid);
-						pI.setMCBans(banstatus.equals("g"), mcbansMod, reputation, mcBanList.toArray(new MCBan[mcBanList.size()]));
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				try {
-					Thread.sleep(5000L);
-				} catch (Exception e) {
-				}
-				ProxiedPlayer player = getProxiedPlayer(uuid);
-				if (player != null) {
-					mcBans(player, pI, null, session);
-				} else {
-					mcBans(connection, pI, null, session);
-				}
-			}
-		});
-	}
-
-	private void mcBans(Connection connection, PlayerAccount playerInfo, LoginEvent event, PlayerSession session) {
-		if (playerInfo.isMCBansExempt()) {
-			return;
-		}
-		boolean moreThan4Hours = false;
-		{
-			OnTimePlayer otp = OnTime.getInstance().getPlayer(playerInfo.getPlayerUUID());
-			OnTimeSessionRecord[] sessionRecords = otp.getSessionRecords();
-			long totalTime = 0L;
-			for (OnTimeSessionRecord record : sessionRecords) {
-				totalTime += record.getTimeLoggedIn();
-				if (totalTime > 3600L * 4L * 1000L) {
-					moreThan4Hours = true;
-					continue;
-				}
-			}
-		}
-		int banCount = playerInfo.getMCBanCount();
-		float rep = playerInfo.getMCBansRep();
-		if (playerInfo.isMCBansPBanned() || rep < 7.0 || banCount >= 3) {
-			if (event != null) {
-				event.setCancelled(true);
-			}
-			TextComponent component = new TextComponent("Entry into CubeBuilders by this account is blocked due to having a bad reputation on other servers. Visit MCBans.com to check your reputation.");
-			connection.disconnect(component);
-		} else if (!moreThan4Hours && banCount > 0) {
-			if (!session.alertedMCBans) {
-				session.alertedMCBans = true;
-				BaseComponent mcBansAlert = new TextComponent("Warning: " + getUUIDCache().getNameFromUUID(playerInfo.getPlayerUUID()) + " has negative reputation on MCBans.com.");
-				mcBansAlert.setColor(ChatColor.AQUA);
-
-				Collection<ProxiedPlayer> playerCollection = getProxy().getPlayers();
-				ProxiedPlayer[] players = playerCollection.toArray(new ProxiedPlayer[playerCollection.size()]);
-				for (ProxiedPlayer player : players) {
-					if (player.hasPermission("hk.siggi.bungeechat.punishmentalert")) {
-						MessageSender.sendMessage(player, mcBansAlert);
-					}
-				}
-			}
 		}
 	}
 

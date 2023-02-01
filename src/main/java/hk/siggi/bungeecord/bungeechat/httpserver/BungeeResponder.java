@@ -19,7 +19,6 @@ import hk.siggi.bungeecord.bungeechat.chatlog.StaffChatLog;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTime;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTimePlayer;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTimeSessionRecord;
-import hk.siggi.bungeecord.bungeechat.player.MCBan;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.player.Punishment;
 import static hk.siggi.bungeecord.bungeechat.util.ChatUtil.stripChatCodes;
@@ -967,33 +966,6 @@ public class BungeeResponder implements HTTPResponder {
 						sb.append("</td>");
 					}
 					sb.append("</tr>");
-				}
-				if (!player.isMCBansExempt()) {
-					MCBan[] mcBans = player.getMCBanList();
-					for (MCBan mcBan : mcBans) {
-						alternateLine = !alternateLine;
-						sb.append("<tr class=\"row").append(alternateLine ? "a" : "b").append("\">");
-						if (allowSeeingProsecutor) {
-							sb.append("<td>");
-							sb.append(mcBan.prosecutor);
-							sb.append(" (");
-							sb.append(mcBan.server);
-							sb.append(")</td>");
-						}
-						sb.append("<td>");
-						sb.append(plugin.getUUIDCache().getNameFromUUID(mcBan.player));
-						sb.append("</td>");
-						sb.append("<td>MCBan</td>");
-						sb.append("<td></td>");
-						sb.append("<td>Permanent</td>");
-						sb.append("<td>");
-						sb.append(mcBan.reason);
-						sb.append("</td>");
-						if (allowChatlogs) {
-							sb.append("<td>n/a</td>");
-						}
-						sb.append("</tr>");
-					}
 				}
 				sb.append("</table>");
 				writePage(request, generatePage("Offence History - " + playerName + " - CubeBuilders", sb.toString()));

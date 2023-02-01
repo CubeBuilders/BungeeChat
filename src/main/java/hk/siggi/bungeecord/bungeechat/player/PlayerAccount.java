@@ -47,11 +47,6 @@ public final class PlayerAccount {
 	private boolean chatCensorSemi = false;
 	private long lastShownChatCensorMessage = 0;
 	private String nickname = null;
-	private boolean mcBansPBanned = false;
-	private boolean mcBansMod = false;
-	private float mcBansRep = 10.0f;
-	private MCBan[] mcBanList = new MCBan[0];
-	private boolean mcBansExempt = false;
 	private boolean bypassIPBan = false;
 	private long shadowMuteExpiry = 0L;
 	private ChatPrefixType chatPrefixType = ChatPrefixType.AUTO;
@@ -149,35 +144,6 @@ public final class PlayerAccount {
 		return bypassIPBan;
 	}
 
-	public void setMCBans(boolean mcBansPBanned, boolean mcBansMod, float mcBansRep, MCBan[] mcBanList) {
-		synchronized (BungeeChat.getInstance().fsLock) {
-			load();
-			this.mcBansPBanned = mcBansPBanned;
-			this.mcBansMod = mcBansMod;
-			this.mcBansRep = mcBansRep;
-			MCBan[] b = new MCBan[mcBanList.length];
-			System.arraycopy(mcBanList, 0, b, 0, b.length);
-			this.mcBanList = b;
-			save();
-		}
-	}
-
-	public boolean isMCBansPBanned() {
-		return mcBansPBanned;
-	}
-
-	public boolean isMCBansMod() {
-		return mcBansMod;
-	}
-
-	public float getMCBansRep() {
-		return mcBansRep;
-	}
-
-	public int getMCBanCount() {
-		return mcBanList.length;
-	}
-
 	public boolean isShadowMuted() {
 		long expiry = getShadowMuteExpiry();
 		return expiry != 0L && expiry > System.currentTimeMillis();
@@ -216,26 +182,6 @@ public final class PlayerAccount {
 			this.chatPrefixType = chatPrefixType;
 			save();
 		}
-	}
-
-	public void setMCBansExempt(boolean mcBansExempt) {
-		synchronized (BungeeChat.getInstance().fsLock) {
-			load();
-			this.mcBansExempt = mcBansExempt;
-			save();
-		}
-	}
-
-	public boolean isMCBansExempt() {
-		return mcBansExempt;
-	}
-
-	public MCBan[] getMCBanList() {
-		MCBan[] b = new MCBan[mcBanList.length];
-		for (int i = 0; i < b.length; i++) {
-			b[i] = mcBanList[i];
-		}
-		return b;
 	}
 
 	public NameHistory[] getNameHistory() {
@@ -691,10 +637,6 @@ public final class PlayerAccount {
 			chatCensorSemi = false;
 			lastShownChatCensorMessage = 0L;
 			nickname = null;
-			mcBansPBanned = false;
-			mcBansExempt = false;
-			mcBansMod = false;
-			mcBansRep = 10.0f;
 			gaveMineChatGift = false;
 			punishments.clear();
 			mail.clear();
@@ -729,7 +671,6 @@ public final class PlayerAccount {
 			phoneNumber = null;
 			fakeLastOnline = 0L;
 			ArrayList<NameHistory> nameHistory = new ArrayList<>();
-			ArrayList<MCBan> mcBans = new ArrayList<>();
 			BufferedReader reader = null;
 			try {
 				reader = new BufferedReader(new InputStreamReader(new FileInputStream(getPlayerFileTxt(player))));
@@ -799,23 +740,6 @@ public final class PlayerAccount {
 							}
 						} else if (key.equalsIgnoreCase("Nickname")) {
 							nickname = val;
-						} else if (key.equalsIgnoreCase("MCBansPBanned")) {
-							mcBansPBanned = val.equals("1");
-						} else if (key.equalsIgnoreCase("MCBansMod")) {
-							mcBansMod = val.equals("1");
-						} else if (key.equalsIgnoreCase("MCBansRep")) {
-							mcBansRep = Float.parseFloat(val);
-						} else if (key.equalsIgnoreCase("MCBansExempt")) {
-							mcBansExempt = val.equals("1");
-						} else if (key.equalsIgnoreCase("MCBan")) {
-							try {
-								String pieces[] = val.split("\\$");
-								String reason = pieces[0];
-								String server = pieces[1];
-								String prosecutor = pieces[2];
-								mcBans.add(new MCBan(player, reason, server, prosecutor));
-							} catch (Exception e) {
-							}
 						} else if (key.equalsIgnoreCase("GaveMineChatGift")) {
 							gaveMineChatGift = val.equals("1");
 						} else if (key.equalsIgnoreCase("BypassIPBan")) {
@@ -892,7 +816,6 @@ public final class PlayerAccount {
 				}
 			}
 			previousNames = nameHistory.toArray(new NameHistory[nameHistory.size()]);
-			mcBanList = mcBans.toArray(new MCBan[mcBans.size()]);
 		} catch (Exception e) {
 		}
 		// </editor-fold>
@@ -939,13 +862,6 @@ public final class PlayerAccount {
 			}
 			if (gaveMineChatGift) {
 				fos.write("GaveMineChatGift=1\n".getBytes());
-			}
-			fos.write(("MCBansPBanned=" + (mcBansPBanned ? "1" : "0") + "\n").getBytes());
-			fos.write(("MCBansMod=" + (mcBansMod ? "1" : "0") + "\n").getBytes());
-			fos.write(("MCBansRep=" + Float.toString(mcBansRep) + "\n").getBytes());
-			fos.write(("MCBansExempt=" + (mcBansExempt ? "1" : "0") + "\n").getBytes());
-			for (MCBan ban : mcBanList) {
-				fos.write(("MCBan=" + (ban.reason) + "$" + (ban.server) + "$" + (ban.prosecutor) + "\n").getBytes());
 			}
 			if (muteTime != 0L) {
 				fos.write(("MuteTime=" + muteTime + "\n").getBytes());

@@ -47,7 +47,6 @@ public class PlayerSession {
 
 	public final InetSocketAddress address;
 	private UUID uuid;
-	public boolean alertedMCBans;
 	public CBUser user = null;
 	public long recentMute = 0L;
 	public long recentBan = 0L;

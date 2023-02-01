@@ -2,7 +2,6 @@ package hk.siggi.bungeecord.bungeechat.commands.punishment;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import hk.siggi.bungeecord.bungeechat.MessageSender;
-import hk.siggi.bungeecord.bungeechat.player.MCBan;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
 import java.util.ArrayList;
@@ -160,20 +159,6 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 					punishment.setColor(ChatColor.GRAY);
 				}
 				MessageSender.sendMessage(sender, punishment);
-			}
-		}
-		if (!playerInfo.isMCBansExempt()) {
-			MCBan[] mcBans = playerInfo.getMCBanList();
-			if (mcBans.length > 0) {
-				int j = Math.min(3, mcBans.length);
-				BaseComponent alert = new TextComponent(receiver + " has history on MCBans.com:");
-				alert.setColor(ChatColor.RED);
-				MessageSender.sendMessage(sender, alert);
-				for (int i = 0; i < j; i++) {
-					BaseComponent punishment = new TextComponent(mcBans[i].server + ": " + mcBans[i].reason + " (" + mcBans[i].prosecutor + ")");
-					punishment.setColor(ChatColor.AQUA);
-					MessageSender.sendMessage(sender, punishment);
-				}
 			}
 		}
 		BaseComponent moreInfo = new TextComponent("Click Here For More Information");
