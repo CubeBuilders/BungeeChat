@@ -466,6 +466,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		return notifications;
 	}
 
+	private EventDiscordRelay eventDiscordRelay = null;
+
 	@Override
 	public void onEnable() {
 		System.setProperty("http.keepAlive", "false");
@@ -477,6 +479,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		bungeeScheduler = new BungeeScheduler();
 		chatController = new ChatController(this);
 		notifications = new Notifications(this, new File(getDataFolder(), "notifications.json"));
+		eventDiscordRelay = new EventDiscordRelay(this);
 		commandAutoCompleter = new CommandAutoCompleter(this);
 
 		PluginManager pm = getProxy().getPluginManager();
@@ -484,6 +487,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerListener(this, this);
 		pm.registerListener(this, chatController);
 		pm.registerListener(this, notifications);
+		pm.registerListener(this, eventDiscordRelay);
 		pm.registerCommand(this, new CommandMsg(this));
 		pm.registerCommand(this, new CommandIgnore(this));
 		pm.registerCommand(this, new CommandPub(this));
