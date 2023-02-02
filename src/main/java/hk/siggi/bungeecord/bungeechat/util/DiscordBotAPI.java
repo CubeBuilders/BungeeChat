@@ -26,17 +26,33 @@ public class DiscordBotAPI {
         }
     }
 
-    public static void sendMessage(String channel, String message) {
+    public static boolean sendMessage(String channel, String message, boolean isTask, ActionLink... links) {
         String endpoint = Endpoints.get("discordbot");
         if (endpoint == null) {
-            return;
+            return false;
         }
         try {
             Map<String, String> postData = new HashMap<>();
             postData.put("channel", channel);
             postData.put("message", message);
-            Util.post(endpoint + "/message", postData);
+            if (links != null) {
+                for (int i = 0; i < links.length; i++) {
+                    postData.put("link" + (i+1), links[i].url);
+                    postData.put("text" + (i+1), links[i].text);
+                }
+            }
+            return new String(Util.post(endpoint + "/message", postData)).equals("OK");
         } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static class ActionLink {
+        private final String url;
+        private final String text;
+        public ActionLink(String url, String text) {
+            this.url = url;
+            this.text = text;
         }
     }
 }

@@ -70,6 +70,7 @@ import hk.siggi.bungeecord.bungeechat.commands.server.CommandNotify;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandRank;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandRegister;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandReload;
+import hk.siggi.bungeecord.bungeechat.commands.server.CommandReport;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandSecretCode;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandSeen;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandServer;
@@ -545,6 +546,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerCommand(this, new CommandStore(this));
 
 		pm.registerCommand(this, new CommandLinkDiscord(this));
+		pm.registerCommand(this, new CommandReport(this));
 
 		pm.registerCommand(this, new CommandTestFeature(this));
 
