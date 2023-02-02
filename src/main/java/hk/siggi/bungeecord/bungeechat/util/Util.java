@@ -216,6 +216,7 @@ public class Util {
 			out.write(data);
 			return readFully(httpc.getInputStream());
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			return null;
 		}
 	}

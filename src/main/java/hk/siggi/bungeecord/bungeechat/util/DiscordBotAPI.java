@@ -35,6 +35,7 @@ public class DiscordBotAPI {
             Map<String, String> postData = new HashMap<>();
             postData.put("channel", channel);
             postData.put("message", message);
+            if (isTask) postData.put("task", "1");
             if (links != null) {
                 for (int i = 0; i < links.length; i++) {
                     postData.put("link" + (i+1), links[i].url);
