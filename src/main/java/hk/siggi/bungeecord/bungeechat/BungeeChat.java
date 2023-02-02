@@ -2557,6 +2557,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 	@EventHandler
 	public void playerSpeeding(PlayerSpeedingEvent event) {
 		ProxiedPlayer player = event.getPlayer();
+		if (event.getGameMode() == 1 || event.getGameMode() == 3) return; // ignore speeding for creative mode and spectator mode
 		TextComponent speedAlert = new TextComponent("");
 		{
 			TextComponent extra = new TextComponent("[!!] ");
