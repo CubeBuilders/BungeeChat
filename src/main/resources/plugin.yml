@@ -3,4 +3,4 @@ main: hk.siggi.bungeecord.bungeechat.BungeeChat
 version: 1.0
 description: BungeeChat
 author: Siggi
-depends: [SiggiHTTP]
+depends: [SiggiHTTP, CubeCore]

@@ -12,6 +12,7 @@ import hk.siggi.bungeecord.bungeechat.ontime.OnTimePlayer;
 import hk.siggi.bungeecord.bungeechat.ontime.OnTimeSessionRecord;
 import hk.siggi.bungeecord.bungeechat.player.PlayerAccount;
 import hk.siggi.bungeecord.bungeechat.player.Punishment;
+import io.siggi.cubecore.bedrockapi.BedrockDeviceInfo;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -179,6 +180,7 @@ public class CommandList extends Command {
 						playersHere.addExtra(comma);
 					}
 					playerInfo.setColor(plugin.getGroupInfo().getColor(p));
+					UUID targetUUID = p.getUniqueId();
 					PlayerSession session = BungeeChat.getSession(p);
 					if (session != null) {
 						if (session.isAfk()) {
@@ -195,7 +197,12 @@ public class CommandList extends Command {
 						if (brand.equals("")) {
 							brand = "Unknown";
 						}
-						TextComponent brandText = new TextComponent((didHoverText ? "\n" : "") + "Client brand: " + brand);
+						String clientInfo = (didHoverText ? "\n" : "") + "Client brand: " + brand;
+						if (BedrockDeviceInfo.isOnBedrock(targetUUID)) {
+							clientInfo += "\nDevice: " + BedrockDeviceInfo.getDevice(targetUUID).getName();
+							clientInfo += "\nInput Mode: " + BedrockDeviceInfo.getInputMode(targetUUID).getName();
+						}
+						TextComponent brandText = new TextComponent(clientInfo);
 						hover.addExtra(brandText);
 						brandText.setColor(ChatColor.GRAY);
 						didHoverText = true;
