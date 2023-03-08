@@ -853,6 +853,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 			CT.get().giveCubeTokens(p.getUniqueId(), finalCT, "Playtime Gift", 60L * 65L * 10000L);
 
+			if (false) {
 			TextComponent t = new TextComponent("");
 			TextComponent youHaveReceived = new TextComponent("You have received ");
 			TextComponent numberCT = new TextComponent(finalCT + " CT");
@@ -881,6 +882,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 			MessageSender.sendMessage(p, t);
 			MessageSender.sendMessage(p, t2);
+			}
 		}
 	}
 
