@@ -90,6 +90,7 @@
     </dependencies>
 
     <build>
+        <finalName>BungeeChat</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
