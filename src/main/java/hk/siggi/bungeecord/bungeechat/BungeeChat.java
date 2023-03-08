@@ -468,6 +468,8 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 	private EventDiscordRelay eventDiscordRelay = null;
 
+	private MotdRandomizer motdRandomizer;
+
 	@Override
 	public void onEnable() {
 		System.setProperty("http.keepAlive", "false");
@@ -480,6 +482,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		chatController = new ChatController(this);
 		notifications = new Notifications(this, new File(getDataFolder(), "notifications.json"));
 		eventDiscordRelay = new EventDiscordRelay(this);
+		motdRandomizer = new MotdRandomizer(this, new File(getDataFolder(), "motd.txt"));
 		commandAutoCompleter = new CommandAutoCompleter(this);
 
 		PluginManager pm = getProxy().getPluginManager();
@@ -488,6 +491,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerListener(this, chatController);
 		pm.registerListener(this, notifications);
 		pm.registerListener(this, eventDiscordRelay);
+		pm.registerListener(this, motdRandomizer);
 		pm.registerCommand(this, new CommandMsg(this));
 		pm.registerCommand(this, new CommandIgnore(this));
 		pm.registerCommand(this, new CommandPub(this));
