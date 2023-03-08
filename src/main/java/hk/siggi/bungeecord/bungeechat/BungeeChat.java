@@ -58,6 +58,8 @@ import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandTemporaryBan;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandUnban;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandUnmute;
 import hk.siggi.bungeecord.bungeechat.commands.punishment.CommandWarn;
+import hk.siggi.bungeecord.bungeechat.commands.server.CommandAlias;
+import hk.siggi.bungeecord.bungeechat.commands.server.CommandBook;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandCTReward;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandDontKickMe;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandFakeIP;
@@ -77,8 +79,6 @@ import hk.siggi.bungeecord.bungeechat.commands.server.CommandServer;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandSetGroup;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandStore;
 import hk.siggi.bungeecord.bungeechat.commands.server.CommandTestFeature;
-import hk.siggi.bungeecord.bungeechat.commands.socialmedia.CommandSocialMedia;
-import hk.siggi.bungeecord.bungeechat.commands.socialmedia.CommandVote;
 import hk.siggi.bungeecord.bungeechat.event.MineWatchEvent;
 import hk.siggi.bungeecord.bungeechat.event.PlayerSpeedingEvent;
 import hk.siggi.bungeecord.bungeechat.event.PunishmentIssuedEvent;
@@ -101,6 +101,9 @@ import hk.siggi.bungeecord.bungeechat.util.TimeUtil;
 import hk.siggi.bungeecord.bungeechat.util.Util;
 import static hk.siggi.bungeecord.bungeechat.util.Util.doubleToString;
 import hk.siggi.cubetokens.CT;
+import io.siggi.cubecore.util.text.book.BookParser;
+import io.siggi.cubecore.util.text.book.SimpleBookParser;
+import io.siggi.cubecore.util.text.processor.CubeBuildersClassicTextProcessor;
 import io.siggi.http.HTTPServer;
 import io.siggi.iphelper.IP;
 import io.siggi.iphelper.IPv4;
@@ -470,6 +473,10 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 	private MotdRandomizer motdRandomizer;
 
+	private ServerNewsOnLogin serverNewsOnLogin;
+
+	private BookParser bookParser;
+
 	@Override
 	public void onEnable() {
 		System.setProperty("http.keepAlive", "false");
@@ -477,12 +484,18 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		deleteAllTemporaryServers();
 		reloadConfig();
 		instance = this;
+
+		CubeBuildersClassicTextProcessor textProcessor = new CubeBuildersClassicTextProcessor(null, null, ChatColor.BLUE, null);
+		textProcessor.setAllowCustomTooltip(true);
+		this.bookParser = new SimpleBookParser(textProcessor);
+
 		nicknameCache = new NicknameCache();
 		bungeeScheduler = new BungeeScheduler();
 		chatController = new ChatController(this);
 		notifications = new Notifications(this, new File(getDataFolder(), "notifications.json"));
 		eventDiscordRelay = new EventDiscordRelay(this);
 		motdRandomizer = new MotdRandomizer(this, new File(getDataFolder(), "motd.txt"));
+		serverNewsOnLogin = new ServerNewsOnLogin(this, new File(getDataFolder(), "books/news.txt"), bookParser);
 		commandAutoCompleter = new CommandAutoCompleter(this);
 
 		PluginManager pm = getProxy().getPluginManager();
@@ -492,6 +505,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerListener(this, notifications);
 		pm.registerListener(this, eventDiscordRelay);
 		pm.registerListener(this, motdRandomizer);
+		pm.registerListener(this, serverNewsOnLogin);
 		pm.registerCommand(this, new CommandMsg(this));
 		pm.registerCommand(this, new CommandIgnore(this));
 		pm.registerCommand(this, new CommandPub(this));
@@ -546,15 +560,16 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerCommand(this, new CommandRegister(this));
 		pm.registerCommand(this, new CommandLogin(this));
 
-		pm.registerCommand(this, new CommandVote(this));
-		pm.registerCommand(this, new CommandSocialMedia(this));
-
 		pm.registerCommand(this, new CommandCapsFilter(this));
 
 		pm.registerCommand(this, new CommandStore(this));
 
 		pm.registerCommand(this, new CommandLinkDiscord(this));
 		pm.registerCommand(this, new CommandReport(this));
+
+		pm.registerCommand(this, new CommandBook(this, new File(getDataFolder(), "books"), bookParser));
+
+		registerAliasCommands(pm);
 
 		pm.registerCommand(this, new CommandTestFeature(this));
 
@@ -738,6 +753,21 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			}
 		}
 		new PeriodicAnnouncements(this, new File(getDataFolder(), "announcements.txt")).start();
+	}
+
+	private void registerAliasCommands(PluginManager pm) {
+		try (BufferedReader reader = new BufferedReader(new FileReader(new File(getDataFolder(), "aliascommands.txt")))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				line = line.trim();
+				int eqPos = line.indexOf("=");
+				if (eqPos == -1) continue;
+				String aliasCommand = line.substring(0,eqPos).trim();
+				String targetCommand = line.substring(eqPos+1).trim();
+				pm.registerCommand(this, new CommandAlias(this, aliasCommand, targetCommand));
+			}
+		} catch (Exception e) {
+		}
 	}
 
 	private VotifierModule votifierModule = null;

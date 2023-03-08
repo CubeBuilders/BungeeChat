@@ -84,6 +84,8 @@ public final class PlayerAccount {
 	private String phoneNumber = null;
 	private long fakeLastOnline = 0L;
 
+	private long lastShownNews = 0L;
+
 	private boolean disableCapsFilter = false;
 
 	public void setMojangSkin(String skin, String signature) {
@@ -804,6 +806,8 @@ public final class PlayerAccount {
 							phoneNumber = val;
 						} else if (key.equalsIgnoreCase("FakeLastOnline")) {
 							fakeLastOnline = Long.parseLong(val);
+						} else if (key.equalsIgnoreCase("LastShownNews")) {
+							lastShownNews = Long.parseLong(val);
 						}
 					}
 				}
@@ -974,6 +978,9 @@ public final class PlayerAccount {
 			}
 			if (fakeLastOnline > 0L) {
 				fos.write(("FakeLastOnline=" + fakeLastOnline + "\n").getBytes());
+			}
+			if (lastShownNews > 0L) {
+				fos.write(("LastShownNews=" + lastShownNews + "\n").getBytes());
 			}
 		} catch (Exception e) {
 		} finally {
@@ -1196,6 +1203,18 @@ public final class PlayerAccount {
 		synchronized (BungeeChat.getInstance().fsLock) {
 			load();
 			this.fakeLastOnline = fakeLastOnline;
+			save();
+		}
+	}
+
+	public long getLastShownNews() {
+		return lastShownNews;
+	}
+
+	public void setLastShownNews(long lastShownNews) {
+		synchronized (BungeeChat.getInstance().fsLock) {
+			load();
+			this.lastShownNews = lastShownNews;
 			save();
 		}
 	}
