@@ -318,7 +318,7 @@ public class CommandSeen extends Command implements TabExecutor {
 						message = new TextComponent("");
 						BaseComponent firstSeenT = new TextComponent("First Seen: ");
 						BaseComponent firstSeenTimestamp = new TextComponent(plugin.formatDate(firstSeen, tz));
-						BaseComponent firstSeenTime = new TextComponent(" (" + TimeUtil.timeDifference(firstSeen, System.currentTimeMillis()) + " ago)");
+						BaseComponent firstSeenTime = new TextComponent(" (" + TimeUtil.timeDifference(firstSeen, System.currentTimeMillis(), 1) + " ago)");
 						firstSeenT.setColor(ChatColor.GREEN);
 						firstSeenTime.setColor(ChatColor.AQUA);
 						message.addExtra(firstSeenT);
@@ -335,7 +335,7 @@ public class CommandSeen extends Command implements TabExecutor {
 						message = new TextComponent("");
 						BaseComponent lastSeenT = new TextComponent("Last Seen: ");
 						BaseComponent lastSeenTimestamp = new TextComponent(plugin.formatDate(lastSeen, tz));
-						BaseComponent lastSeenTime = new TextComponent(" (" + TimeUtil.timeDifference(lastSeen, System.currentTimeMillis()) + " ago)");
+						BaseComponent lastSeenTime = new TextComponent(" (" + TimeUtil.timeDifference(lastSeen, System.currentTimeMillis(), 1) + " ago)");
 						lastSeenT.setColor(ChatColor.GREEN);
 						lastSeenTime.setColor(ChatColor.AQUA);
 						message.addExtra(lastSeenT);
