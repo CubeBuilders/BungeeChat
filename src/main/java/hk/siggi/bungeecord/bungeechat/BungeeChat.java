@@ -820,10 +820,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			sessionMapWriteLock.unlock();
 		}
 	}
-
-	public double baseCT() {
-		int playerCount = getProxy().getOnlineCount();
-		return (((double) playerCount) * ((double) 5)) / (double) 20;
 	}
 
 	public double perPlayerMultiplier(ProxiedPlayer p) {
@@ -833,12 +829,12 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 		double hoursInLast2Weeks = ((double) timeInLast2Weeks) / 3600000L;
 
-		return Math.min(2.5, 1 + (hoursInLast2Weeks / 8.0));
+		return Math.min(23, 1 + (hoursInLast2Weeks/3));
 	}
 
 	private void ctLoop() {
 		Collection<ProxiedPlayer> players = getProxy().getPlayers();
-		double baseCT = baseCT();
+		double baseCT = 3;
 		long now = System.currentTimeMillis();
 		for (ProxiedPlayer p : players) {
 			double multiplier = perPlayerMultiplier(p);
