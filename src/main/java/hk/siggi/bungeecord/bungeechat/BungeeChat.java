@@ -821,6 +821,10 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		}
 	}
 
+	public double baseCT() {
+		return 3;
+	}
+
 	public double perPlayerMultiplier(ProxiedPlayer p) {
 		PlayerSession session = getSession(p);
 		long currentSessionLength = (System.currentTimeMillis() - session.loginTime);
@@ -833,7 +837,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 
 	private void ctLoop() {
 		Collection<ProxiedPlayer> players = getProxy().getPlayers();
-		double baseCT = 3;
+		double baseCT = baseCT();
 		long now = System.currentTimeMillis();
 		for (ProxiedPlayer p : players) {
 			double multiplier = perPlayerMultiplier(p);
