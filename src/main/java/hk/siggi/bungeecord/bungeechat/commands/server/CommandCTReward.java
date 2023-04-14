@@ -46,8 +46,8 @@ public class CommandCTReward extends Command {
 		MessageSender.sendMessage(player, msg);
 
 		msg = new TextComponent("");
-		baseCTText = new TextComponent("Base CT: ");
-		formulaText = new TextComponent("3");
+		TextComponent baseCTText = new TextComponent("Base CT: ");
+		TextComponent formulaText = new TextComponent("3");
 		baseCTText.setColor(ChatColor.GOLD);
 		formulaText.setColor(ChatColor.YELLOW);
 		msg.addExtra(baseCTText);
