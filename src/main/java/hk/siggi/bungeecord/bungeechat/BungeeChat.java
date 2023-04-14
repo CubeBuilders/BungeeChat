@@ -820,7 +820,6 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			sessionMapWriteLock.unlock();
 		}
 	}
-	}
 
 	public double perPlayerMultiplier(ProxiedPlayer p) {
 		PlayerSession session = getSession(p);
