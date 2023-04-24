@@ -37,6 +37,7 @@ import hk.siggi.bungeecord.bungeechat.commands.messaging.CommandPub;
 import hk.siggi.bungeecord.bungeechat.commands.messaging.CommandRealName;
 import hk.siggi.bungeecord.bungeechat.commands.messaging.CommandReply;
 import hk.siggi.bungeecord.bungeechat.commands.moderation.CommandAntiSpy;
+import hk.siggi.bungeecord.bungeechat.commands.moderation.CommandClearChat;
 import hk.siggi.bungeecord.bungeechat.commands.moderation.CommandNoMsg;
 import hk.siggi.bungeecord.bungeechat.commands.moderation.CommandNoSpy;
 import hk.siggi.bungeecord.bungeechat.commands.moderation.CommandSneaky;
@@ -515,6 +516,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		pm.registerCommand(this, new CommandMail(this));
 		pm.registerCommand(this, new CommandWarn(this));
 		pm.registerCommand(this, new CommandMute(this));
+		pm.registerCommand(this, new CommandClearChat(this));
 		pm.registerCommand(this, new CommandPermanentMute(this));
 		pm.registerCommand(this, new CommandShadowMute(this));
 		pm.registerCommand(this, new CommandUnmute(this));
