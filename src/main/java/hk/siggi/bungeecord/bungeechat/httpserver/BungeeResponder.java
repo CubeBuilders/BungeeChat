@@ -195,7 +195,7 @@ public class BungeeResponder implements HTTPResponder {
 //			allowChatlogs = true;
 //		}
 		try {
-			sessionCookie = request.cookies.get("SessID");
+			sessionCookie = request.cookies.get("__Host-SessionToken");
 			if (sessionCookie != null) {
 				HttpURLConnection conn = (HttpURLConnection) (new URL(Endpoints.get("website") + "/api/bc?cookie=" + sessionCookie).openConnection());
 				BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
