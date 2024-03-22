@@ -2398,7 +2398,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 						break vpnProxyCheck;
 					}
 				}
-				URL url = new URL("http://check.getipintel.net/check.php?ip=" + userIPAddress + "&contact=siggi@siggi.hk&flags=m");
+				URL url = new URL("https://check.getipintel.net/check.php?ip=" + userIPAddress + "&contact=siggi@siggi.hk&flags=m");
 				HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
 				urlc.setRequestProperty("User-Agent", "CubeBuilders Server (cubebuilders.net / siggi@siggi.hk)");
 				urlc.setConnectTimeout(2000);
