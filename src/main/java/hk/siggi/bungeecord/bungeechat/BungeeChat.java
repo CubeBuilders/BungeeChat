@@ -2340,7 +2340,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		return lr;
 	}
 
-	private final List<String> badIPAddresses = new LinkedList<>();
+	private final Set<String> badIPAddresses = new HashSet<>();
 
 	@EventHandler
 	public void login(LoginEvent event) {
@@ -2409,9 +2409,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				if (result >= 1) {
 					ipIsVPN = true;
 					synchronized (badIPAddresses) {
-						if (!badIPAddresses.contains(userIPAddress)) {
-							badIPAddresses.add(userIPAddress);
-						}
+						badIPAddresses.add(userIPAddress);
 					}
 				}
 			} catch (Exception e) {
