@@ -47,7 +47,7 @@ public class CommandLogin extends Command {
 				MessageSender.sendMessage(p, "");
 				MessageSender.sendMessage(p, "&e==================================================");
 				MessageSender.sendMessage(p, "&c&lPay attention and READ:");
-				MessageSender.sendMessage(p, "&6Make sure you got this code from &dhttps://cubebuilders.net &6and &c&onot&r&6 from another website or from someone who asked you to type it in!");
+				MessageSender.sendMessage(p, "&6Make sure you got this code from &dhttps://cube.builders &6and &c&onot&r&6 from another website or from someone who asked you to type it in!");
 				MessageSender.sendMessage(p, "&e==================================================");
 				if (extraData != null) {
 					if (extraData.contains("/")) {
