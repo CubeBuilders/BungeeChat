@@ -2,6 +2,7 @@ package hk.siggi.bungeecord.bungeechat.commands.server;
 
 import hk.siggi.bungeecord.bungeechat.BungeeChat;
 import hk.siggi.bungeecord.bungeechat.MessageSender;
+import hk.siggi.bungeecord.bungeechat.PlayerSession;
 import hk.siggi.bungeecord.bungeechat.util.APIUtil;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -27,9 +28,10 @@ public class CommandLogin extends Command {
 			MessageSender.sendMessage(p, "&6This command is used to log into our website.");
 			return;
 		}
+		PlayerSession session = BungeeChat.getSession(p);
 		String code = strings[0];
 		String ipAddress = null;
-		if (strings.length < 2 || !strings[1].equals("no-check-ip")) {
+		if (strings.length < 2 || !strings[1].equals(session.nonce)) {
 			ipAddress = ((InetSocketAddress) p.getSocketAddress()).getAddress().getHostAddress();
 		}
 		String result = APIUtil.codeLogin(p.getUniqueId(), strings[0], ipAddress);
@@ -56,7 +58,7 @@ public class CommandLogin extends Command {
 					MessageSender.sendMessage(p, "&6Location of the browser that generated this code:");
 					MessageSender.sendMessage(p, "&e - " + extraData);
 				}
-				MessageSender.sendMessage(p, "&6If you're sure you're logging into the website, </login " + code + " no-check-ip><click here>.");
+				MessageSender.sendMessage(p, "&6If you're sure you're logging into the website, </login " + code + " " + session.nonce + "><click here>.");
 				MessageSender.sendMessage(p, "&6");
 				MessageSender.sendMessage(p, "&e==================================================");
 				MessageSender.sendMessage(p, "&6You received this message your IP address does not match the IP address of the web browser the code was generated at.");

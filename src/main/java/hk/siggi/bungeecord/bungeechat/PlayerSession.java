@@ -17,6 +17,7 @@ import java.io.DataOutputStream;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.net.InetSocketAddress;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,6 +29,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Consumer;
+
+import hk.siggi.bungeecord.bungeechat.util.Util;
 import net.cubebuilders.user.CBUser;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
@@ -59,6 +62,7 @@ public class PlayerSession {
 	public volatile int afkTime = 0;
 	private WeakReference<ProxiedPlayer> playerRef = null;
 	public String clientBrand = "";
+	public String nonce;
 
 	private final List<Long> chatTimes = new LinkedList<>();
 
@@ -163,6 +167,9 @@ public class PlayerSession {
 		this.address = address;
 		created = System.currentTimeMillis();
 		this.uuid = uuid;
+		byte[] nonceBytes = new byte[16];
+		new SecureRandom().nextBytes(nonceBytes);
+		this.nonce = Util.bytesToHex(nonceBytes);
 	}
 
 	public void sendHotbarMessage(BaseComponent message) {
