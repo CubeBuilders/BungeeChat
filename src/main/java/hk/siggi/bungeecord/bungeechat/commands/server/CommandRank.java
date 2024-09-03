@@ -41,6 +41,10 @@ public class CommandRank extends Command {
 		} else {
 			user = plugin.getPlayerNameHandler().getPlayerByName(split[1]);
 		}
+		String correctName = plugin.getPlayerNameHandler().getNameByPlayer(user);
+		if (correctName == null) {
+			correctName = split[1];
+		}
 		if (user == null) {
 			BaseComponent noExist = new TextComponent("Player " + split[1] + " does not exist");
 			noExist.setColor(ChatColor.RED);
@@ -51,9 +55,14 @@ public class CommandRank extends Command {
 		switch (split[0]) {
 			case "add":
 				APIUtil.addRank(user, rank);
+				MessageSender.sendMessage(sender, ChatColor.AQUA + "Adding rank " + rank + " to " + correctName + ".");
 				break;
 			case "del":
 				APIUtil.delRank(user, rank);
+				MessageSender.sendMessage(sender, ChatColor.AQUA + "Deleting rank " + rank + " from " + correctName + ".");
+				break;
+			default:
+				MessageSender.sendMessage(sender, ChatColor.RED + "Unknown subcommand: " + split[0]);
 				break;
 		}
 	}
