@@ -9,7 +9,7 @@ public class CommandStore extends Command {
 	public final BungeeChat plugin;
 
 	public CommandStore(BungeeChat plugin) {
-		super("store", null, "buy");
+		super("store", null);
 		this.plugin = plugin;
 	}
 
