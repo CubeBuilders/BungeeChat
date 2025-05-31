@@ -28,20 +28,11 @@ public class RelogHandler extends AbstractReconnectHandler implements Listener {
 	}
 
 	private PlayerRelogData get(UUID uuid) {
-		PlayerRelogData prd = table.get(uuid);
-		if (prd == null) {
-			table.put(uuid, prd = new PlayerRelogData(uuid));
-		}
-		return prd;
+		return table.computeIfAbsent(uuid, PlayerRelogData::new);
 	}
 
 	private void cleanExpired() {
-		for (Iterator<PlayerRelogData> it = table.values().iterator(); it.hasNext();) {
-			PlayerRelogData prd = it.next();
-			if (prd.hasExpired()) {
-				it.remove();
-			}
-		}
+		table.values().removeIf(PlayerRelogData::hasExpired);
 	}
 
 	@EventHandler
