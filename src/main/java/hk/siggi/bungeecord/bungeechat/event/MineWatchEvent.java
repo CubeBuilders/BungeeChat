@@ -1,29 +1,19 @@
 package hk.siggi.bungeecord.bungeechat.event;
 
-import lombok.Getter;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Event;
 
 public class MineWatchEvent extends Event {
 
-	@Getter
 	private final ProxiedPlayer player;
-	@Getter
 	private final ServerInfo server;
-	@Getter
 	private final String world;
-	@Getter
 	private final int x;
-	@Getter
 	private final int y;
-	@Getter
 	private final int z;
-	@Getter
 	private final String ore;
-	@Getter
 	private final int count;
-	@Getter
 	private final int lightLevel;
 
 	public MineWatchEvent(ProxiedPlayer p, ServerInfo server, String world, int x, int y, int z, String ore, int count, int lightLevel) {
@@ -36,5 +26,41 @@ public class MineWatchEvent extends Event {
 		this.ore = ore;
 		this.count = count;
 		this.lightLevel = lightLevel;
+	}
+
+	public ProxiedPlayer getPlayer() {
+		return player;
+	}
+
+	public ServerInfo getServer() {
+		return server;
+	}
+
+	public String getWorld() {
+		return world;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public int getZ() {
+		return z;
+	}
+
+	public String getOre() {
+		return ore;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public int getLightLevel() {
+		return lightLevel;
 	}
 }

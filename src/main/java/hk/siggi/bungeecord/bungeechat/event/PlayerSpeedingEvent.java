@@ -1,17 +1,14 @@
 package hk.siggi.bungeecord.bungeechat.event;
 
-import lombok.Getter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Event;
 
 public class PlayerSpeedingEvent extends Event {
 
-	@Getter
 	private final ProxiedPlayer player;
-	@Getter
 	private final double speed3D, speedXZ, speedY;
-	@Getter private final boolean flying, gliding, first;
-	@Getter private final int gameMode;
+	private final boolean flying, gliding, first;
+	private final int gameMode;
 
 	public PlayerSpeedingEvent(ProxiedPlayer player, double speed3D, double speedXZ, double speedY, boolean flying, boolean gliding, int gameMode, boolean first) {
 		this.player = player;
@@ -22,5 +19,37 @@ public class PlayerSpeedingEvent extends Event {
 		this.gliding = gliding;
 		this.gameMode = gameMode;
 		this.first = first;
+	}
+
+	public ProxiedPlayer getPlayer() {
+		return player;
+	}
+
+	public double getSpeed3D() {
+		return speed3D;
+	}
+
+	public double getSpeedXZ() {
+		return speedXZ;
+	}
+
+	public double getSpeedY() {
+		return speedY;
+	}
+
+	public boolean isFlying() {
+		return flying;
+	}
+
+	public boolean isGliding() {
+		return gliding;
+	}
+
+	public boolean isFirst() {
+		return first;
+	}
+
+	public int getGameMode() {
+		return gameMode;
 	}
 }

@@ -20,9 +20,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
 import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 
 public class ServerActivityReport {
 
@@ -46,7 +43,6 @@ public class ServerActivityReport {
 	private final TimeZone timezone;
 	private final transient GregorianCalendar calendar;
 
-	@Getter
 	private int activePlayers = 0, totalPlayers = 0, meanPlayerAge = 0, medianPlayerAge = 0;
 
 	private final Map<Integer, StatisticReport> months = new HashMap<>();
@@ -232,8 +228,6 @@ public class ServerActivityReport {
 
 	public static class StatisticReport {
 
-		@Getter
-		@Setter(AccessLevel.PRIVATE)
 		private int newPlayers, oneTimePlayers, returningPlayers, quittingPlayers, activePlayers, activePlayersFromHere;
 
 		private StatisticReport() {

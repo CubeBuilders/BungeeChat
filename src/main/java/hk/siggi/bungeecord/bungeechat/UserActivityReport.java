@@ -16,9 +16,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 
 public class UserActivityReport {
 
@@ -85,12 +82,22 @@ public class UserActivityReport {
 
 	public static class Activity {
 
-		@Getter
-		@Setter(AccessLevel.PRIVATE)
 		private long start, end;
 
 		private Activity(long start, long end) {
 			this.start = start;
+			this.end = end;
+		}
+
+		public long getStart() {
+			return start;
+		}
+
+		public long getEnd() {
+			return end;
+		}
+
+		private void setEnd(long end) {
 			this.end = end;
 		}
 	}
