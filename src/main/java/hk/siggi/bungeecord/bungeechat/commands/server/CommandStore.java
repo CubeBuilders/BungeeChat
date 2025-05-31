@@ -16,7 +16,7 @@ public class CommandStore extends Command {
 	@Override
 	public void execute(CommandSender sender, String[] strings) {
 		MessageSender.sendMessage(sender, "&6--------------------");
-		MessageSender.sendMessage(sender, "&6Click for our webstore! -> <https://cubebuilders.net/store><cubebuilders.net/store>");
+		MessageSender.sendMessage(sender, "&6Click for our webstore! -> <https://cube.builders/store><cube.builders/store>");
 		MessageSender.sendMessage(sender, "&6--------------------");
 	}
 }

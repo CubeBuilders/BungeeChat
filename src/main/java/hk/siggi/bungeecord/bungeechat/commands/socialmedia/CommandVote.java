@@ -21,7 +21,7 @@ public class CommandVote extends Command implements TabExecutor {
 	@Override
 	public void execute(CommandSender cs, String[] args) {
 		MessageSender.sendMessage(cs, "&6----");
-		MessageSender.sendMessage(cs, "&6To vote for us, <https://cubebuilders.net/vote><Click here!>");
+		MessageSender.sendMessage(cs, "&6To vote for us, <https://cube.builders/vote><Click here!>");
 		MessageSender.sendMessage(cs, "&6----");
 		MessageSender.sendMessage(cs, "&6Subscribe to us on YouTube!");
 		MessageSender.sendMessage(cs, "<https://www.youtube.com/channel/UCsRSHw2Fay1wEiYVaT4bTzw><&bClick for CubeBuilders on YouTube!>");

@@ -2235,7 +2235,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 		if (playerInfo.getLastVoted() < System.currentTimeMillis() - 86400000L) {
 			getScheduler().schedule(this, () -> {
 				MessageSender.sendMessage(player, "");
-				MessageSender.sendMessage(player, "&6You haven't voted today! <https://cubebuilders.net/vote><Click here and vote now!>");
+				MessageSender.sendMessage(player, "&6You haven't voted today! <https://cube.builders/vote><Click here and vote now!>");
 				MessageSender.sendMessage(player, "");
 			}, 2250, TimeUnit.MILLISECONDS);
 		}
@@ -2398,9 +2398,9 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 						break vpnProxyCheck;
 					}
 				}
-				URL url = new URL("https://check.getipintel.net/check.php?ip=" + userIPAddress + "&contact=siggi@siggi.hk&flags=m");
+				URL url = new URL("https://check.getipintel.net/check.php?ip=" + userIPAddress + "&contact=hey@siggi.io&flags=m");
 				HttpURLConnection urlc = (HttpURLConnection) url.openConnection();
-				urlc.setRequestProperty("User-Agent", "CubeBuilders Server (cubebuilders.net / siggi@siggi.hk)");
+				urlc.setRequestProperty("User-Agent", "CubeBuilders Server (cube.builders / hey@siggi.io)");
 				urlc.setConnectTimeout(2000);
 				urlc.setReadTimeout(2000);
 				BufferedReader reader = new BufferedReader(new InputStreamReader(urlc.getInputStream()));
@@ -2442,7 +2442,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 				}
 				if (bytes == null) {
 					event.setCancelled(true);
-					TextComponent c = new TextComponent("Could not load your profile data. Please try again in 1 minute. If this problem persists, contact a staff member on our Discord -> discord.cubebuilders.net");
+					TextComponent c = new TextComponent("Could not load your profile data. Please try again in 1 minute. If this problem persists, contact a staff member on our Discord -> discord.cube.builders");
 					connection.disconnect(c);
 					return;
 				}
@@ -2714,7 +2714,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			/*message = new TextComponent("You can ");
 			 message.setColor(ChatColor.RED);
 			 extra = new TextComponent("appeal your offence to be unmuted.");
-			 extra.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://cubebuilders.net/index.php/topic,3.0.html"));
+			 extra.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://cube.builders/index.php/topic,3.0.html"));
 			 extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click here to appeal")}));
 			 extra.setColor(ChatColor.AQUA);
 			 message.addExtra(extra);
@@ -2749,7 +2749,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			/*message = new TextComponent("You can ");
 			 message.setColor(ChatColor.RED);
 			 extra = new TextComponent("appeal your offence to be unmuted earlier.");
-			 extra.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://cubebuilders.net/index.php/topic,3.0.html"));
+			 extra.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "http://cube.builders/index.php/topic,3.0.html"));
 			 extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click here to appeal")}));
 			 extra.setColor(ChatColor.AQUA);
 			 message.addExtra(extra);
@@ -2787,7 +2787,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			extra.setColor(ChatColor.WHITE);
 			message.addExtra(extra);
 
-			extra = new TextComponent("Visit the CubeBuilders website to appeal - https://cubebuilders.net - and then click Offences\n\nReview the game rules and terms of service at these links:\nhttps://cubebuilders.net/rules\nhttps://cubebuilders.net/tos");
+			extra = new TextComponent("Visit the CubeBuilders website to appeal - https://cube.builders - and then click Offences\n\nReview the game rules and terms of service at these links:\nhttps://cube.builders/rules\nhttps://cube.builders/tos");
 			message.addExtra(extra);
 
 			if (!(player instanceof ProxiedPlayer)) {
@@ -2824,7 +2824,7 @@ public class BungeeChat extends Plugin implements Listener, VariableServerConnec
 			extra.setColor(ChatColor.WHITE);
 			message.addExtra(extra);
 
-			extra = new TextComponent("Visit the CubeBuilders website to appeal - https://cubebuilders.net - and then click Offences\n\nReview the game rules and terms of service at these links:\nhttps://cubebuilders.net/rules\nhttps://cubebuilders.net/tos");
+			extra = new TextComponent("Visit the CubeBuilders website to appeal - https://cube.builders - and then click Offences\n\nReview the game rules and terms of service at these links:\nhttps://cube.builders/rules\nhttps://cube.builders/tos");
 			message.addExtra(extra);
 
 			if (!(player instanceof ProxiedPlayer)) {

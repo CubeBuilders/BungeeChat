@@ -67,7 +67,7 @@ public class MessageSender {
 			return link;
 		String escapedLink;
 		try {
-			String cbwebsitePrefix = "https://cubebuilders.net/";
+			String cbwebsitePrefix = "https://cube.builders/";
 			if (link.startsWith(cbwebsitePrefix)) {
 				link = link.substring(cbwebsitePrefix.length());
 			} else if (link.startsWith("https://")) {
@@ -81,6 +81,6 @@ public class MessageSender {
 		} catch (Exception e) {
 			return link;
 		}
-		return "https://cubebuilders.net/link/u=" + (player.getUniqueId().toString().replace("-","")) + "/" + autoLoginToken + "/" + escapedLink;
+		return "https://cube.builders/link/u=" + (player.getUniqueId().toString().replace("-","")) + "/" + autoLoginToken + "/" + escapedLink;
 	}
 }

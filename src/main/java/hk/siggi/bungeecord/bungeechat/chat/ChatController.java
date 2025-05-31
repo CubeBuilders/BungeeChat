@@ -623,6 +623,7 @@ public final class ChatController implements Listener {
 
 		patcher.forEach("cubebuilders net", (w) -> w.replaceWhole("cubebuilders.net"));
 		patcher.forEach("cubebuilders.net", (w) -> w.replaceWhole("cubebuilders.net"));
+		patcher.forEach("cube.builders", (w) -> w.replaceWhole("cube.builders"));
 
 		patcher.forEach("Siggi.hk", (w) -> w.replaceWhole("Siggi.hk"));
 		patcher.forEach("Siggi.io", (w) -> w.replaceWhole("Siggi.io"));

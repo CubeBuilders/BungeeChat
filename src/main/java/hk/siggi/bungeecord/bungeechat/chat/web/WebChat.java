@@ -76,7 +76,7 @@ public class WebChat {
 		}
 		WebChatClient client = new WebChatClient(this, uuid, username, socket);
 		client.start();
-		client.sendMessage(unify(processChat(null, "Hi&6 there, " + username + "! <https://cubebuilders.net/>")));
+		client.sendMessage(unify(processChat(null, "Hi&6 there, " + username + "! <https://cube.builders/>")));
 	}
 
 	public void send(UUID uuid, BaseComponent component) {

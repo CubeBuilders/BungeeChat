@@ -64,7 +64,7 @@ public class CommandReport extends Command implements TabExecutor {
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         String replayCommandTimestamp = sdf.format(new Date(now));
         message += "\n\nReplay command at time of report: `/replay load " + replayCommandTimestamp + "-GMT`";
-        String chatLogUrl = "https://cubebuilders.net/bc/chatlog?from=" + ((now - 300000L) / 1000L) + "&to=" + (now / 1000L);
+        String chatLogUrl = "https://cube.builders/bc/chatlog?from=" + ((now - 300000L) / 1000L) + "&to=" + (now / 1000L);
         if (DiscordBotAPI.sendMessage("ingame-reports", message, true, new DiscordBotAPI.ActionLink(chatLogUrl, "Chat Log"))) {
             MessageSender.sendMessage(p, "&6Your report has been received. Thanks for helping keep CubeBuilders a fun and safe place!");
         } else {

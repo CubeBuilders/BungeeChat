@@ -162,7 +162,7 @@ public class CommandCheckHistory extends Command implements TabExecutor {
 			}
 		}
 		BaseComponent moreInfo = new TextComponent("Click Here For More Information");
-		moreInfo.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cubebuilders.net/mod/offences/" + (playerInfo.getPlayerUUID().toString().replaceAll("-", "").toLowerCase())));
+		moreInfo.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cube.builders/mod/offences/" + (playerInfo.getPlayerUUID().toString().replaceAll("-", "").toLowerCase())));
 		MessageSender.sendMessage(sender, moreInfo);
 //		if (sender instanceof ProxiedPlayer && pageCount > 1) {
 //			BaseComponent pageSelector = new TextComponent("Go: ");

@@ -1531,7 +1531,7 @@ public class BungeeResponder implements HTTPResponder {
 			UUID fromUUID = Util.uuidFromString(from);
 			PlayerAccount accountFrom = plugin.getPlayerInfo(fromUUID);
 			if (accountFrom.getCurrentRank() == null) {
-				request.response.write("Cannot send mail: Mail is available to Plus members only! Add a Plus membership to your account here: https://cubebuilders.net/store (Msg&data rates may apply)");
+				request.response.write("Cannot send mail: Mail is available to Plus members only! Add a Plus membership to your account here: https://cube.builders/store (Msg&data rates may apply)");
 				return;
 			}
 			String fromNameCorrected = Util.uuidToString(fromUUID);

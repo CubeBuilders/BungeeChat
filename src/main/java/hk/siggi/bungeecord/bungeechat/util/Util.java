@@ -60,26 +60,6 @@ public class Util {
 			notPermittedMessages.add(message);
 		}
 		{
-			BaseComponent message = new TextComponent("lolwut? You think you can tell ");
-			message.setColor(ChatColor.RED);
-			BaseComponent extra = new TextComponent("me");
-			extra.setItalic(true);
-			extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to apply for a staff spot!")}));
-			extra.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cubebuilders.net/apply"));
-			message.addExtra(extra);
-			extra = new TextComponent(" what to do?");
-			message.addExtra(extra);
-			notPermittedMessages.add(message);
-		}
-		{
-			BaseComponent message = new TextComponent("You know, we do take staff applications. Staff members have access to more commands, such as the command you just tried. ");
-			message.setColor(ChatColor.RED);
-			BaseComponent extra = new TextComponent("Click here to apply for a staff spot");
-			extra.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent("Click to apply for a staff spot!")}));
-			extra.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://cubebuilders.net/apply"));
-			notPermittedMessages.add(message);
-		}
-		{
 			BaseComponent message = new TextComponent("You didn't actually think I'd let you do that, did you? Oh, you did... that's so sweet! <3");
 			message.setColor(ChatColor.RED);
 			notPermittedMessages.add(message);
@@ -109,7 +89,7 @@ public class Util {
 		return notPermittedMessages.get((int) Math.floor(Math.random() * notPermittedMessages.size()));
 	}
 
-	private static final String USER_AGENT = "CubeBuilders (cubebuilders.net)";
+	private static final String USER_AGENT = "CubeBuilders (cube.builders)";
 
 	public static byte[] getURL(String url) {
 		try {
@@ -390,7 +370,7 @@ public class Util {
 			huc.setConnectTimeout(1000);
 			huc.setReadTimeout(1000);
 			huc.setInstanceFollowRedirects(true);
-			huc.setRequestProperty("User-Agent", "CubeBuilders.net - In-game Chat Link Metadata Grabber (hey@siggi.io)");
+			huc.setRequestProperty("User-Agent", "cube.builders - In-game Chat Link Metadata Grabber (hey@siggi.io)");
 			InputStream in = huc.getInputStream();
 			String contentType = huc.getContentType();
 			if (!contentType.toLowerCase().contains("text/htm") || huc.getContentLengthLong() > 524288) {

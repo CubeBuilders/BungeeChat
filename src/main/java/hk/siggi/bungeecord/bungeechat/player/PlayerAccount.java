@@ -298,7 +298,7 @@ public final class PlayerAccount {
 			}
 			if (getCurrentRank() == null) {
 				if (now - getLastMailAlert() > 43200000L) {
-					BungeeChat.getInstance().text(player, "You have new mail waiting for you on CubeBuilders! Login to CubeBuilders in-game and type /mail read to read! Upgrade to Plus to send & receive mail on your phone at https://cubebuilders.net/store (Msg & Data rates may apply)");
+					BungeeChat.getInstance().text(player, "You have new mail waiting for you on CubeBuilders! Login to CubeBuilders in-game and type /mail read to read! Upgrade to Plus to send & receive mail on your phone at https://cube.builders/store (Msg & Data rates may apply)");
 				}
 			} else {
 				BungeeChat.getInstance().text(player, "Mail from " + senderName + ": " + message + " (reply: MAIL " + (senderName.startsWith(BungeeChat.NICK_PREFIX) ? senderName.substring(BungeeChat.NICK_PREFIX.length()) : senderName) + " [message])");

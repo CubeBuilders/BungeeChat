@@ -674,6 +674,7 @@ public class ChatString implements CharSequence {
 
 	static {
 		hstsSites.add("cubebuilders.net");
+		hstsSites.add("cube.builders");
 		hstsSites.add("siggi.io");
 		hstsSites.add("spotify.com");
 		hstsSites.add("youtube.com");
